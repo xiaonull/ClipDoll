@@ -57,12 +57,12 @@
 		.pannel {
 			position: absolute;
 			width: 93%;
-			height: 88%;
-			top: 7%;
+			height: 90%;
+			top: 5%;
 			left: 50%;
 			margin-left: -46.5%;
 			background-image: url('~@/assets/modal/box-bg03.png');
-			background-size: cover;
+			background-size: 100% 100%;
 			background-position: center;
 
 			.title {
@@ -86,16 +86,16 @@
 			.info {
 				color: #93796d;
 				font-size: 0.63rem;
-				margin-top: 0.5rem;
+				margin-top: 0.2rem;
 			}
 
 			.content {
 				width: 88%;
-				height: 6.6rem;
-				margin: 0.8rem auto 0 auto;
+				height: 6rem;
+				margin: 0.4rem auto 0 auto;
 				background-image: url('~@/assets/modal/input-bg.png');
 				background-repeat: no-repeat;
-				background-size: contain;
+				background-size: 100% 100%;
 				overflow: hidden;
 
 				.contentText {
@@ -103,7 +103,7 @@
 					height: 90%;
 					border: none;
 					background-color: rgba(255, 255, 255, 0);
-					padding: 0.4rem 0.6rem;
+					padding: 0.4rem 0.1rem 0.4rem 0.6rem;
 					font-size: 0.8rem;
 					outline: none;
 					resize: none;
@@ -121,10 +121,11 @@
 				color: #e35727;
 				padding-bottom: 0.5rem;
 				border-bottom: 2px dashed #e35727;
+				margin: 0 0.2rem 0 0.2rem;
 			}
 
 			.uploadImg {
-				height: 4rem;
+				height: 3rem;
 
 				.addIcon {
 					width: 1.5rem;

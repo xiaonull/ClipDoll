@@ -7,7 +7,7 @@
 		<div class="right">
 			<p class="info">幸运值 : 17/100</p>
 			<div class="value">
-				<div class="bubble">
+				<div class="bubble" v-show="show">
 					<div class="rule">
 						<p class="rule1">幸运值+10</p>
 						<p class="rule2">满100时必中</p>
@@ -20,13 +20,17 @@
 
 <script>
 	export default {
-		
+		data() {
+			return {
+				show: false
+			}
+		}
 	}
 </script>
 
 <style scoped lang="less"> 
 	.luckValue {
-		height: 2rem;
+		height: 8rem;
 		position: relative;
 		z-index: 2;
 		background-color: #f26fa5;

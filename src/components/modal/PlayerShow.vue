@@ -79,12 +79,12 @@
 		.pannel {
 			position: absolute;
 			width: 95%;
-			height: 88%;
-			top: 7%;
+			height: 90%;
+			top: 5%;
 			left: 50%;
 			margin-left: -47.5%;
 			background-image: url('~@/assets/modal/box-bg03.png');
-			background-size: cover;
+			background-size: 100% 100%;
 			background-position: center;
 
 			.title {
@@ -107,12 +107,12 @@
 
 			.main {
 				width: 100%;
-				height: 56%;
+				height: 52%;
 				margin-top: 0.6rem;
 				font-size: 0;
 
 				.toLeft {
-					width: 15%;
+					width: 18%;
 					height: 100%;
 					display: inline-block;
 
@@ -127,7 +127,7 @@
 				}
 
 				.imgContainer {
-					width: 70%;
+					width: 64%;
 					height: 100%;
 					display: inline-block;
 
@@ -138,7 +138,7 @@
 				}
 
 				.toRight {
-					width: 15%;
+					width: 18%;
 					height: 100%;
 					display: inline-block;
 

@@ -7,18 +7,22 @@
 				</div>
 				<div class="controlMove" v-else>
 					<div class="left">
-						<img src="~@/assets/gameDesk/ico-left.png" class="img" @touchstart="left" @touchend="stopMove">
+						<div class="img img_l" @touchstart="left" @touchend="stopMove"></div>
+						<!-- <img src="~@/assets/gameDesk/ico-left.png" class="img" @touchstart="left" @touchend="stopMove"> -->
 					</div>
 					<div class="center">
 						<div class="top">
-							<img src="~@/assets/gameDesk/ico-top.png" class="img" @touchstart="behind"  @touchend="stopMove">
+							<div class="img img_t" @touchstart="behind"  @touchend="stopMove"></div>
+							<!-- <img src="~@/assets/gameDesk/ico-top.png" class="img" @touchstart="behind"  @touchend="stopMove"> -->
 						</div>
 						<div class="bottom">
-							<img src="~@/assets/gameDesk/ico-bottom.png" class="img" @touchstart="front"  @touchend="stopMove">
+							<div class="img img_b" @touchstart="front"  @touchend="stopMove"></div>
+							<!-- <img src="~@/assets/gameDesk/ico-bottom.png" class="img" @touchstart="front"  @touchend="stopMove"> -->
 						</div>
 					</div>
 					<div class="right">
-						<img src="~@/assets/gameDesk/ico-right.png" class="img" @touchstart="right"  @touchend="stopMove">
+						<div class="img img_r" @touchstart="right"  @touchend="stopMove"></div>
+						<!-- <img src="~@/assets/gameDesk/ico-right.png" class="img" @touchstart="right"  @touchend="stopMove"> -->
 					</div>
 				</div>
 			</div>
@@ -80,37 +84,41 @@
 			start() {
 				this.startGame = true;
 			},
-			left() {
+			left(event) {
 				if(this.grabState === false) {
 					this.interval = setInterval(() => {
 						this.$store.commit('rod/move_Left');
 						htsBus.$emit('move_Left');
 					}, 20);
 				}
+				event.preventDefault();
 			},
-			behind() {
+			behind(event) {
 				if(this.grabState === false) {
 					this.interval = setInterval(() => {
 						this.$store.commit('rod/move_Behind');
 						htsBus.$emit('move_Behind');
 					}, 30);
 				}
+				event.preventDefault();
 			},
-			front() {
+			front(event) {
 				if(this.grabState === false) {
 					this.interval = setInterval(() => {
 						this.$store.commit('rod/move_Front');
 						htsBus.$emit('move_Front');
 					}, 30);
 				}
+				event.preventDefault();
 			},
-			right() {
+			right(event) {
 				if(this.grabState === false) {
 					this.interval = setInterval(() => {
 						this.$store.commit('rod/move_Right');
 						htsBus.$emit('move_Right');
 					}, 20);
 				}
+				event.preventDefault();
 			},
 			stopMove() {
 				clearInterval(this.interval);
@@ -260,7 +268,7 @@
 						
 						// console.log(this.$store.state.rod.position.left + ':' + this.$store.state.rod.position.scale);
 						// 这里容易出问题，需要优化
-						if(this.$store.state.rod.position.left === 80 && this.$store.state.rod.position.scale === 1.001) {
+						if(this.$store.state.rod.position.left === 80 && (this.$store.state.rod.position.scale === 1.001 || this.$store.state.rod.position.scale === 1)) {
 							clearInterval(interval);
 							resolve();
 						}
@@ -343,7 +351,7 @@
 		position: absolute;
 		z-index: 2;
 		width: 100%;
-		height: 8rem;
+		height: 6.5rem;
 		bottom: 0;
 		background-image: url('~@/assets/bg/desktop.png');
 		background-size: cover;
@@ -385,6 +393,12 @@
 							top: 50%;
 							margin-top: -1rem;
 						}
+
+						.img_l {
+							background-image: url('~@/assets/gameDesk/ico-left.png');
+							background-size: cover;
+						}
+
 					}
 
 					.center {
@@ -402,6 +416,12 @@
 								top: 50%;
 								margin-top: -1rem;
 							}
+
+							.img_t {
+								background-image: url('~@/assets/gameDesk/ico-top.png');
+								background-size: cover;
+							}
+
 						}
 						
 						.bottom {
@@ -413,6 +433,11 @@
 								position: relative;
 								top: 100%;
 								margin-top: -1rem;
+							}
+
+							.img_b {
+								background-image: url('~@/assets/gameDesk/ico-bottom.png');
+								background-size: cover;
 							}
 						}
 					}
@@ -428,6 +453,11 @@
 							position: relative;
 							top: 50%;
 							margin-top: -1rem;
+						}
+
+						.img_r {
+							background-image: url('~@/assets/gameDesk/ico-right.png');
+							background-size: cover;
 						}
 					}
 				}
@@ -462,17 +492,17 @@
 		
 		.info {
 			position: absolute;
-			bottom: 0.6rem;
+			bottom: 0;
 			overflow: hidden;
+			height: 2.5rem;
 
 			.left {
 				float: left;
 				width: 5.5rem;
-				height: 3rem;
+				height: 2.5rem;
 
 				.user {
-					height: 1.5rem;
-					line-height: 1.5rem;
+					height: 1rem;
 					overflow: hidden;
 					text-overflow:ellipsis;
 					white-space: nowrap;
@@ -482,7 +512,7 @@
 						display: inline-block;
 						width: 0.7rem;
 						height: 0.7rem;
-						margin: 0.5rem 0.2rem 0 0.5rem;
+						margin: 0rem 0.2rem 0 0.5rem;
 					}
 
 					.userName {
@@ -498,7 +528,6 @@
 					position: relative;
 					height: 1.5rem;
 					line-height: 1.5rem;
-					padding-top: 0.2rem;
 					text-align: center;
 
 					.img_bg {
@@ -509,7 +538,7 @@
 
 					.img_icon {
 						position: absolute;
-						top: 0.4rem;
+						top: 0.2rem;
 						left: 0.8rem;
 						width: 0.7rem;
 						height: 0.7rem;
@@ -517,7 +546,7 @@
 
 					.glodNum {
 						position: absolute;
-						top: 0.01rem;
+						top: -0.19rem;
 						left: 1.9rem;
 						font-size: 0.65rem;
 						color: #e1ea2a;
@@ -531,7 +560,7 @@
 				width: 9.5rem;
 				height: 2rem;
 				display: flex;
-				padding: 0.8rem 0 0.2rem 0;
+				padding: 0rem 0 0.2rem 0;
 
 				.icon {
 					flex: 1;

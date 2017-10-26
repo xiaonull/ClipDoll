@@ -67,12 +67,12 @@
 		.pannel {
 			position: absolute;
 			width: 95%;
-			height: 50%;
+			height: 58%;
 			top: 20%;
 			left: 50%;
 			margin-left: -47.5%;
 			background-image: url('~@/assets/modal/box-bg01.png');
-			background-size: cover;
+			background-size: 100% 100%;
 			background-position: center;
 
 			.title {

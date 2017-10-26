@@ -23,7 +23,9 @@
 			</div>
 			<!-- 底盘装娃娃 -->
 			<div class="underpan" ref="underpan">
-				<div class="shadow" ref="shadow"></div>
+				<div class="shadowContainer">
+					<div class="shadow" ref="shadow"></div>
+				</div>
 				<img src="~@/assets/wawa/wawa-tu.png" class="img wawa wawa_1">
 				<img src="~@/assets/wawa/wawa-tu.png" class="img wawa wawa_2">
 				<img src="~@/assets/wawa/wawa-tu.png" class="img wawa wawa_3">
@@ -34,10 +36,10 @@
 		</div>
 		<div class="wawaji_subTop"></div>
 		<div class="wawaji_subLeft">
-			<img src="~@/assets/light/light01.png" class="wawaji_top_light">
+			<img :src="light_img" class="wawaji_top_light">
 		</div>
 		<div class="wawaji_subRight">
-			<img src="~@/assets/light/light01.png" class="wawaji_top_light">
+			<img :src="light_img" class="wawaji_top_light">
 		</div>
 		<div class="wawaji_subBottom"></div>
 		<div class="maskBottom"></div>
@@ -53,14 +55,19 @@
 				left: this.$store.state.rod.position,
 				scale: this.$store.state.rod.position,
 				grabWaWa: this.$store.state.rod.action,
-				layer: this.$store.state.rod.layer
+				layer: this.$store.state.rod.layer,
+				light_img_index: 1
 			}
 		},
 		mounted() {
 			this.init();
 			this.bindEvevt();
+			this.changeLightImg();
 		},
 		computed: {
+			light_img() {
+				return './static/light/light0' + this.light_img_index + '.png';
+			},
 			rod_length() {
 				return this.$store.state.rod.handle_length;
 			}
@@ -94,6 +101,11 @@
 					return $(self.$refs.gameBox).css('height');
 				}
 			},
+			changeLightImg() {
+				setInterval(() => {
+					this.light_img_index = (this.light_img_index + 1) % 3 === 0 ? 3 : (this.light_img_index + 1) % 3 ;
+				}, 2000);
+			},
 			move_Left() {
 				if(this.$store.state.rod.moveToLeft === 'can') {
 					$(this.$refs.shadow).css('left', '-=1px');
@@ -116,19 +128,35 @@
 			},
 			grab() {
 				let $shadow =  $(this.$refs.underpan).find('.shadow');
-				let shadowLeft = $shadow.css('left').slice(0, $shadow.css('left').length - 2);
+				let shadowLeft = $shadow.css('left').slice(0, $shadow.css('left').length - 2) * 1 + $shadow.css('width').slice(0, $shadow.css('width').length - 2) / 2;
 				let shadowBottom = $shadow.css('bottom').slice(0, $shadow.css('bottom').length - 2);
 
 				let $wawas = $(this.$refs.underpan).find('.wawa');
 				for(let i = 0, j = $wawas.length; i < j; i++) {
 					let $wawa = $wawas.eq(i);
-					let wawaLeft = $wawa.css('left').slice(0, $wawa.css('left').length - 2);
+					let wawaLeft = $wawa.css('left').slice(0, $wawa.css('left').length - 2) * 1 + $wawa.css('width').slice(0, $wawa.css('width').length - 2) / 2;
 					let wawaBottom = $wawa.css('bottom').slice(0, $wawa.css('bottom').length - 2);
 					
-					// 判斷阴影的左下角的位置与娃娃图片的左下角位置是否在一定范围内
+					// 判斷阴影的下边中点的位置与娃娃图片的下边中点的位置是否在一定范围内
 					let distance = Math.sqrt(Math.pow((wawaLeft - shadowLeft), 2) + Math.pow((wawaBottom - shadowBottom), 2));
-					// console.log(distance);
-					if(distance < 23) {
+					console.log(distance);
+
+					let phoneWidth = document.documentElement.clientWidth; 
+					let level1 = 0;
+					let level2 = 0;
+					let level3 = 0;
+					if(phoneWidth <= 410) {
+						level1 = 20;
+						level2 = 23;
+						level3 = 25;
+					}else {
+						level1 = 23;
+						level2 = 28;
+						level3 = 32;
+					}
+
+
+					if(distance < level1) {
 						// 准确抓到，有90%的概率向后台请求抓起概率
 						// level表示抓取的准确度，在抓取失败时准确度越高能抓起的高度越高；catch表示能否完全抓起，由后台控制
 						htsBus.$emit('grabing', {
@@ -137,7 +165,7 @@
 							$obj: $wawa
 						});
 						return;
-					} else if(distance < 28) {
+					} else if(distance < level2) {
 						// 较准确抓到，有70%的概率向后台请求抓起概率
 						htsBus.$emit('grabing', {
 							level: 2,
@@ -145,8 +173,8 @@
 							$obj: $wawa
 						});
 						return;
-					} else if(distance < 32) {
-						// 抓到，但是不向后台请求
+					} else if(distance < level3) {
+						// 较准确抓到，有50%的概率向后台请求抓起概率
 						htsBus.$emit('grabing', {
 							level: 3,
 							catch: false,
@@ -232,6 +260,7 @@
 		position: relative;
 		background-color: #f26fa5;
 		z-index: 2;
+		overflow: hidden;
 
 		.wawaji_subTop {
 			position: absolute;
@@ -292,7 +321,7 @@
 			z-index: 2;
 			bottom: 0;
 			width: 100%;
-			height: 30px;
+			height: 1.85rem;
 			background-color: #f26fa5;
 		}
 
@@ -366,17 +395,24 @@
 			width: 100%;
 			height: 6rem;
 			bottom: 20px;
+			overflow: visible;
 
-			.shadow {
-				position: absolute;
-				left: 52px;
-				top: 3rem;
-				width: 2.5rem;
+			.shadowContainer {
+				/* width: 2.5rem;
 				height: 2.5rem;
-				border-radius: 50%;
-				background-color: rgba(0, 0, 0, 0.3);
-				transform:rotateX(125deg);
-				-webkit-transform:rotateX(125deg);
+				overflow: hidden; */
+
+				.shadow {
+					position: absolute;
+					left: 52px;
+					top: 3rem;
+					width: 2.5rem;
+					height: 2.5rem;
+					border-radius: 50%;
+					background-color: rgba(0, 0, 0, 0.3);
+					transform:rotateX(125deg);
+					-webkit-transform:rotateX(125deg);
+				}
 			}
 
 			.img {
