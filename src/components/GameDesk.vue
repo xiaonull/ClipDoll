@@ -37,7 +37,7 @@
 			<div class="left">
 				<div class="user">
 					<img src="~@/assets/gameDesk/re-ico.png" class="img">
-					<span class="userName">一步一步一步一步</span>
+					<span class="userName">{{nickname}}</span>
 				</div>
 				<div class="glod">
 					<img src="~@/assets/gameDesk/gold-bg02.png" class="img img_bg">
@@ -67,6 +67,7 @@
 	export default {
 		data() {
 			return {
+				nickname: '',
 				startGame: false,
 				grabState: false,
 				interval: null
@@ -74,12 +75,26 @@
 		},
 		mounted() {
 			this.bindEvevt();
+			this.init();
 		},
 		methods: {
 			bindEvevt() {
 				htsBus.$on('grabing', (option) => {
 					this.grabing(option);
 				});
+			},
+			init() {
+				let option = {
+					url: 'api/user',
+					type: 'GET',
+					success: function(result, status, xhr) {
+						if(result.code === 1) {
+							this.nickname = result.user.nickname;
+						}
+					}.bind(this)
+				};
+
+				myAjax(option);
 			},
 			start() {
 				this.startGame = true;

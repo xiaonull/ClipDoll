@@ -7,25 +7,10 @@
 			</div>
 			<div class="content">
 				<div class="list">
-					<div class="item">
+					<div class="item" v-for="item in rechargeData" :key="item.id">
 						<img src="~@/assets/modal/gold-ico02.png" class="icon">
-						<span class="num">100金币</span>
-						<img src="~@/assets/modal/buy-ico.png" class="img_buy">
-					</div>
-					<div class="item">
-						<img src="~@/assets/modal/gold-ico02.png" class="icon">
-						<span class="num">200<span class="green">+20</span>金币</span>
-						<img src="~@/assets/modal/buy-ico.png" class="img_buy">
-					</div>
-					<div class="item">
-						<img src="~@/assets/modal/gold-ico02.png" class="icon">
-						<span class="num">400<span class="green">+40</span>金币</span>
-						<img src="~@/assets/modal/buy-ico.png" class="img_buy">
-					</div>
-					<div class="item">
-						<img src="~@/assets/modal/gold-ico02.png" class="icon">
-						<span class="num">1000<span class="green">+120</span>金币</span>
-						<img src="~@/assets/modal/buy-ico.png" class="img_buy">
+						<span class="num">{{item.coin_num}}<span class="green" v-if="item.award_num !== 0">+{{item.award_num}}</span>金币</span>
+						<img src="~@/assets/modal/buy-ico.png" class="img_buy" @click="buyGold(item.id)">
 					</div>
 				</div>
 			</div>
@@ -37,14 +22,47 @@
 	export default {
 		data() {
 			return {
-
+				rechargeData: []
 			}
 		},
+		mounted() {
+			this.init();
+		},
 		methods: {
+			init() {
+				let option = {
+					url: 'api/rechargeamount?token=' + sessionStorage.token,
+					type: 'GET',
+					success: function(result, status, xhr) {
+						if(result.code === 1) {
+							this.rechargeData = sort_rechargeData(result.data);
+							// let arr = sort_rechargeData(result.data);
+							// for(let i = 0, j = arr.length; i < j; i++) {
+							// 	this.rechargeData.push(arr[i]);
+							// }
+						}
+					}.bind(this)
+				};
+
+				myAjax(option);
+			},
 			close() {
 				this.$store.commit('modal/setRecharge', {
 					showRecharge: false
 				});
+			},
+			buyGold(id) {
+				let option = {
+					url: 'api/wxpay/' + id,
+					type: 'POST',
+					success: function(result, status, xhr) {
+						console.log(id);
+
+
+					}.bind(this)
+				};
+
+				myAjax(option);
 			}
 		},
 		computed: {
@@ -52,6 +70,22 @@
 				return this.$store.state.modal.showRecharge;
 			}
 		}
+	}
+	
+	// 冒泡排序根据价格从小到大排序
+	function sort_rechargeData(arr) {
+		for(let i = 0, j = arr.length - 1; i < j; i++) {
+			for(let i2 = 0, j2 = arr.length - 1; i2 < j2; i2++) {
+				if(arr[i2].price > arr[i2 + 1].price) {
+					// 交换位置，大的在后面
+					var temp = arr[i2];
+					arr[i2] = arr[i2 + 1];
+					arr[i2 + 1] = temp;
+				}
+			}
+		}
+
+		return arr;
 	}
 </script>
 

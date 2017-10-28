@@ -26,12 +26,12 @@
 				<div class="shadowContainer">
 					<div class="shadow" ref="shadow"></div>
 				</div>
-				<img src="~@/assets/wawa/wawa-tu.png" class="img wawa wawa_1">
-				<img src="~@/assets/wawa/wawa-tu.png" class="img wawa wawa_2">
-				<img src="~@/assets/wawa/wawa-tu.png" class="img wawa wawa_3">
-				<img src="~@/assets/wawa/wawa-tu.png" class="img wawa wawa_4">
-				<img src="~@/assets/wawa/wawa-tu.png" class="img wawa wawa_5">
-				<img src="~@/assets/wawa/wawa-tu.png" class="img wawa wawa_6">
+				<img :src="'http://' + currentWaWaList[0].sc_pic" :class="currentWaWaList[0].id" class="img wawa wawa_1" v-if="currentWaWaList[0]">
+				<img :src="'http://' + currentWaWaList[1].sc_pic" :class="currentWaWaList[1].id" class="img wawa wawa_2" v-if="currentWaWaList[1]">
+				<img :src="'http://' + currentWaWaList[2].sc_pic" :class="currentWaWaList[2].id" class="img wawa wawa_3" v-if="currentWaWaList[2]">
+				<img :src="'http://' + currentWaWaList[3].sc_pic" :class="currentWaWaList[3].id" class="img wawa wawa_4" v-if="currentWaWaList[3]">
+				<img :src="'http://' + currentWaWaList[4].sc_pic" :class="currentWaWaList[4].id" class="img wawa wawa_5" v-if="currentWaWaList[4]">
+				<img :src="'http://' + currentWaWaList[5].sc_pic" :class="currentWaWaList[5].id" class="img wawa wawa_6" v-if="currentWaWaList[5]">
 			</div>
 		</div>
 		<div class="wawaji_subTop"></div>
@@ -56,7 +56,8 @@
 				scale: this.$store.state.rod.position,
 				grabWaWa: this.$store.state.rod.action,
 				layer: this.$store.state.rod.layer,
-				light_img_index: 1
+				light_img_index: 1,
+				currentWaWaList: []
 			}
 		},
 		mounted() {
@@ -100,6 +101,18 @@
 				GameBox.prototype.getHeight = function() {
 					return $(self.$refs.gameBox).css('height');
 				}
+
+				let option = {
+					url: 'api/user',
+					type: 'GET',
+					success: function(result, status, xhr) {
+						if(result.code === 1) {
+							this.currentWaWaList = result.data.data;
+						}
+					}.bind(this)
+				};
+
+				myAjax(option);
 			},
 			changeLightImg() {
 				setInterval(() => {

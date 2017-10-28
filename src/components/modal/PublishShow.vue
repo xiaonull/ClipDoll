@@ -11,7 +11,15 @@
 			</div>
 			<h2 class="info2">请上传美美的照片</h2>
 			<div class="uploadImg">
-				<img src="~@/assets/modal/add-ico.png" class="addIcon">
+				<form id="uploadImgForm" ref="uploadImgForm">
+					<input type="file" name="uploadImg" id="uploadImg" ref="uploadImg" hidden="true" value="" @change="uploadImg" />
+					<label for="uploadImg" class="uploadImgLabel">
+						<img src="~@/assets/modal/add-ico.png" class="addIcon">
+					</label>
+				</form>
+				<div class="preview">
+					<img :src="previewImgUrl" class="img" v-if="previewImgUrl !== ''">
+				</div>
 			</div>
 			<h5 class="info3">
 				<p>*写上游戏的祝福语再拍照会更容易通过审核哦！</p>
@@ -27,7 +35,8 @@
 	export default {
 		data() {
 			return {
-				contentText: ''
+				contentText: '',
+				previewImgUrl: ''
 			}
 		},
 		methods: {
@@ -35,6 +44,15 @@
 				this.$store.commit('modal/setPublishShow', {
 					showPublishShow: false
 				});
+			},
+			uploadImg() {
+				var file = $(this.$refs.uploadImg)[0].files[0];
+				if(!(file.type === 'image/png' || file.type === 'image/jpg' || file.type === 'image/jpeg')) {
+					console.log('文件格式不为图片');
+					return;
+				}
+
+				this.previewImgUrl = URL.createObjectURL(file);
 			}
 		},
 		computed: {
@@ -126,10 +144,31 @@
 
 			.uploadImg {
 				height: 3rem;
+				text-align: left;
+				position: relative;
 
-				.addIcon {
-					width: 1.5rem;
-					margin: 0.5rem 0 0 0.6rem;
+				.uploadImgLabel {
+					display: inline-block;
+
+					.addIcon {
+						display: inline-block;
+						width: 1.5rem;
+						margin: 0.5rem 0 0 0.6rem;
+					}
+				}
+			}
+
+			.preview {
+				position: absolute;
+				width: 2.4rem;
+				height: 2.4rem;
+				top: 0.25rem;
+				right: 0.5rem;
+				border: 2px dashed #e35727;
+
+				.img {
+					width: 100%;
+					height: 100%;
 				}
 			}
 

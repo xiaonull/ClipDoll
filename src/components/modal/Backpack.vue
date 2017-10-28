@@ -19,30 +19,15 @@
 			</div>
 			<div class="content" v-if="active === 'myWaWa'">
 				<div class="list">
-					<div class="item item1">
+					<div class="item" :class="{item1:index%3===0, item2:index%3===1, item3:index%3===2}" v-for="(item, index) in myWaWaList" :key="index">
 						<div class="imgContainer">
-							<img src="~@/assets/modal/wawa-tu.png" class="img">
+							<img :src="'http://' + item.pic" class="img">
 						</div>
-						<div class="extractWaWa">
+						<div class="extractWaWa" @click="extractWaWa(item.goods_id)">
 							<img src="~@/assets/modal/an-ico01.png" class="img">
 						</div>
 					</div>
-					<div class="item item2">
-						<div class="imgContainer">
-							<img src="~@/assets/modal/wawa-tu.png" class="img">
-						</div>
-						<div class="extractWaWa">
-							<img src="~@/assets/modal/an-ico01.png" class="img">
-						</div>
-					</div>
-					<div class="item item3">
-						<div class="imgContainer">
-							<img src="~@/assets/modal/wawa-tu.png" class="img">
-						</div>
-						<div class="extractWaWa">
-							<img src="~@/assets/modal/an-ico01.png" class="img">
-						</div>
-					</div>
+					
 				</div>
 			</div>
 			<div class="extractRecordsContent" v-else>
@@ -55,7 +40,7 @@
 					</div>
 				</div>
 				<div class="list">
-					<div class="item">
+					<div class="item" v-for="(item, index) in extractRecords" :key="index">
 						<div class="extractContent">
 							<span class="text">布娃娃</span>
 						</div>
@@ -89,12 +74,39 @@
 	export default {
 		data() {
 			return {
-				active: 'myWaWa'
+				active: 'myWaWa',
+				myWaWaList: [],
+				extractRecords: []
 			}
+		},
+		mounted() {
+			this.loadData();
 		},
 		methods: {
 			loadData() {
+				let option = {
+					url: 'api/rucksack?token=' + sessionStorage.token,
+					type: 'GET',
+					success: function(result, status, xhr) {
+						if(result.code === 1) {
+							this.myWaWaList = result.data;
+						}
+					}.bind(this)
+				};
 
+				myAjax(option);
+
+				let option2 = {
+					url: 'api/withdrawlog?token=' + sessionStorage.token,
+					type: 'POST',
+					success: function(result, status, xhr) {
+						if(result.length > 0) {
+							this.extractRecords = result;
+						}
+					}.bind(this)
+				};
+
+				myAjax(option2);
 			},
 			close() {
 				this.$store.commit('modal/setBackpack', {
@@ -107,6 +119,9 @@
 				}else {
 					this.active = 'extractRecords';
 				}
+			},
+			extractWaWa(goods_id) {
+
 			}
 		},
 		computed: {

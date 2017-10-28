@@ -7,29 +7,13 @@
 			</div>
 			<div class="content">
 				<div class="list">
-					<div class="item">
+					<div class="item" v-for="item in taskList">
 						<img src="~@/assets/modal/gold-ico02.png" class="icon">
 						<div class="main">
-							<span class="text">抓2次娃娃(1/2)</span>
-							<span class="reward">奖励金币x5</span>
+							<span class="text">{{item.mission_title}}({{item.finish_num}}/{{item.mission_need_num}})</span>
+							<span class="reward">{{item.awards_contents}}</span>
 						</div>
-						<span class="state">未达成</span>
-					</div>
-					<div class="item">
-						<img src="~@/assets/modal/gold-ico02.png" class="icon">
-						<div class="main">
-							<span class="text">抓2次娃娃(1/2)</span>
-							<span class="reward">奖励金币x5</span>
-						</div>
-						<span class="state">未达成</span>
-					</div>
-					<div class="item">
-						<img src="~@/assets/modal/gold-ico02.png" class="icon">
-						<div class="main">
-							<span class="text">抓2次娃娃(2/2)</span>
-							<span class="reward">奖励金币x5</span>
-						</div>
-						<span class="state green">已达成</span>
+						<span class="state" :class="{green : item.finish_num == item.mission_need_num}">{{item.finish_num == item.mission_need_num ? '已达成' : '未达成'}}</span>
 					</div>
 				</div>
 			</div>
@@ -41,14 +25,30 @@
 	export default {
 		data() {
 			return {
-
+				taskList: []
 			}
+		},
+		mounted() {
+			this.init();
 		},
 		methods: {
 			close() {
 				this.$store.commit('modal/setTask', {
 					showTask: false
 				});
+			},
+			init() {
+				let option = {
+					url: 'api/mission?token=' + sessionStorage.token,
+					type: 'GET',
+					success: function(result, status, xhr) {
+						if(result.code === 1) {
+							this.taskList = result.data;
+						}
+					}.bind(this)
+				};
+
+				myAjax(option);
 			}
 		},
 		computed: {
