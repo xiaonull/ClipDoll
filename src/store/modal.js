@@ -4,6 +4,7 @@ export default {
 			msg: '11',
 			display: false
 		},
+		showSelectWawaJi: true,
 		showBackpack: false,
 		showRecharge: false,
 		showTask: false,
@@ -25,6 +26,9 @@ export default {
 		resetMsg(state) {
 			state.Msg.msg = '';
 			state.Msg.display = false;
+		},
+		setSelectWawaJi(state, data) {
+			state.showSelectWawaJi = data.showSelectWawaJi;
 		},
 		setBackpack(state, data) {
 			state.showBackpack = data.showBackpack;

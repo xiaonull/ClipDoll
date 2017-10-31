@@ -1,6 +1,7 @@
 <template>
 	<section class="index">
 		<msg></msg>
+		<selectWawaJi></selectWawaJi>
 		<recharge></recharge>
 		<backpack></backpack>
 		<playerShow></playerShow>
@@ -17,6 +18,7 @@
 	import LuckValue from './LuckValue.vue';
 	import GameDesk from './GameDesk.vue';
 	import Msg from './modal/Msg.vue';
+	import SelectWawaJi from './modal/SelectWawaJi.vue';
 	import Backpack from './modal/Backpack.vue';
 	import Recharge from './modal/Recharge.vue';
 	import Task from './modal/Task.vue';
@@ -29,6 +31,7 @@
 			LuckValue,
 			GameDesk,
 			Msg,
+			SelectWawaJi,
 			Backpack,
 			Recharge,
 			Task,
