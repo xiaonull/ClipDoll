@@ -101,23 +101,16 @@
 				GameBox.prototype.getHeight = function() {
 					return $(self.$refs.gameBox).css('height');
 				}
-
-				let option = {
-					url: 'api/user',
-					type: 'GET',
-					success: function(result, status, xhr) {
-						if(result.code === 1) {
-							this.currentWaWaList = result.data.data;
-						}
-					}.bind(this)
-				};
-
-				myAjax(option);
+				
+				let wawaJiData = JSON.parse(sessionStorage.initWaWaJi);
+				this.currentWaWaList = wawaJiData.data;
+				this.$store.commit('info/setWawaJiGold', wawaJiData.coin);
+				this.$store.commit('info/setLuckyValue', wawaJiData.lucky);
 			},
 			changeLightImg() {
 				setInterval(() => {
 					this.light_img_index = (this.light_img_index + 1) % 3 === 0 ? 3 : (this.light_img_index + 1) % 3 ;
-				}, 2000);
+				}, 1000);
 			},
 			move_Left() {
 				if(this.$store.state.rod.moveToLeft === 'can') {
@@ -140,7 +133,7 @@
 				}
 			},
 			grab() {
-				let $shadow =  $(this.$refs.underpan).find('.shadow');
+				let $shadow =  $(this.$refs.shadow);
 				let shadowLeft = $shadow.css('left').slice(0, $shadow.css('left').length - 2) * 1 + $shadow.css('width').slice(0, $shadow.css('width').length - 2) / 2;
 				let shadowBottom = $shadow.css('bottom').slice(0, $shadow.css('bottom').length - 2);
 
@@ -159,49 +152,213 @@
 					let level2 = 0;
 					let level3 = 0;
 					if(phoneWidth <= 410) {
-						level1 = 20;
-						level2 = 23;
-						level3 = 25;
+						level1 = 17;
+						level2 = 19;
+						level3 = 22;
 					}else {
-						level1 = 23;
-						level2 = 28;
-						level3 = 32;
+						level1 = 19;
+						level2 = 22;
+						level3 = 25;
 					}
-
 
 					if(distance < level1) {
 						// 准确抓到，有90%的概率向后台请求抓起概率
-						// level表示抓取的准确度，在抓取失败时准确度越高能抓起的高度越高；catch表示能否完全抓起，由后台控制
-						htsBus.$emit('grabing', {
-							level: 1,
-							catch: true,
-							$obj: $wawa
-						});
+						// 获取1～10之间的随机整数
+						if(Math.floor(Math.random() * 10 + 1) <= 9) {
+							this.isCatch(this.currentWaWaList[i].id)
+							.then((data) => {
+								// level表示抓取的准确度，在抓取失败时准确度越高能抓起的高度越高；catch表示能否完全抓起，由后台控制
+								htsBus.$emit('grabing', {
+									level: 1,
+									catch: data,
+									$obj: $wawa
+								});
+							}, (err) => {
+
+							})
+							.catch((err) => {
+								
+							});
+						}else {
+							this.lost()
+							.then((data) => {
+								htsBus.$emit('grabing', {
+									level: 1,
+									catch: false,
+									$obj: $wawa
+								});
+							}, (err) => {
+
+							})
+							.catch((err) => {
+								
+							});
+						}
+						
 						return;
 					} else if(distance < level2) {
 						// 较准确抓到，有70%的概率向后台请求抓起概率
-						htsBus.$emit('grabing', {
-							level: 2,
-							catch: true,
-							$obj: $wawa
-						});
+						// 获取1～10之间的随机整数
+						if(Math.floor(Math.random() * 10 + 1) <= 7) {
+							this.isCatch(this.currentWaWaList[i].id)
+							.then((data) => {
+								// level表示抓取的准确度，在抓取失败时准确度越高能抓起的高度越高；catch表示能否完全抓起，由后台控制
+								htsBus.$emit('grabing', {
+									level: 2,
+									catch: data,
+									$obj: $wawa
+								});
+							}, (err) => {
+
+							})
+							.catch((err) => {
+								
+							});
+						}else {
+							this.lost()
+							.then((data) => {
+								htsBus.$emit('grabing', {
+									level: 2,
+									catch: false,
+									$obj: $wawa
+								});
+							}, (err) => {
+
+							})
+							.catch((err) => {
+								
+							});
+						}
+						
 						return;
 					} else if(distance < level3) {
 						// 较准确抓到，有50%的概率向后台请求抓起概率
-						htsBus.$emit('grabing', {
-							level: 3,
-							catch: false,
-							$obj: $wawa
-						});
+						// 获取1～10之间的随机整数
+						if(Math.floor(Math.random() * 10 + 1) <= 5) {
+							this.isCatch(this.currentWaWaList[i].id)
+							.then((data) => {
+								// level表示抓取的准确度，在抓取失败时准确度越高能抓起的高度越高；catch表示能否完全抓起，由后台控制
+								htsBus.$emit('grabing', {
+									level: 3,
+									catch: data,
+									$obj: $wawa
+								});
+							}, (err) => {
+
+							})
+							.catch((err) => {
+								
+							});
+						}else {
+							this.lost()
+							.then((data) => {
+								htsBus.$emit('grabing', {
+									level: 3,
+									catch: false,
+									$obj: $wawa
+								});
+							}, (err) => {
+
+							})
+							.catch((err) => {
+								
+							});
+						}
+						
 						return;
 					}
 				}
 
-				// 完全没抓到
-				htsBus.$emit('grabing', {
-					level: 4,
-					catch: false,
-					$obj: null
+				this.lost()
+				.then((data) => {
+					// 完全没抓到
+					htsBus.$emit('grabing', {
+						level: 4,
+						catch: false,
+						$obj: null
+					});
+				}, (err) => {
+
+				})
+				.catch((err) => {
+
+				});
+
+			},
+			isCatch(wawa_id) {
+				return new Promise((resolve, reject) => {
+					let option = {
+						url: 'api/catchdoll/' + this.currentWaWaList[0].goods_cate_id + '/' + wawa_id + '?token=' + sessionStorage.token,
+						type: 'POST',
+						success: function(result, status, xhr) {
+							if(result.code === 1) {
+								if(result.lucky === 'clear') {
+									this.$store.commit('modal/setbubble_luckValue', {
+										showBubble: false,
+										bubble_luckValue: 0
+									});	
+									this.$store.commit('info/setLuckyValue', 0);
+								}else {
+									this.$store.commit('modal/setbubble_luckValue', {
+										showBubble: false,
+										bubble_luckValue: result.lucky
+									});	
+								}
+
+								if(result.data === 'get') {
+									resolve(true);
+								}else if(result.data === 'lost') {
+									resolve(false);
+								}
+							}else {
+								this.$store.commit('modal/setMsg', {
+									msg: result.msg,
+									display: true
+								});
+
+								let t = setTimeout(() => {
+									this.$store.commit('modal/resetMsg');
+									clearTimeout(t);
+								}, 2000);
+
+								reject();
+							}
+						}.bind(this)
+					};
+
+					myAjax(option);
+				});
+			},
+			lost() {
+				return new Promise((resolve, reject) => {
+					let option = {
+						url: 'api/catchdoll/' + this.currentWaWaList[0].goods_cate_id + '/0' + '?token=' + sessionStorage.token + '&iscatch=false',
+						type: 'POST',
+						success: function(result, status, xhr) {
+							if(result.code === 1) {
+								if(result.lucky === 'clear') {
+									this.$store.commit('modal/setbubble_luckValue', {
+										showBubble: false,
+										bubble_luckValue: 0
+									});	
+									this.$store.commit('info/setLuckyValue', 0);
+								}else {
+									this.$store.commit('modal/setbubble_luckValue', {
+										showBubble: false,
+										bubble_luckValue: result.lucky
+									});	
+								}	
+
+								if(result.data === 'get') {
+									resolve(true);
+								}else if(result.data === 'lost') {
+									resolve(false);
+								}
+							}
+						}.bind(this)
+					};
+
+					myAjax(option);
 				});
 			}
 		},
@@ -223,7 +380,7 @@
 					if(val.grabWaWa === true) {
 						let n = 0;
 						let interval = setInterval(() => {
-							n += 1;
+							n += 2;
 							$(this.$refs.rod_paw_l).css({
 								'transform': 'rotate(-' + n + 'deg)'
 							});
@@ -240,7 +397,7 @@
 					if(val.grabWaWa === false) {
 						let n = 16;
 						let interval = setInterval(() => {
-							n -= 1;
+							n -= 2;
 							$(this.$refs.rod_paw_l).css({
 								'transform': 'rotate(-' + n + 'deg)'
 							});
@@ -334,7 +491,7 @@
 			z-index: 2;
 			bottom: 0;
 			width: 100%;
-			height: 1.85rem;
+			height: 1.4rem;
 			background-color: #f26fa5;
 		}
 
@@ -420,11 +577,18 @@
 					left: 52px;
 					top: 3rem;
 					width: 2.5rem;
-					height: 2.5rem;
-					border-radius: 50%;
+					height: 1.5rem;
+					background-image: url('~@/assets/bg/shadow.png');
+					background-size: 100% 100%;
+					filter:alpha(opacity=50);  
+					-moz-opacity: 0.7;  
+					-khtml-opacity: 0.7;  
+					opacity: 0.7;
+
+					/* border-radius: 50%;
 					background-color: rgba(0, 0, 0, 0.3);
 					transform:rotateX(125deg);
-					-webkit-transform:rotateX(125deg);
+					-webkit-transform:rotateX(125deg); */
 				}
 			}
 

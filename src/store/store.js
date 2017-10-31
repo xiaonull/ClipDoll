@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import rod from './rod.js';
 import modal from './modal.js';
+import info from './info.js';
 
 Vue.use(Vuex);
 
@@ -18,6 +19,12 @@ export default new Vuex.Store({
 			state: modal.state,
 			mutations: modal.mutations,
 			actions: modal.actions
+		},
+		info: {
+			namespaced: true,
+			state: info.state,
+			mutations: info.mutations,
+			actions: info.actions
 		}
 	}
 })
@@ -27,17 +34,19 @@ window.myAjax = function(option) {
 	let domainName = 'http://baby.quwin.cn/';
 	// return;
 
-	if(!sessionStorage.token || sessionStorage.token === null || sessionStorage.token === '') {
-		getToken()
-		.then(() => {
-			send();
-		})
-		.catch((err) => {
-			console.log(err);
-		});	;
-	}else {
-		send();
-	}
+	// if(!sessionStorage.token || sessionStorage.token === null || sessionStorage.token === '') {
+	// 	getToken()
+	// 	.then(() => {
+	// 		send();
+	// 	})
+	// 	.catch((err) => {
+	// 		console.log(err);
+	// 	});	;
+	// }else {
+	// 	send();
+	// }
+
+	send();
 
 	function send() {
 		$.ajax({
@@ -71,13 +80,13 @@ window.myAjax = function(option) {
 };
 
 
-function getToken() {
+window.getToken = function() {
 	return new Promise((resolve, reject) => {
 		$.ajax({
-			url: 'http://baby.quwin.cn/api/user',
+			url: 'http://baby.quwin.cn/api/refresh?token=' + sessionStorage.token,
 			type: 'GET',
 			success: function(result, status, xhr) {
-				sessionStorage.token = result.token;
+				sessionStorage.token = result;
 				resolve();
 			},
 			error: function() {

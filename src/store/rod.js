@@ -104,7 +104,7 @@ export default {
 
 						resolve();
 					}
-				}, 30);
+				}, 20);
 			});
 		},
 		// 完全夹起娃娃（如果夹中娃娃的话）
@@ -133,7 +133,7 @@ export default {
 
 						resolve();
 					}
-				}, 30);
+				}, 20);
 			});
 		},
 		grabUpButFail(context, option) {
@@ -181,7 +181,7 @@ export default {
 					wawaUpHeight--;
 
 					if(wawaUpHeight <= 0) {
-						context.commit('release');
+						// context.commit('release');
 
 						option.$obj.animate({
 							marginTop: '0'
@@ -194,7 +194,7 @@ export default {
 						resolve();
 					}
 
-				}, 30);
+				}, 20);
 			});
 
 		}

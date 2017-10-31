@@ -53,12 +53,10 @@
 			},
 			buyGold(id) {
 				let option = {
-					url: 'api/wxpay/' + id,
-					type: 'POST',
+					url: 'api/pay/' + id + '?token=' + sessionStorage.token,
+					type: 'GET',
 					success: function(result, status, xhr) {
-						console.log(id);
-
-
+						console.log(result);
 					}.bind(this)
 				};
 

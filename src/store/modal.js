@@ -8,7 +8,9 @@ export default {
 		showRecharge: false,
 		showTask: false,
 		showPlayerShow: false,
-		showPublishShow: false
+		showPublishShow: false,
+		showBubble: false,
+		bubble_luckValue: 0
 	},
 
 	mutations: {
@@ -38,6 +40,12 @@ export default {
 		},
 		setPublishShow(state, data) {
 			state.showPublishShow = data.showPublishShow;
+		},
+		setbubble_luckValue(state, data) {
+			state.showBubble = data.showBubble;
+			if(data.bubble_luckValue) {
+				state.bubble_luckValue = data.bubble_luckValue;
+			}
 		}
 	},
 

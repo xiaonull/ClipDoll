@@ -42,7 +42,7 @@
 				<div class="glod">
 					<img src="~@/assets/gameDesk/gold-bg02.png" class="img img_bg">
 					<img src="~@/assets/gameDesk/gold-ico.png" class="img_icon">
-					<span class="glodNum"> X 372</span>
+					<span class="glodNum"> X {{userGold}}</span>
 				</div>
 			</div>
 			<div class="right">
@@ -73,6 +73,11 @@
 				interval: null
 			}
 		},
+		computed: {
+			userGold() {
+				return this.$store.state.info.userGold;
+			}
+		},
 		mounted() {
 			this.bindEvevt();
 			this.init();
@@ -84,20 +89,26 @@
 				});
 			},
 			init() {
-				let option = {
-					url: 'api/user',
-					type: 'GET',
-					success: function(result, status, xhr) {
-						if(result.code === 1) {
-							this.nickname = result.user.nickname;
-						}
-					}.bind(this)
-				};
-
-				myAjax(option);
+				let userData = JSON.parse(sessionStorage.userData);
+				this.nickname = userData.username;
+				this.$store.commit('info/setUserGold', userData.coin);
 			},
 			start() {
-				this.startGame = true;
+				// 判断金币够不够
+				if(this.$store.state.info.userGold >= this.$store.state.info.wawaJiGold) {
+					this.$store.commit('info/setUserGold', this.$store.state.info.userGold - this.$store.state.info.wawaJiGold);
+					this.startGame = true;
+				}else {
+					this.$store.commit('modal/setMsg', {
+						msg: '金币不足，请充值',
+						display: true
+					});
+
+					let t1 = setTimeout(() => {
+						this.$store.commit('modal/resetMsg');
+						clearTimeout(t1);
+					}, 2000);
+				}
 			},
 			left(event) {
 				if(this.grabState === false) {
@@ -148,13 +159,14 @@
 				}
 			},
 			grabing(option) {
+				// console.log(option.level);
 				// 抓不到娃娃
 				if(option.level === 4) {
 					this.$store.dispatch('rod/grabDown').then((data) => {
 						return new Promise((resolve, reject) => {
 							this.$store.commit('rod/grabWaWa');
 							setTimeout(() => {
-								this.$store.commit('rod/release');
+								// this.$store.commit('rod/release');
 								resolve();
 							}, 2000);
 						});
@@ -302,15 +314,12 @@
 					this.grabState = false;
 
 					if(option && option.failed && option.failed === true) {
+						this.$store.commit('rod/release');
+						
 						this.$store.commit('modal/setMsg', {
 							msg: '好可惜抓取失败',
 							display: true
 						});
-
-						let t1 = setTimeout(() => {
-							this.$store.commit('modal/resetMsg');
-							clearTimeout(t1);
-						}, 2000);
 					}
 
 					if(option && option.failed === false) {
@@ -324,6 +333,25 @@
 							clearTimeout(t1);
 						}, 2000);
 					}
+
+					let t1 = setTimeout(() => {
+						this.$store.commit('modal/resetMsg');
+
+						this.$store.commit('info/setLuckyValue', parseInt(this.$store.state.modal.bubble_luckValue) + parseInt(this.$store.state.info.luckyValue));
+						this.$store.commit('modal/setbubble_luckValue', {
+							showBubble: true
+						});
+
+						let t2 = setTimeout(() => {
+							this.$store.commit('modal/setbubble_luckValue', {
+								showBubble: false,
+								bubble_luckValue: 0
+							});
+							clearTimeout(t2);
+						}, 3000);
+
+						clearTimeout(t1);
+					}, 2000);	
 				})
 				.catch(response => {
 					console.log('error: ' + response);

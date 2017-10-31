@@ -42,26 +42,10 @@
 				<div class="list">
 					<div class="item" v-for="(item, index) in extractRecords" :key="index">
 						<div class="extractContent">
-							<span class="text">布娃娃</span>
+							<span class="text">{{item.name}}</span>
 						</div>
 						<div class="currentState">
-							<span class="text">发送中</span>
-						</div>
-					</div>
-					<div class="item">
-						<div class="extractContent">
-							<span class="text">布娃娃</span>
-						</div>
-						<div class="currentState">
-							<span class="text">发送中</span>
-						</div>
-					</div>
-					<div class="item">
-						<div class="extractContent">
-							<span class="text">布娃娃</span>
-						</div>
-						<div class="currentState">
-							<span class="text suc">成功</span>
+							<span class="text" :class="{suc: item.status === '已发货'}">{{item.status}}</span>
 						</div>
 					</div>
 				</div>
@@ -80,7 +64,7 @@
 			}
 		},
 		mounted() {
-			this.loadData();
+			
 		},
 		methods: {
 			loadData() {
@@ -100,8 +84,8 @@
 					url: 'api/withdrawlog?token=' + sessionStorage.token,
 					type: 'POST',
 					success: function(result, status, xhr) {
-						if(result.length > 0) {
-							this.extractRecords = result;
+						if(result.code === 1) {
+							this.extractRecords = result.data;
 						}
 					}.bind(this)
 				};
@@ -216,6 +200,7 @@
 					padding: 0.8rem 0.5rem;
 					height: 90%;
 					font-size: 0;
+					text-align: left;
 
 					.item {
 						display: inline-block;

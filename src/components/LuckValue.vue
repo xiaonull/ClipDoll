@@ -2,14 +2,14 @@
 	<section class="luckValue">
 		<div class="left">
 			<img src="~@/assets/luckValue/gold-ico.png" class="goldIcon">
-			<span class="goldNum">10</span>
+			<span class="goldNum">{{wawaJiGold}}</span>
 		</div>
 		<div class="right">
-			<p class="info">幸运值 : 17/100</p>
-			<div class="value">
-				<div class="bubble" v-show="show">
+			<p class="info">幸运值 : {{luckyValue}}/100</p>
+			<div class="value" ref="barValue">
+				<div class="bubble" ref="bubble" v-show="show">
 					<div class="rule">
-						<p class="rule1">幸运值+10</p>
+						<p class="rule1">幸运值+{{bubble_luckValue}}</p>
 						<p class="rule2">满100时必中</p>
 					</div>
 				</div>
@@ -22,8 +22,35 @@
 	export default {
 		data() {
 			return {
-				show: false
+				// show: false
 			}
+		},
+		computed: {
+			wawaJiGold() {
+				return this.$store.state.info.wawaJiGold;
+			},
+			luckyValue() {
+				if(this.$store.state.info.luckyValue < 70) {
+					let len = 9.2 * (this.$store.state.info.luckyValue / 100);
+					$(this.$refs.barValue).css('width', len + 'rem');
+				}else {
+					let len = 9.2 * (this.$store.state.info.luckyValue / 100);
+					$(this.$refs.barValue).css('width', len + 'rem');
+					$(this.$refs.bubble).css('right', '-1rem');
+				}
+				
+				return this.$store.state.info.luckyValue;
+			},
+			show() {
+				return this.$store.state.modal.showBubble;
+			},
+			bubble_luckValue() {
+				return this.$store.state.modal.bubble_luckValue;
+			}
+		},
+		mounted() {
+			let len = 9.3 * (this.$store.state.info.luckyValue / 100);
+			$(this.$refs.barValue).css('width', len + 'rem');
 		}
 	}
 </script>
@@ -78,17 +105,22 @@
 				font-weight: 600;
 				font-size: 0.6rem;
 				position: relative;
+				z-index: 10;
 				top: 0.08rem;
 				right: 0.5rem;
 			}
 
 			.value {
-				width: 2.581rem;
+				width: 0rem;
 				height: 0.7rem;
 				margin-top: 0.13rem;
 				margin-left: 0.1rem;
 				border-radius: 1rem;
 				background-image: url('~@/assets/luckValue/price.jpg');
+				filter:alpha(opacity=50);  
+				/* -moz-opacity: 0.5;  
+				-khtml-opacity: 0.5;  
+				opacity: 0.5; */
 				position: relative;
 
 				.bubble {

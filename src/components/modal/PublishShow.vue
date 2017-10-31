@@ -12,7 +12,7 @@
 			<h2 class="info2">请上传美美的照片</h2>
 			<div class="uploadImg">
 				<form id="uploadImgForm" ref="uploadImgForm">
-					<input type="file" name="uploadImg" id="uploadImg" ref="uploadImg" hidden="true" value="" @change="uploadImg" />
+					<input type="file" name="pic" id="uploadImg" ref="uploadImg" hidden="true" value="" @change="uploadImg" />
 					<label for="uploadImg" class="uploadImgLabel">
 						<img src="~@/assets/modal/add-ico.png" class="addIcon">
 					</label>
@@ -26,7 +26,7 @@
 				<p>*通过审核后即可获得100金币奖励！</p>
 				<p>*所上传图片视为允许被引用！</p>
 			</h5>
-			<img src="~@/assets/modal/an-ico03.png" class="sureToSend">
+			<img src="~@/assets/modal/an-ico03.png" class="sureToSend" @click="sureToSend">
 		</div>
 	</section>
 </template>
@@ -45,18 +45,102 @@
 					showPublishShow: false
 				});
 			},
+			resetData() {
+				this.contentText = '';
+				this.previewImgUrl = '';
+			},
 			uploadImg() {
 				var file = $(this.$refs.uploadImg)[0].files[0];
 				if(!(file.type === 'image/png' || file.type === 'image/jpg' || file.type === 'image/jpeg')) {
 					console.log('文件格式不为图片');
+					this.previewImgUrl = '';
 					return;
 				}
 
 				this.previewImgUrl = URL.createObjectURL(file);
+			},
+			sureToSend() {
+				if(this.contentText.length < 30) {
+					this.$store.commit('modal/setMsg', {
+						msg: '请输入不少于30字的玩家秀内容',
+						display: true
+					});
+
+					let t = setTimeout(() => {
+						this.$store.commit('modal/resetMsg');
+						clearTimeout(t);
+					}, 2000);
+
+					return;
+				}
+				
+				let file = $(this.$refs.uploadImg)[0].files[0];
+				// console.log(file)
+				if(!file || !(file.type === 'image/png' || file.type === 'image/jpg' || file.type === 'image/jpeg')) {
+					this.$store.commit('modal/setMsg', {
+						msg: '请上传美美的照片',
+						display: true
+					});
+
+					let t = setTimeout(() => {
+						this.$store.commit('modal/resetMsg');
+						clearTimeout(t);
+					}, 2000);
+					
+					document.getElementById('uploadImgForm').reset();
+					return;
+				}
+				
+				let formData = new FormData();
+				formData.append('pic', file);
+				let option = {
+					url: 'api/addusershow?contents=' + this.contentText + '&token=' + sessionStorage.token,
+					type: 'POST',
+					data: formData,
+					dataType: 'json',
+					cache: false,
+					processData: false,
+					contentType: false,
+					success: function(result, status, xhr) {
+						if(result.code === 1) {
+							this.$store.commit('modal/setMsg', {
+								msg: '发表成功',
+								display: true
+							});
+
+							let t = setTimeout(() => {
+								this.$store.commit('modal/resetMsg');
+								clearTimeout(t);
+							}, 2000);
+							
+							document.getElementById('uploadImgForm').reset();
+							this.contentText = '';
+							this.previewImgUrl = '';
+						}else {
+							this.$store.commit('modal/setMsg', {
+								msg: '发表失败，请稍后重试',
+								display: true
+							});
+
+							let t = setTimeout(() => {
+								this.$store.commit('modal/resetMsg');
+								clearTimeout(t);
+							}, 2000);
+
+							console.log('发表玩家秀err: ' + result);
+						}
+					}.bind(this)
+				};
+
+				myAjax(option);
 			}
 		},
 		computed: {
 			show() {
+				if(this.$store.state.modal.showPublishShow === true) {
+					this.resetData();
+				}
+
 				return this.$store.state.modal.showPublishShow;
 			}
 		}

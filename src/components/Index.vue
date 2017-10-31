@@ -34,6 +34,22 @@
 			Task,
 			PlayerShow,
 			PublishShow
+		},
+		mounted() {
+			// 每20分钟刷新一下 token
+			let t = setTimeout(() => {
+				setInterval(() => {
+					getToken();
+				}, 1200000);
+
+				clearTimeout(t);
+			}, 1200000);
+			
+			// console.log(sessionStorage.reload);
+			if(sessionStorage.reload === 'true') {
+				sessionStorage.reload = 'false';
+				window.location.reload();
+			}
 		}
 	}
 </script>

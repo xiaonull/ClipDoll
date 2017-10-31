@@ -31,7 +31,7 @@
 		width: 100%;
 		height: 100%;
 		background-color: rgba(0, 0, 0, 0.3);
-		z-index: 20;
+		z-index: 25;
 		text-align: center;
 
 		.text {
@@ -40,8 +40,9 @@
 			top: 35%;
 			background-color: rgba(0, 0, 0, 0.5);
 			width: 80%;
-			height: 4rem;
-			line-height: 4rem;
+			min-height: 3rem;
+			padding: 0.5rem;
+			line-height: 3rem;
 			font-size: 1.3rem;
 			color: #fff;
 			border-radius: 0.5rem;
