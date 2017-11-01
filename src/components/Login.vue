@@ -32,6 +32,7 @@
 						sessionStorage.token = result.token;
 						sessionStorage.userData =  JSON.stringify(result.user);
 						sessionStorage.initWaWaJi =  JSON.stringify(result.data);
+						sessionStorage.loginUrlData =  JSON.stringify(data);
 						// console.log(JSON.parse(sessionStorage.initWaWaJi));
 						
 						if(sessionStorage.login === 'true') {

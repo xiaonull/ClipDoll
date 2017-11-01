@@ -4,8 +4,13 @@ export default {
 			msg: '11',
 			display: false
 		},
-		showSelectWawaJi: true,
+		showSelectWawaJi: false,
 		showBackpack: false,
+		showReceiptInfo: false,
+		receiptID: {
+			rucksack_id: 0,
+			goods_id: 0
+		},
 		showRecharge: false,
 		showTask: false,
 		showPlayerShow: false,
@@ -32,6 +37,13 @@ export default {
 		},
 		setBackpack(state, data) {
 			state.showBackpack = data.showBackpack;
+		},
+		setReceiptInfo(state, data) {
+			state.showReceiptInfo = data.showReceiptInfo;
+		},
+		setReceiptID(state, data) {
+			state.receiptID.rucksack_id = data.rucksack_id;
+			state.receiptID.goods_id = data.goods_id;
 		},
 		setRecharge(state, data) {
 			state.showRecharge = data.showRecharge;

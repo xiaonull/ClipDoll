@@ -150,7 +150,9 @@
 				clearInterval(this.interval);
 			},
 			changeOther() {
-
+				this.$store.commit('modal/setSelectWawaJi', {
+					showSelectWawaJi: true
+				});
 			},
 			grab() {
 				if(this.grabState === false) {

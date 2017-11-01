@@ -91,6 +91,10 @@
 				htsBus.$on('grab', () => {
 					this.grab();
 				});
+
+				htsBus.$on('setCurrentWaWaList', (data) => {
+					this.currentWaWaList = data;
+				});
 			},
 			init() {
 				let self = this;
@@ -162,6 +166,7 @@
 					}
 
 					if(distance < level1) {
+						// console.log('level1')
 						// 准确抓到，有90%的概率向后台请求抓起概率
 						// 获取1～10之间的随机整数
 						if(Math.floor(Math.random() * 10 + 1) <= 9) {
@@ -180,11 +185,12 @@
 								
 							});
 						}else {
-							this.lost()
+							this.isCatch(this.currentWaWaList[i].id)
 							.then((data) => {
+								// level表示抓取的准确度，在抓取失败时准确度越高能抓起的高度越高；catch表示能否完全抓起，由后台控制
 								htsBus.$emit('grabing', {
 									level: 1,
-									catch: false,
+									catch: data,
 									$obj: $wawa
 								});
 							}, (err) => {
@@ -197,6 +203,7 @@
 						
 						return;
 					} else if(distance < level2) {
+						// console.log('level2')
 						// 较准确抓到，有70%的概率向后台请求抓起概率
 						// 获取1～10之间的随机整数
 						if(Math.floor(Math.random() * 10 + 1) <= 7) {
@@ -215,11 +222,12 @@
 								
 							});
 						}else {
-							this.lost()
+							this.isCatch(this.currentWaWaList[i].id)
 							.then((data) => {
+								// level表示抓取的准确度，在抓取失败时准确度越高能抓起的高度越高；catch表示能否完全抓起，由后台控制
 								htsBus.$emit('grabing', {
 									level: 2,
-									catch: false,
+									catch: data,
 									$obj: $wawa
 								});
 							}, (err) => {
@@ -232,6 +240,7 @@
 						
 						return;
 					} else if(distance < level3) {
+						// console.log('level3')
 						// 较准确抓到，有50%的概率向后台请求抓起概率
 						// 获取1～10之间的随机整数
 						if(Math.floor(Math.random() * 10 + 1) <= 5) {
@@ -250,11 +259,12 @@
 								
 							});
 						}else {
-							this.lost()
+							this.isCatch(this.currentWaWaList[i].id)
 							.then((data) => {
+								// level表示抓取的准确度，在抓取失败时准确度越高能抓起的高度越高；catch表示能否完全抓起，由后台控制
 								htsBus.$emit('grabing', {
 									level: 3,
-									catch: false,
+									catch: data,
 									$obj: $wawa
 								});
 							}, (err) => {
@@ -288,7 +298,7 @@
 			isCatch(wawa_id) {
 				return new Promise((resolve, reject) => {
 					let option = {
-						url: 'api/catchdoll/' + this.currentWaWaList[0].goods_cate_id + '/' + wawa_id + '?token=' + sessionStorage.token,
+						url: 'api/catchdoll/' + this.currentWaWaList[0].goods_cate_id + '/' + wawa_id + '?token=' + sessionStorage.token + '&iscatch=true',
 						type: 'POST',
 						success: function(result, status, xhr) {
 							if(result.code === 1) {
@@ -391,7 +401,7 @@
 							if(n >= 16) {
 								clearInterval(interval);
 							}
-						}, 125);
+						}, 80);
 					}
 
 					if(val.grabWaWa === false) {
@@ -408,7 +418,7 @@
 							if(n <= 0) {
 								clearInterval(interval);
 							}
-						}, 125);
+						}, 80);
 					}
 				},
 				deep: true

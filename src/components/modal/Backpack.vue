@@ -23,7 +23,7 @@
 						<div class="imgContainer">
 							<img :src="'http://' + item.pic" class="img">
 						</div>
-						<div class="extractWaWa" @click="extractWaWa(item.goods_id)">
+						<div class="extractWaWa" @click="extractWaWa(item.rucksack_id, item.goods_id)">
 							<img src="~@/assets/modal/an-ico01.png" class="img">
 						</div>
 					</div>
@@ -64,9 +64,16 @@
 			}
 		},
 		mounted() {
-			
+			this.bindEvevt();
 		},
 		methods: {
+			bindEvevt() {
+				htsBus.$on('loadBackpackData', () => {
+					// this.myWaWaList = [];
+					// this.extractRecords = [];
+					this.loadData();
+				});
+			},
 			loadData() {
 				let option = {
 					url: 'api/rucksack?token=' + sessionStorage.token,
@@ -104,8 +111,14 @@
 					this.active = 'extractRecords';
 				}
 			},
-			extractWaWa(goods_id) {
-
+			extractWaWa(rucksack_id, goods_id) {
+				this.$store.commit('modal/setReceiptID', {
+					rucksack_id: rucksack_id,
+					goods_id: goods_id
+				});
+				this.$store.commit('modal/setReceiptInfo', {
+					showReceiptInfo: true
+				});
 			}
 		},
 		computed: {

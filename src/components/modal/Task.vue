@@ -13,7 +13,11 @@
 							<span class="text">{{item.mission_title}}({{item.finish_num}}/{{item.mission_need_num}})</span>
 							<span class="reward">{{item.awards_contents}}</span>
 						</div>
-						<span class="state" :class="{green : item.finish_num == item.mission_need_num}">{{item.finish_num == item.mission_need_num ? '已达成' : '未达成'}}</span>
+						<span class="state" :class="{green : item.mission_status === '1'}">
+							{{item.mission_status === '0' ? '未达成' : ''}}
+							{{item.mission_status === '1' ? '已达成' : ''}}
+							{{item.mission_status === '2' ? '已领取' : ''}}
+						</span>
 					</div>
 				</div>
 			</div>

@@ -4,6 +4,7 @@
 		<selectWawaJi></selectWawaJi>
 		<recharge></recharge>
 		<backpack></backpack>
+		<receiptInfo></receiptInfo>
 		<playerShow></playerShow>
 		<publishShow></publishShow>
 		<task></task>
@@ -20,6 +21,7 @@
 	import Msg from './modal/Msg.vue';
 	import SelectWawaJi from './modal/SelectWawaJi.vue';
 	import Backpack from './modal/Backpack.vue';
+	import ReceiptInfo from './modal/ReceiptInfo.vue';
 	import Recharge from './modal/Recharge.vue';
 	import Task from './modal/Task.vue';
 	import PlayerShow from './modal/PlayerShow.vue';
@@ -33,6 +35,7 @@
 			Msg,
 			SelectWawaJi,
 			Backpack,
+			ReceiptInfo,
 			Recharge,
 			Task,
 			PlayerShow,
@@ -53,6 +56,24 @@
 				sessionStorage.reload = 'false';
 				window.location.reload();
 			}
+
+			// 页面刷新时更新数据
+			let data = JSON.parse(sessionStorage.loginUrlData);
+			// console.log(data);
+			let option = {
+				url: 'api/login',
+				type: 'POST',
+				data: data,
+				success: function(result, status, xhr) {
+					if(result.code === 1) {
+						sessionStorage.token = result.token;
+						sessionStorage.userData =  JSON.stringify(result.user);
+						sessionStorage.initWaWaJi =  JSON.stringify(result.data);
+					}
+				}.bind(this)
+			};
+
+			myAjax(option);
 		}
 	}
 </script>

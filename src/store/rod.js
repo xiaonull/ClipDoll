@@ -142,29 +142,37 @@ export default {
 			let downL = 0;
 			let wawaUp = 0;
 			let wawaUpHeight = 0;
+			let wawaDownHeight = 0;
+			let wawaDownFlag = true;
 			if(option.level === 1) {
 				if(context.state.position.scale > 1 && context.state.position.scale <= 1.058) {
 					downL = h - 200;
 					wawaUpHeight = h - 240;
+					wawaDownHeight = h - 240;
 				}else {
 					downL = h - 240;
 					wawaUpHeight = h - 280;
+					wawaDownHeight = h - 280;
 				}				
 			}else if(option.level === 2) {
 				if(context.state.position.scale > 1 && context.state.position.scale <= 1.058) {
 					downL = h - 200;
 					wawaUpHeight = h - 290;
+					wawaDownHeight = h - 290;
 				}else {
 					downL = h - 240;
 					wawaUpHeight = h - 330;
+					wawaDownHeight = h - 330;
 				}
 			}else if(option.level === 3) {
 				if(context.state.position.scale > 1 && context.state.position.scale <= 1.058) {
 					downL = h - 200;
 					wawaUpHeight = h - 340;
+					wawaDownHeight = h - 340;
 				}else {
 					downL = h - 240;
 					wawaUpHeight = h - 380;
+					wawaDownHeight = h - 380;
 				}
 			}
 
@@ -172,30 +180,45 @@ export default {
 				let intervalUp = setInterval(() => {
 					context.commit('grabUp');
 
-					if(option.$obj) {
+					if(option.$obj && wawaUpHeight > 0) {
 						wawaUp--;
 						option.$obj.css('marginTop', wawaUp + 'px');
 					}
 
 					downL--;
 					wawaUpHeight--;
-
-					if(wawaUpHeight <= 0) {
+					
+					if(wawaUpHeight <= 0 && wawaDownFlag) {
 						// context.commit('release');
-
-						option.$obj.animate({
-							marginTop: '0'
-						}, 2000);
+						
+						//因为jq的animate与css发生冲突，所以不使用animate函数
+						// option.$obj.animate({
+						// 	marginTop: '0'
+						// }, 2000, () => {
+						// 	option.$obj.css('marginTop', '0px');
+						// });
+						wawaDownFlag = false;
+						wawaDown(wawaUp);
 					}
-
+					
 					if(downL <= 0) {
 						clearInterval(intervalUp);
 
 						resolve();
 					}
-
 				}, 20);
 			});
+
+			function wawaDown(wawaUp) {
+				let i = setInterval(() => {
+					if(wawaUp < 0) {
+						wawaUp++
+						option.$obj.css('marginTop', wawaUp + 'px');
+					}else {
+						clearInterval(i);
+					}
+				}, 20);
+			}
 
 		}
 	}
