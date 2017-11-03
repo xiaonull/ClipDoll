@@ -27,19 +27,25 @@
 					<div class="shadow" ref="shadow"></div>
 				</div>
 				<img :src="'http://' + currentWaWaList[0].sc_pic" :class="currentWaWaList[0].id" class="img wawa wawa_1" v-if="currentWaWaList[0]">
+				<div class="shadow1 shadowImg"></div>
 				<img :src="'http://' + currentWaWaList[1].sc_pic" :class="currentWaWaList[1].id" class="img wawa wawa_2" v-if="currentWaWaList[1]">
+				<div class="shadow2 shadowImg"></div>
 				<img :src="'http://' + currentWaWaList[2].sc_pic" :class="currentWaWaList[2].id" class="img wawa wawa_3" v-if="currentWaWaList[2]">
+				<div class="shadow3 shadowImg"></div>
 				<img :src="'http://' + currentWaWaList[3].sc_pic" :class="currentWaWaList[3].id" class="img wawa wawa_4" v-if="currentWaWaList[3]">
+				<div class="shadow4 shadowImg"></div>
 				<img :src="'http://' + currentWaWaList[4].sc_pic" :class="currentWaWaList[4].id" class="img wawa wawa_5" v-if="currentWaWaList[4]">
+				<div class="shadow5 shadowImg"></div>
 				<img :src="'http://' + currentWaWaList[5].sc_pic" :class="currentWaWaList[5].id" class="img wawa wawa_6" v-if="currentWaWaList[5]">
+				<div class="shadow6 shadowImg"></div>
 			</div>
 		</div>
 		<div class="wawaji_subTop"></div>
 		<div class="wawaji_subLeft">
-			<img :src="light_img" class="wawaji_top_light">
+			<img :src="light_img" class="wawaji_left_light">
 		</div>
 		<div class="wawaji_subRight">
-			<img :src="light_img" class="wawaji_top_light">
+			<img :src="light_img" class="wawaji_right_light">
 		</div>
 		<div class="wawaji_subBottom"></div>
 		<div class="maskBottom"></div>
@@ -128,24 +134,26 @@
 			},
 			move_Behind() {
 				if(this.$store.state.rod.moveToBehind === 'can') {
-					$(this.$refs.shadow).css('top', '-=1px');
+					$(this.$refs.shadow).css('bottom', '+=1px');
 				}
 			},
 			move_Front() {
 				if(this.$store.state.rod.moveToFront === 'can') {
-					$(this.$refs.shadow).css('top', '+=1px');
+					$(this.$refs.shadow).css('bottom', '-=1px');
 				}
 			},
 			grab() {
 				let $shadow =  $(this.$refs.shadow);
 				let shadowLeft = $shadow.css('left').slice(0, $shadow.css('left').length - 2) * 1 + $shadow.css('width').slice(0, $shadow.css('width').length - 2) / 2;
-				let shadowBottom = $shadow.css('bottom').slice(0, $shadow.css('bottom').length - 2);
+				let shadowBottom = parseFloat($shadow.css('bottom').slice(0, $shadow.css('bottom').length - 2));
 
 				let $wawas = $(this.$refs.underpan).find('.wawa');
 				for(let i = 0, j = $wawas.length; i < j; i++) {
+					let $wawa_shadow = $(this.$refs.underpan).find('.shadowImg').eq(i);
+
 					let $wawa = $wawas.eq(i);
-					let wawaLeft = $wawa.css('left').slice(0, $wawa.css('left').length - 2) * 1 + $wawa.css('width').slice(0, $wawa.css('width').length - 2) / 2;
-					let wawaBottom = $wawa.css('bottom').slice(0, $wawa.css('bottom').length - 2);
+					let wawaLeft = parseFloat($wawa.css('left').slice(0, $wawa.css('left').length - 2)) + parseFloat($wawa.css('width').slice(0, $wawa.css('width').length - 2)) / 2;
+					let wawaBottom = parseFloat($wawa.css('bottom').slice(0, $wawa.css('bottom').length - 2));
 					
 					// 判斷阴影的下边中点的位置与娃娃图片的下边中点的位置是否在一定范围内
 					let distance = Math.sqrt(Math.pow((wawaLeft - shadowLeft), 2) + Math.pow((wawaBottom - shadowBottom), 2));
@@ -176,7 +184,8 @@
 								htsBus.$emit('grabing', {
 									level: 1,
 									catch: data,
-									$obj: $wawa
+									$obj: $wawa,
+									$wawa_shadow: $wawa_shadow
 								});
 							}, (err) => {
 
@@ -191,7 +200,8 @@
 								htsBus.$emit('grabing', {
 									level: 1,
 									catch: data,
-									$obj: $wawa
+									$obj: $wawa,
+									$wawa_shadow: $wawa_shadow
 								});
 							}, (err) => {
 
@@ -213,7 +223,8 @@
 								htsBus.$emit('grabing', {
 									level: 2,
 									catch: data,
-									$obj: $wawa
+									$obj: $wawa,
+									$wawa_shadow: $wawa_shadow
 								});
 							}, (err) => {
 
@@ -228,7 +239,8 @@
 								htsBus.$emit('grabing', {
 									level: 2,
 									catch: data,
-									$obj: $wawa
+									$obj: $wawa,
+									$wawa_shadow: $wawa_shadow
 								});
 							}, (err) => {
 
@@ -250,7 +262,8 @@
 								htsBus.$emit('grabing', {
 									level: 3,
 									catch: data,
-									$obj: $wawa
+									$obj: $wawa,
+									$wawa_shadow: $wawa_shadow
 								});
 							}, (err) => {
 
@@ -265,7 +278,8 @@
 								htsBus.$emit('grabing', {
 									level: 3,
 									catch: data,
-									$obj: $wawa
+									$obj: $wawa,
+									$wawa_shadow: $wawa_shadow
 								});
 							}, (err) => {
 
@@ -436,7 +450,7 @@
 <style scoped lang="less">
 	.gameBox {
 		width: 100%;
-		height: 63%;
+		height: 71%;
 		position: relative;
 		background-color: #f26fa5;
 		z-index: 2;
@@ -458,38 +472,42 @@
 			position: absolute;
 			z-index: 8;
 			left: 0;
-			width: 28px;
+			width: 0.9rem;
 			height: 100%;
 			background-image: url('~@/assets/bg/box-left.png');
 			background-repeat: repeat;
 			background-position: left;
 			background-size: cover;
+
+			.wawaji_left_light {
+				width: 95%;
+				height: 90%;
+			}
 		}
 
 		.wawaji_subRight {
 			position: absolute;
 			z-index: 8;
 			right: 0;
-			width: 28px;
+			width: 0.9rem;
 			height: 100%;
 			background-image: url('~@/assets/bg/box-right.png');
 			background-repeat: repeat;
 			background-position: right;
 			background-size: cover;
-		}
 
-		.wawaji_top_light {
-			width: 40px;
-			height: 90%;
-			margin-left: -6px;
+			.wawaji_right_light {
+				width: 95%;
+				height: 90%;
+			}
 		}
 
 		.wawaji_subBottom {
 			position: absolute;
 			z-index: 7;
-			bottom: 10px;
+			bottom: 0.5rem;
 			width: 100%;
-			height: 45px;
+			height: 0.8rem;
 			background-image: url('~@/assets/bg/box-bottom.png');
 			background-repeat: repeat;
 			background-position: center;
@@ -501,21 +519,21 @@
 			z-index: 2;
 			bottom: 0;
 			width: 100%;
-			height: 1.4rem;
+			height: 1.3rem;
 			background-color: #f26fa5;
 		}
 
 		.main {
 			position: absolute;
 			top: 25px;
-			left: 28px;
-			right: 28px;
-			bottom: 25px;
+			left: 0.9rem;
+			right: 0.9rem;
+			bottom: 1.3rem;
 			background-color: #34ccdd;
 			background-image: url('~@/assets/bg/house.jpg');
 			background-repeat: no-repeat;
 			background-position: center;
-			background-size: cover;
+			background-size: 100% 100%;
 		}
 
 		.rod {
@@ -585,7 +603,7 @@
 				.shadow {
 					position: absolute;
 					left: 52px;
-					top: 3rem;
+					bottom: 1rem;
 					width: 2.5rem;
 					height: 1.5rem;
 					background-image: url('~@/assets/bg/shadow.png');
@@ -609,10 +627,11 @@
 
 			.wawa {
 				position: absolute;
+				bottom: 0;
 			}
 
 			.wawa_1 {
-				top: 2.3rem;
+				bottom: 0.2rem;
 				left: 4rem;
 				z-index: 6;
 				-ms-transform:scale(1.1, 1.1); 
@@ -621,7 +640,7 @@
 			}
 
 			.wawa_2 {
-				top: 2.3rem;
+				bottom: 0.2rem;
 				left: 7rem;
 				z-index: 6;
 				-ms-transform:scale(1.1, 1.1); 
@@ -630,7 +649,7 @@
 			}
 
 			.wawa_3 {
-				top: 2.3rem;
+				bottom: 0.2rem;
 				left: 10rem;
 				z-index: 6;
 				-ms-transform:scale(1.1, 1.1); 
@@ -639,17 +658,64 @@
 			}
 
 			.wawa_4 {
-				top: 0;
+				bottom: 2.3rem;
 				left: 3.5rem;
+				z-index: 2;
 			}
 
 			.wawa_5 {
-				top: 0;
+				bottom: 2.3rem;
 				left: 6rem;
+				z-index: 2;
 			}
 
 			.wawa_6 {
-				top: 0;
+				bottom: 2.3rem;
+				left: 8.5rem;
+				z-index: 2;
+			}
+
+			.shadowImg {
+				position: absolute;
+				width: 2.2rem;
+				height: 1.3rem;
+				z-index: 1;
+				background-image: url('~@/assets/bg/shadow.png');
+				background-repeat: no-repeat;
+				background-size: 98% 98%;
+				filter:alpha(opacity=50);  
+				-moz-opacity: 0.7;  
+				-khtml-opacity: 0.7;  
+				opacity: 0.7;
+			}
+
+			.shadow1 {
+				bottom: 0;
+				left: 4rem;
+			}
+
+			.shadow2 {
+				bottom: 0;
+				left: 7rem;
+			}
+
+			.shadow3 {
+				bottom: 0;
+				left: 10rem;
+			}
+
+			.shadow4 {
+				bottom: 2.3rem;
+				left: 3.5rem;
+			}
+
+			.shadow5 {
+				bottom: 2.3rem;
+				left: 6rem;
+			}
+
+			.shadow6 {
+				bottom: 2.3rem;
 				left: 8.5rem;
 			}
 		}

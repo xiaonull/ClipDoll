@@ -30,7 +30,7 @@
 				return this.$store.state.info.wawaJiGold;
 			},
 			luckyValue() {
-				console.log(this.$store.state.info.luckyValue)
+				// console.log(this.$store.state.info.luckyValue)
 				if(this.$store.state.info.luckyValue < 70) {
 					let len = 9.2 * (this.$store.state.info.luckyValue / 100);
 					$(this.$refs.barValue).css('width', len + 'rem');

@@ -198,6 +198,12 @@
 						return this.$store.dispatch('rod/grabUp', option.$obj);
 					}).then((data) => {
 						// 移动到出口处
+
+						// 将娃娃的阴影去掉
+						if(option.$wawa_shadow) {
+							option.$wawa_shadow.css('display', 'none');
+						}
+
 						return new Promise((resolve, reject) => {
 							let moveLeft = 0;
 							let interval = setInterval(() => {
@@ -231,7 +237,7 @@
 								option.$obj.css('zIndex', '0');
 
 								option.$obj.animate({
-									marginTop: '500px'
+									marginBottom: '-500px'
 								}, 2000);
 
 								clearTimeout(timeout);
@@ -396,7 +402,7 @@
 		position: absolute;
 		z-index: 2;
 		width: 100%;
-		height: 6.5rem;
+		height: 28%;
 		bottom: 0;
 		background-image: url('~@/assets/bg/desktop.png');
 		background-size: cover;

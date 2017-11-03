@@ -9,7 +9,7 @@
 		<publishShow></publishShow>
 		<task></task>
 		<game-box></game-box>
-		<luck-value></luck-value>
+		<!-- <luck-value></luck-value> -->
 		<game-desk></game-desk>
 	</section>
 </template>

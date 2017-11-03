@@ -55,7 +55,7 @@ export default {
 			}
 		},
 		move_Behind(state) {
-			if(state.position.scale >= 0.95) {
+			if(state.position.scale >= 0.97) {
 				if(state.position.left < phone.getWidth() - 110 || state.position.scale > 0.98) {
 					state.moveToBehind = 'can';
 					state.position.scale -= 0.001;
@@ -68,7 +68,7 @@ export default {
 			}
 		},
 		move_Front(state) {
-			if(state.position.scale <= 1.038) {
+			if(state.position.scale <= 1.045) {
 				state.moveToFront = 'can';
 				state.position.scale += 0.001;
 				// console.log(state.position.scale);
@@ -123,8 +123,8 @@ export default {
 					context.commit('grabUp');
 					
 					if($obj) {
-						wawaUp--;
-						$obj.css('marginTop', wawaUp + 'px');
+						wawaUp++;
+						$obj.css('marginBottom', wawaUp + 'px');
 					}
 
 					downL--;
@@ -137,10 +137,13 @@ export default {
 			});
 		},
 		grabUpButFail(context, option) {
+			// alert('option.level: ' + option.level);
+			// console.log(option.$obj)
 			let gameBox = new GameBox();
 			let h = gameBox.getHeight().slice(0, gameBox.getHeight().length - 2);
 			let downL = 0;
 			let wawaUp = 0;
+			let wawaDown_ = 0;
 			let wawaUpHeight = 0;
 			let wawaDownHeight = 0;
 			let wawaDownFlag = true;
@@ -151,38 +154,39 @@ export default {
 					wawaDownHeight = h - 240;
 				}else {
 					downL = h - 240;
-					wawaUpHeight = h - 280;
-					wawaDownHeight = h - 280;
+					wawaUpHeight = h - 260;
+					wawaDownHeight = h - 260;
 				}				
 			}else if(option.level === 2) {
 				if(context.state.position.scale > 1 && context.state.position.scale <= 1.058) {
 					downL = h - 200;
-					wawaUpHeight = h - 290;
-					wawaDownHeight = h - 290;
+					wawaUpHeight = h - 250;
+					wawaDownHeight = h - 250;
 				}else {
 					downL = h - 240;
-					wawaUpHeight = h - 330;
-					wawaDownHeight = h - 330;
+					wawaUpHeight = h - 280;
+					wawaDownHeight = h - 280;
 				}
 			}else if(option.level === 3) {
 				if(context.state.position.scale > 1 && context.state.position.scale <= 1.058) {
 					downL = h - 200;
-					wawaUpHeight = h - 340;
-					wawaDownHeight = h - 340;
+					wawaUpHeight = h - 260;
+					wawaDownHeight = h - 260;
 				}else {
 					downL = h - 240;
-					wawaUpHeight = h - 380;
-					wawaDownHeight = h - 380;
+					wawaUpHeight = h - 300;
+					wawaDownHeight = h - 300;
 				}
 			}
 
 			return new Promise((resolve, reject) => {
 				let intervalUp = setInterval(() => {
 					context.commit('grabUp');
-
+					
 					if(option.$obj && wawaUpHeight > 0) {
-						wawaUp--;
-						option.$obj.css('marginTop', wawaUp + 'px');
+						wawaDown_++;
+						// console.log(wawaDown_)
+						option.$obj.css('marginBottom', wawaDown_ + 'px');
 					}
 
 					downL--;
@@ -198,7 +202,7 @@ export default {
 						// 	option.$obj.css('marginTop', '0px');
 						// });
 						wawaDownFlag = false;
-						wawaDown(wawaUp);
+						wawaDown(wawaDown_);
 					}
 					
 					if(downL <= 0) {
@@ -209,11 +213,11 @@ export default {
 				}, 20);
 			});
 
-			function wawaDown(wawaUp) {
+			function wawaDown(wawaDown_) {
 				let i = setInterval(() => {
-					if(wawaUp < 0) {
-						wawaUp++
-						option.$obj.css('marginTop', wawaUp + 'px');
+					if(wawaDown_ > 0) {
+						wawaDown_--;
+						option.$obj.css('marginBottom', wawaDown_ + 'px');
 					}else {
 						clearInterval(i);
 					}
