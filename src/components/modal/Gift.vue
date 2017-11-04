@@ -8,9 +8,15 @@
 			</div>
 			<div class="main">
 				<div class="left">
-					
+					<p class="text">今日从“<span class="red">公众号菜单</span>”进入游戏即可领取</p>
 				</div>
-				<div class="right"></div>
+				<div class="right">
+					<img src="~@/assets/modal/gold-ico06.png" class="img">
+				</div>
+			</div>
+			<span class="line"></span>
+			<div class="go">
+				<img src="~@/assets/modal/an-ico07.png" class="img">
 			</div>
 		</div>
 	</section>
@@ -83,19 +89,60 @@
 
 			.main {
 				margin-top: 1.5rem;
+				overflow: hidden;
 
 				.left {
-					width: 60%;
+					display: table;
+					width: 8.5rem;
 					height: 5rem;
 					float: left;
-					background-color: #fff;
+
+					.text {
+						display: table-cell; 
+						vertical-align:middle; 
+						text-align:center;
+						padding: 0 0.5rem 0 1rem;
+						text-align: left;
+						font-size: 0.6rem;
+						color: #65492a;
+						font-weight: 600;
+
+						.red {
+							color: #d86241;
+						}
+					}
 				}
 
 				.right {
-					width: 40%;
+					width: 5rem;
 					height: 5rem;
-					float: right;
-					background-color: #9F1818;
+					float: left;
+
+					.img {
+						width: 90%;
+						height: 90%;
+						margin-top: 5%;
+					}
+				}
+			}
+
+			.line {
+				display: block;
+				width: 12rem;
+				height: 1px;
+				margin-left: 1rem;
+				margin-top: 0.7rem;
+				background-color: #65492a;
+			}
+
+			.go {
+				width: 5.3rem;
+				height: 1.8rem;
+				margin: 0.8rem auto 0 auto;
+
+				.img {
+					width: 100%;
+					height: 100%;
 				}
 			}
 		}

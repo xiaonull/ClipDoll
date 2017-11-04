@@ -1,17 +1,43 @@
 <template>
 	<section class="notice" ref="notice">
-		<p class="text">恭喜<span class="name">一步一步</span>走狗屎运抓到奶牛维尼熊了！</p>
+		<!-- <p class="text">恭喜<span class="name">一步一步</span>走狗屎运抓到奶牛维尼熊了！</p> -->
+		<p class="text" v-if="currentIndex >= 0">{{noticeList[currentIndex].contents}}</p>
 	</section>
 </template>
 
 <script type="text/javascript">
 	export default {
 		mounted() {
-			setInterval(() => {
-				this.roll();
-			}, 4000);
+			this.init();
+		},
+		data() {
+			return {
+				noticeList: [],
+				currentIndex: -1,
+			}
 		},
 		methods: {
+			init() {
+				let option = {
+					url: 'api/notice?token=' + sessionStorage.token,
+					type: 'GET',
+					success: function(result, status, xhr) {
+						if(result.code === 1 && result.data.length > 0) {
+							this.noticeList = result.data;
+							this.currentIndex = 0;
+							this.startRoll();
+						}
+					}.bind(this)
+				};
+
+				myAjax(option);
+			},
+			startRoll() {
+				this.roll();
+				setInterval(() => {
+					this.roll();
+				}, 8000);
+			},
 			roll() {
 				$(this.$refs.notice).animate({
 					width: '95%'
@@ -19,8 +45,13 @@
 					let t = setTimeout(() => {
 						$(this.$refs.notice).animate({
 							width: '0'
-						}, 200);
-						clearTimeout(t);
+						}, 200, () => {
+							this.currentIndex++;
+							if(this.currentIndex >= this.noticeList.length) {
+								this.currentIndex = 0;
+							}
+							clearTimeout(t);
+						});
 					}, 2000);
 				});
 			}

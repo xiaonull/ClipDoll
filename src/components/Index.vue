@@ -11,6 +11,7 @@
 		<notice></notice>
 		<catch></catch>
 		<gift></gift>
+		<countDown></countDown>
 		<game-box></game-box>
 		<!-- <luck-value></luck-value> -->
 		<game-desk></game-desk>
@@ -19,6 +20,7 @@
 
 <script>
 	import Notice from './Notice.vue';
+	import CountDown from './modal/CountDown.vue';
 	import GameBox from './GameBox.vue';
 	import LuckValue from './LuckValue.vue';
 	import GameDesk from './GameDesk.vue';
@@ -36,6 +38,7 @@
 	export default {
 		components: {
 			Notice,
+			CountDown,
 			GameBox,
 			LuckValue,
 			GameDesk,

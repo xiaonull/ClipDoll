@@ -104,7 +104,7 @@ export default {
 
 						resolve();
 					}
-				}, 20);
+				}, 10);
 			});
 		},
 		// 完全夹起娃娃（如果夹中娃娃的话）
@@ -125,6 +125,8 @@ export default {
 					if($obj) {
 						wawaUp++;
 						$obj.css('marginBottom', wawaUp + 'px');
+
+						shake($obj);
 					}
 
 					downL--;
@@ -139,6 +141,14 @@ export default {
 		grabUpButFail(context, option) {
 			// alert('option.level: ' + option.level);
 			// console.log(option.$obj)
+			// console.log($current_wawa)
+			// console.log(option.$obj)
+			if($current_wawa === null) {
+				angle = 0;
+			}else if($current_wawa[0] != option.$obj[0]) {
+				angle = 0;
+			}
+
 			let gameBox = new GameBox();
 			let h = gameBox.getHeight().slice(0, gameBox.getHeight().length - 2);
 			let downL = 0;
@@ -191,6 +201,11 @@ export default {
 
 					downL--;
 					wawaUpHeight--;
+
+					// 摇晃动画
+					if(option.$obj) {
+						shake(option.$obj, option.$rod_lid, option.$rod_paws);
+					}
 					
 					if(wawaUpHeight <= 0 && wawaDownFlag) {
 						// context.commit('release');
@@ -221,9 +236,39 @@ export default {
 					}else {
 						clearInterval(i);
 					}
-				}, 20);
+				}, 7);
 			}
 
+		}
+	}
+}
+
+let interval;
+let angle = 0;
+let rod_angle = 0;
+let direction = 'left';
+let $current_wawa = null;
+
+
+function shake($wawa, $rod_lid, $rod_paws) {
+	$current_wawa = $wawa;
+	if(direction === 'left') {
+		angle += 0.35;
+		rod_angle += 0.03;
+		$wawa.css('transform', 'rotate(' + angle + 'deg)');
+		// $rod_lid.css('transform', 'rotate(' + rod_angle + 'deg)');
+		// $rod_paws.css('transform', 'rotate(' + rod_angle + 'deg)');
+		if(angle >= 15) {
+			direction = 'right';
+		}
+	}else if(direction === 'right') {
+		angle -= 0.35;
+		rod_angle -= 0.03;
+		$wawa.css('transform', 'rotate(' + angle + 'deg)');
+		// $rod_lid.css('transform', 'rotate(' + rod_angle + 'deg)');
+		// $rod_paws.css('transform', 'rotate(' + rod_angle + 'deg)');
+		if(angle <= -15) {
+			direction = 'left';
 		}
 	}
 }

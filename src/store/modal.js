@@ -1,3 +1,5 @@
+let interval;
+
 export default {
 	state: {
 		Msg: {
@@ -17,7 +19,11 @@ export default {
 		showPublishShow: false,
 		showBubble: false,
 		bubble_luckValue: 0,
-		showGift: false
+		showGift: false,
+		countDown: {
+			show: false,
+			count: 20
+		}
 	},
 
 	mutations: {
@@ -66,10 +72,36 @@ export default {
 		},
 		setGift(state, data) {
 			state.showGift = data.showGift;
+		},
+		setCountDown(state, data) {
+			if(data.show || data.show === false) {
+				state.countDown.show = data.show;
+			}
+			if(data.count || data.count === 0) {
+				state.countDown.count = data.count;
+			}
 		}
 	},
 
 	actions: {
-		
+		startCountDown(context) {
+			clearInterval(interval);
+			return new Promise((resolve, reject) => {
+				interval = setInterval(() => {
+					if(context.state.countDown.count <= 0) {
+						context.commit('setCountDown', {
+							show: false,
+							count: 20
+						});
+						clearInterval(interval);
+						resolve();
+					}else {
+						context.commit('setCountDown', {
+							count: context.state.countDown.count - 1
+						});
+					}
+				}, 1000);
+			});
+		}
 	}
 }

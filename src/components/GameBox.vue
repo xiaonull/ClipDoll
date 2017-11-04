@@ -8,11 +8,11 @@
 					<div class="rod_handle" v-for="i in rod_length"></div>
 				</div>
 				<!-- 盖子 -->
-				<div class="rod_lid">
+				<div class="rod_lid" ref="rod_lid">
 					<img src="~@/assets/rod/hooktu02.png" class="rod_lid_img">
 				</div>
 				<!-- 爪子 -->
-				<div class="rod_paws">
+				<div class="rod_paws" ref="rod_paws">
 					<div class="rod_paw_l" ref="rod_paw_l">
 						<img src="~@/assets/rod/hooktu03.png" class="rod_paw_l_img">
 					</div>
@@ -203,13 +203,13 @@
 					let level2 = 0;
 					let level3 = 0;
 					if(phoneWidth <= 410) {
-						level1 = 17;
-						level2 = 19;
-						level3 = 22;
+						level1 = 9;
+						level2 = 12;
+						level3 = 15;
 					}else {
-						level1 = 19;
-						level2 = 22;
-						level3 = 25;
+						level1 = 11;
+						level2 = 14;
+						level3 = 18;
 					}
 
 					if(distance < level1) {
@@ -224,7 +224,9 @@
 									level: 1,
 									catch: data,
 									$obj: $wawa,
-									$wawa_shadow: $wawa_shadow
+									$wawa_shadow: $wawa_shadow,
+									$rod_lid: $(this.$refs.rod_lid),
+									$rod_paws: $(this.$refs.rod_paws)
 								});
 							}, (err) => {
 
@@ -240,7 +242,9 @@
 									level: 1,
 									catch: data,
 									$obj: $wawa,
-									$wawa_shadow: $wawa_shadow
+									$wawa_shadow: $wawa_shadow,
+									$rod_lid: $(this.$refs.rod_lid),
+									$rod_paws: $(this.$refs.rod_paws)
 								});
 							}, (err) => {
 
@@ -263,7 +267,9 @@
 									level: 2,
 									catch: data,
 									$obj: $wawa,
-									$wawa_shadow: $wawa_shadow
+									$wawa_shadow: $wawa_shadow,
+									$rod_lid: $(this.$refs.rod_lid),
+									$rod_paws: $(this.$refs.rod_paws)
 								});
 							}, (err) => {
 
@@ -279,7 +285,9 @@
 									level: 2,
 									catch: data,
 									$obj: $wawa,
-									$wawa_shadow: $wawa_shadow
+									$wawa_shadow: $wawa_shadow,
+									$rod_lid: $(this.$refs.rod_lid),
+									$rod_paws: $(this.$refs.rod_paws)
 								});
 							}, (err) => {
 
@@ -302,7 +310,9 @@
 									level: 3,
 									catch: data,
 									$obj: $wawa,
-									$wawa_shadow: $wawa_shadow
+									$wawa_shadow: $wawa_shadow,
+									$rod_lid: $(this.$refs.rod_lid),
+									$rod_paws: $(this.$refs.rod_paws)
 								});
 							}, (err) => {
 
@@ -318,7 +328,9 @@
 									level: 3,
 									catch: data,
 									$obj: $wawa,
-									$wawa_shadow: $wawa_shadow
+									$wawa_shadow: $wawa_shadow,
+									$rod_lid: $(this.$refs.rod_lid),
+									$rod_paws: $(this.$refs.rod_paws)
 								});
 							}, (err) => {
 
@@ -607,7 +619,7 @@
 						position: absolute;
 						top: -4.5rem;
 						right: -4rem;
-						z-index: 2;
+						z-index: 10;
 						text-align: center;
 
 						.rule {
@@ -666,10 +678,14 @@
 				background-size: contain;
 			}
 
-			.rod_lid_img {
-				width: 2rem;
-				height: 1.5rem;
-				margin-left: -0.95rem;	
+			.rod_lid {
+				transform-origin: 50% 0;
+
+				.rod_lid_img {
+					width: 2rem;
+					height: 1.5rem;
+					margin-left: -0.95rem;	
+				}
 			}
 
 			.rod_paws {
@@ -677,6 +693,8 @@
 				height: 4rem;
 				margin-left: -1.3rem;
 				overflow: hidden;
+
+				transform-origin: 50% 0;
 			}
 
 			.rod_paw_l {
@@ -737,8 +755,8 @@
 			}
 
 			.img {
-				width: 2.5rem;
-				height: 3.5rem;
+				width: 2.75rem;
+				height: 3.85rem;
 			}
 
 			.wawa {
@@ -750,27 +768,27 @@
 				bottom: 0.2rem;
 				left: 4rem;
 				z-index: 6;
-				-ms-transform:scale(1.1, 1.1); 
+				/* -ms-transform:scale(1.1, 1.1); 
 				-webkit-transform: scale(1.1, 1.1); 
-				transform: scale(1.1, 1.1); 
+				transform: scale(1.1, 1.1);  */
 			}
 
 			.wawa_2 {
 				bottom: 0.2rem;
 				left: 7rem;
 				z-index: 6;
-				-ms-transform:scale(1.1, 1.1); 
+				/* -ms-transform:scale(1.1, 1.1); 
 				-webkit-transform: scale(1.1, 1.1); 
-				transform: scale(1.1, 1.1); 
+				transform: scale(1.1, 1.1);  */
 			}
 
 			.wawa_3 {
 				bottom: 0.2rem;
 				left: 10rem;
 				z-index: 6;
-				-ms-transform:scale(1.1, 1.1); 
+				/* -ms-transform:scale(1.1, 1.1); 
 				-webkit-transform: scale(1.1, 1.1); 
-				transform: scale(1.1, 1.1); 
+				transform: scale(1.1, 1.1);  */
 			}
 
 			.wawa_4 {

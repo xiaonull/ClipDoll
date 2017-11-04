@@ -16,22 +16,22 @@
 					<div class="item">
 						<img src="~@/assets/modal/gold-ico02.png" class="icon">
 						<span class="num">100金币</span>
-						<img src="~@/assets/modal/price-an01.png" class="img_buy" @click="buyGold()">
+						<img src="~@/assets/modal/price-an01.png" class="img_buy" @click="buyGold(100, 9.9)">
 					</div>
 					<div class="item">
 						<img src="~@/assets/modal/gold-ico03.png" class="icon">
 						<span class="num">200<span class="green">+10 </span>金币</span>
-						<img src="~@/assets/modal/price-an02.png" class="img_buy" @click="buyGold()">
+						<img src="~@/assets/modal/price-an02.png" class="img_buy" @click="buyGold(210, 19.9)">
 					</div>
 					<div class="item">
 						<img src="~@/assets/modal/gold-ico04.png" class="icon">
 						<span class="num">400<span class="green">+40 </span>金币</span>
-						<img src="~@/assets/modal/price-an03.png" class="img_buy" @click="buyGold()">
+						<img src="~@/assets/modal/price-an03.png" class="img_buy" @click="buyGold(440, 39.9)">
 					</div>
 					<div class="item">
 						<img src="~@/assets/modal/gold-ico05.png" class="icon">
 						<span class="num">1000<span class="green">+120 </span>金币</span>
-						<img src="~@/assets/modal/price-an04.png" class="img_buy" @click="buyGold()">
+						<img src="~@/assets/modal/price-an04.png" class="img_buy" @click="buyGold(1120, 99.9)">
 					</div>
 				</div>
 			</div>
@@ -72,17 +72,32 @@
 					showRecharge: false
 				});
 			},
-			buyGold() {
-				// let option = {
-				// 	url: 'api/pay/' + id + '?token=' + sessionStorage.token,
-				// 	type: 'GET',
-				// 	success: function(result, status, xhr) {
-				// 		console.log(result);
-				// 	}.bind(this)
-				// };
+			buyGold(coin, price) {
+				let option = {
+					url: 'api/pay?token=' + sessionStorage.token,
+					type: 'POST',
+					data: {
+						coin: coin,
+						price: price
+					},
+					success: function(result, status, xhr) {
+						console.log(result);
+					}.bind(this)
+				};
 
-				// myAjax(option);
+				myAjax(option);
 			}
+			// buyGold() {
+			// 	// let option = {
+			// 	// 	url: 'api/pay/' + id + '?token=' + sessionStorage.token,
+			// 	// 	type: 'GET',
+			// 	// 	success: function(result, status, xhr) {
+			// 	// 		console.log(result);
+			// 	// 	}.bind(this)
+			// 	// };
+
+			// 	// myAjax(option);
+			// }
 		},
 		computed: {
 			show() {

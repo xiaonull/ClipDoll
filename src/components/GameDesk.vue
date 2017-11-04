@@ -106,6 +106,20 @@
 				// 判断金币够不够
 				if(this.$store.state.info.userGold >= this.$store.state.info.wawaJiGold) {
 					this.$store.commit('info/setUserGold', this.$store.state.info.userGold - this.$store.state.info.wawaJiGold);
+					this.$store.commit('modal/setCountDown', {
+						show: true,
+						count: 20
+					});
+					this.$store.dispatch('modal/startCountDown')
+					.then((data)  => {
+						if(this.startGame === true && this.grabState === false) {
+							this.grabState = true;
+							htsBus.$emit('grab');
+						}
+					})
+					.catch(response => {
+						console.log('error: ' + response);
+					});
 					this.startGame = true;
 				}else {
 					this.$store.commit('modal/setMsg', {
@@ -167,6 +181,11 @@
 				if(this.grabState === false) {
 					this.grabState = true;
 					htsBus.$emit('grab');
+
+					this.$store.commit('modal/setCountDown', {
+						show: false,
+						count: 20
+					});
 				}
 			},
 			grabing(option) {
@@ -228,11 +247,13 @@
 									htsBus.$emit('move_Front');
 								}
 
+								shake(option.$obj);
+
 								if(this.$store.state.rod.position.left <= 45 && this.$store.state.rod.position.scale >= 1.02) {
 									clearInterval(interval);
 									resolve();
 								}
-							}, 30);
+							}, 20);
 
 							// if(this.$store.state.rod.position.scale < 1) {
 							// 	option.$obj.animate({width: '2.5rem', height: '3.7rem'}, 5000);
@@ -276,10 +297,7 @@
 							}, 2000);
 						});
 					}).then((data) => {
-						return this.$store.dispatch('rod/grabUpButFail', {
-							level: option.level,
-							$obj: option.$obj
-						});
+						return this.$store.dispatch('rod/grabUpButFail', option);
 					}).then((data) => {
 						this.grabed({
 							failed: true
@@ -401,6 +419,32 @@
 						showPlayerShow: true
 					});
 				}
+			}
+		}
+	}
+
+	let interval;
+	let angle = 0;
+	let rod_angle = 0;
+	let direction = 'left';
+	let $current_wawa = null;
+
+
+	function shake($wawa) {
+		$current_wawa = $wawa;
+		if(direction === 'left') {
+			angle += 0.35;
+			rod_angle += 0.03;
+			$wawa.css('transform', 'rotate(' + angle + 'deg)');
+			if(angle >= 15) {
+				direction = 'right';
+			}
+		}else if(direction === 'right') {
+			angle -= 0.35;
+			rod_angle -= 0.03;
+			$wawa.css('transform', 'rotate(' + angle + 'deg)');
+			if(angle <= -15) {
+				direction = 'left';
 			}
 		}
 	}
