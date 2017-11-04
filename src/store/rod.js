@@ -55,7 +55,7 @@ export default {
 			}
 		},
 		move_Behind(state) {
-			if(state.position.scale >= 0.97) {
+			if(state.position.scale >= 0.965) {
 				if(state.position.left < phone.getWidth() - 110 || state.position.scale > 0.98) {
 					state.moveToBehind = 'can';
 					state.position.scale -= 0.001;

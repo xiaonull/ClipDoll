@@ -8,6 +8,9 @@
 		<playerShow></playerShow>
 		<publishShow></publishShow>
 		<task></task>
+		<notice></notice>
+		<catch></catch>
+		<gift></gift>
 		<game-box></game-box>
 		<!-- <luck-value></luck-value> -->
 		<game-desk></game-desk>
@@ -15,6 +18,7 @@
 </template>
 
 <script>
+	import Notice from './Notice.vue';
 	import GameBox from './GameBox.vue';
 	import LuckValue from './LuckValue.vue';
 	import GameDesk from './GameDesk.vue';
@@ -26,9 +30,12 @@
 	import Task from './modal/Task.vue';
 	import PlayerShow from './modal/PlayerShow.vue';
 	import PublishShow from './modal/PublishShow.vue';
+	import Catch from './modal/Catch.vue';
+	import Gift from './modal/Gift.vue';
 
 	export default {
 		components: {
+			Notice,
 			GameBox,
 			LuckValue,
 			GameDesk,
@@ -39,7 +46,9 @@
 			Recharge,
 			Task,
 			PlayerShow,
-			PublishShow
+			PublishShow,
+			Catch,
+			Gift
 		},
 		mounted() {
 			// 每20分钟刷新一下 token

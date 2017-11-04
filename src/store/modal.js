@@ -16,7 +16,8 @@ export default {
 		showPlayerShow: false,
 		showPublishShow: false,
 		showBubble: false,
-		bubble_luckValue: 0
+		bubble_luckValue: 0,
+		showGift: false
 	},
 
 	mutations: {
@@ -62,6 +63,9 @@ export default {
 			if(data.bubble_luckValue) {
 				state.bubble_luckValue = data.bubble_luckValue;
 			}
+		},
+		setGift(state, data) {
+			state.showGift = data.showGift;
 		}
 	},
 

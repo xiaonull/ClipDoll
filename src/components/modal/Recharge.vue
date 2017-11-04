@@ -1,5 +1,6 @@
 <template>
 	<section class="recharge" v-if="show">
+		<img src="~@/assets/modal/cat-bg.png" class="catImg">
 		<div class="pannel">
 			<div class="title">
 				<img src="~@/assets/modal/box-bt01.png" class="img_title">
@@ -7,10 +8,30 @@
 			</div>
 			<div class="content">
 				<div class="list">
-					<div class="item" v-for="item in rechargeData" :key="item.id">
+					<!-- <div class="item" v-for="item in rechargeData" :key="item.id">
 						<img src="~@/assets/modal/gold-ico02.png" class="icon">
 						<span class="num">{{item.coin_num}}<span class="green" v-if="item.award_num !== 0">+{{item.award_num}}</span>金币</span>
 						<img src="~@/assets/modal/buy-ico.png" class="img_buy" @click="buyGold(item.id)">
+					</div> -->
+					<div class="item">
+						<img src="~@/assets/modal/gold-ico02.png" class="icon">
+						<span class="num">100金币</span>
+						<img src="~@/assets/modal/price-an01.png" class="img_buy" @click="buyGold()">
+					</div>
+					<div class="item">
+						<img src="~@/assets/modal/gold-ico03.png" class="icon">
+						<span class="num">200<span class="green">+10 </span>金币</span>
+						<img src="~@/assets/modal/price-an02.png" class="img_buy" @click="buyGold()">
+					</div>
+					<div class="item">
+						<img src="~@/assets/modal/gold-ico04.png" class="icon">
+						<span class="num">400<span class="green">+40 </span>金币</span>
+						<img src="~@/assets/modal/price-an03.png" class="img_buy" @click="buyGold()">
+					</div>
+					<div class="item">
+						<img src="~@/assets/modal/gold-ico05.png" class="icon">
+						<span class="num">1000<span class="green">+120 </span>金币</span>
+						<img src="~@/assets/modal/price-an04.png" class="img_buy" @click="buyGold()">
 					</div>
 				</div>
 			</div>
@@ -30,37 +51,37 @@
 		},
 		methods: {
 			init() {
-				let option = {
-					url: 'api/rechargeamount?token=' + sessionStorage.token,
-					type: 'GET',
-					success: function(result, status, xhr) {
-						if(result.code === 1) {
-							this.rechargeData = sort_rechargeData(result.data);
-							// let arr = sort_rechargeData(result.data);
-							// for(let i = 0, j = arr.length; i < j; i++) {
-							// 	this.rechargeData.push(arr[i]);
-							// }
-						}
-					}.bind(this)
-				};
+				// let option = {
+				// 	url: 'api/rechargeamount?token=' + sessionStorage.token,
+				// 	type: 'GET',
+				// 	success: function(result, status, xhr) {
+				// 		if(result.code === 1) {
+				// 			this.rechargeData = sort_rechargeData(result.data);
+				// 			// let arr = sort_rechargeData(result.data);
+				// 			// for(let i = 0, j = arr.length; i < j; i++) {
+				// 			// 	this.rechargeData.push(arr[i]);
+				// 			// }
+				// 		}
+				// 	}.bind(this)
+				// };
 
-				myAjax(option);
+				// myAjax(option);
 			},
 			close() {
 				this.$store.commit('modal/setRecharge', {
 					showRecharge: false
 				});
 			},
-			buyGold(id) {
-				let option = {
-					url: 'api/pay/' + id + '?token=' + sessionStorage.token,
-					type: 'GET',
-					success: function(result, status, xhr) {
-						console.log(result);
-					}.bind(this)
-				};
+			buyGold() {
+				// let option = {
+				// 	url: 'api/pay/' + id + '?token=' + sessionStorage.token,
+				// 	type: 'GET',
+				// 	success: function(result, status, xhr) {
+				// 		console.log(result);
+				// 	}.bind(this)
+				// };
 
-				myAjax(option);
+				// myAjax(option);
 			}
 		},
 		computed: {
@@ -96,11 +117,21 @@
 		z-index: 20;
 		text-align: center;
 
+		.catImg {
+			display: block;
+			width: 95%;
+			position: absolute;
+			top: -3%;
+			left: 50%;
+			margin-left: -47.5%;
+		}
+
 		.pannel {
 			position: absolute;
+			z-index: 25;
 			width: 95%;
-			height: 58%;
-			top: 20%;
+			height: 60%;
+			top: 27%;
 			left: 50%;
 			margin-left: -47.5%;
 			background-image: url('~@/assets/modal/box-bg01.png');
@@ -127,58 +158,63 @@
 			}
 
 			.content {
-				width: 90%;
+				width: 86%;
 				height: 77%;
-				margin-left: 5%;
+				margin-left: 7%;
 				margin-top: 0.2rem;
 				background-color: #f2cd5b;
-				border-radius: 1rem;
-				overflow-y: scroll;
+				border-radius: 0.3rem;
+				overflow-y: hidden;
 
 				.list {
-					padding: 0.6rem 0.5rem 0 0.5rem;
+					padding: 0.6rem 0.3rem 0 0.3rem;
 					height: 93%;
 
 					.item {
 						position: relative;
 						width: 100%;
-						height: 1.8rem;
-						line-height: 1.8rem;
+						height: 2rem;
+						line-height: 2rem;
 						background-color: #ffe7ab;
-						border-radius: 3rem;
+						border-radius: 0.4rem;
 						margin-bottom: 0.6rem;
 						text-align: left;
+						border: 1px solid #fff1c6;
+
+						background-image: url('~@/assets/modal/price-bg.png');
+						background-size: 100% 100%;
+						margin-bottom: 0.5rem;
 
 						.icon {
 							display: inline-block;
-							width: 1.1rem;
-							height: 1.4rem;
-							margin-left: 0.7rem;
+							width: 2.3rem;
+							height: 2.1rem;
 							position: relative;
-							top: 0.2rem;
+							top: 0.1rem;
+							left: 0.1rem;
 						}
 
 						.num {
 							display: inline-block;
-							font-size: 0.8rem;
+							font-size: 0.6rem;
 							color: #62370B;
 							font-weight: 500;
 							position: relative;
-							top: -0.3rem;
+							top: -0.85rem;
 							margin-left: 0.3rem;
 
 							.green {
-								color: #598C09;
+								color: #17a502;
 							}
 						}
 
 						.img_buy {
 							display: inline-block;
-							width: 3rem;
-							height: 1.2rem;
+							width: 3.3rem;
+							height: 1.35rem;
 							position: absolute;
 							right: 0.5rem;
-							top: 0.33rem;
+							top: 0.35rem;
 						}
 					}
 				}

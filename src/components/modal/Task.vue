@@ -75,8 +75,8 @@
 		.pannel {
 			position: absolute;
 			width: 95%;
-			height: 58%;
-			top: 20%;
+			height: 70%;
+			top: 15%;
 			left: 50%;
 			margin-left: -47.5%;
 			background-image: url('~@/assets/modal/box-bg01.png');
@@ -120,35 +120,38 @@
 						width: 100%;
 						height: 2.5rem;
 						background-color: #ffe7ab;
-						border-radius: 0.8rem;
-						margin-bottom: 0.7rem;
+						background-image: url('~@/assets/modal/task-bg.jpg');
+						background-size: 1% 100%;
+						border-radius: 0.3rem;
+						margin-bottom: 0.5rem;
 						text-align: left;
 
 						.icon {
 							display: inline-block;
-							width: 1.1rem;
-							height: 1.4rem;
-							margin-left: 0.7rem;
+							width: 2.4rem;
+							height: 2.4rem;
 							position: relative;
-							top: 0.55rem;
+							top: 0.1rem;
 						}
 
 						.main {
 							display: inline-block;
+							position: relative;
+							top: -0.85rem;
 
 							.text {
 								display: block;
-								font-size: 0.8rem;
+								font-size: 0.7rem;
 								color: #4C2C0B;
 								font-weight: 500;
-								margin-left: 0.3rem;
+								margin-left: -0.2rem;
 								position: relative;
 								top: 0.4rem;
 							}
 
 							.reward {
 								display: inline-block;
-								margin-left: 0.3rem;
+								margin-left: -0.2rem;
 								position: relative;
 								top: 0.6rem;
 								color: #b9951d;

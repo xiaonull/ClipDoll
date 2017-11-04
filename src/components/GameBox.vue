@@ -44,10 +44,25 @@
 		<div class="wawaji_subLeft">
 			<img :src="light_img" class="wawaji_left_light">
 		</div>
+		<div class="gift" @click="openGift">
+			<img src="~@/assets/bg/package-ico.png" class="img">
+		</div>
 		<div class="wawaji_subRight">
 			<img :src="light_img" class="wawaji_right_light">
 		</div>
-		<div class="wawaji_subBottom"></div>
+		<div class="wawaji_subBottom">
+			<div class="luckBar">
+				<p class="info">幸运值 : {{luckyValue}}/100</p>
+				<div class="value" ref="barValue">
+					<div class="bubble" ref="bubble" v-show="showBubble">
+						<div class="rule">
+							<p class="rule1">幸运值+{{bubble_luckValue}}</p>
+							<p class="rule2">满100时必中</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 		<div class="maskBottom"></div>
 	</section>
 </template>
@@ -77,6 +92,25 @@
 			},
 			rod_length() {
 				return this.$store.state.rod.handle_length;
+			},
+			luckyValue() {
+				if(this.$store.state.info.luckyValue < 80) {
+					let len = 12.3 * (this.$store.state.info.luckyValue / 100);
+					$(this.$refs.barValue).css('width', len + 'rem');
+					$(this.$refs.bubble).css('right', '-4rem');
+				}else {
+					let len = 12.3 * (this.$store.state.info.luckyValue / 100);
+					$(this.$refs.barValue).css('width', len + 'rem');
+					$(this.$refs.bubble).css('right', '-1rem');
+				}
+				
+				return this.$store.state.info.luckyValue;
+			},
+			showBubble() {
+				return this.$store.state.modal.showBubble;
+			},
+			bubble_luckValue() {
+				return this.$store.state.modal.bubble_luckValue;
 			}
 		},
 		methods: {
@@ -121,6 +155,11 @@
 				setInterval(() => {
 					this.light_img_index = (this.light_img_index + 1) % 3 === 0 ? 3 : (this.light_img_index + 1) % 3 ;
 				}, 1000);
+			},
+			openGift() {
+				this.$store.commit('modal/setGift', {
+					showGift: true
+				});
 			},
 			move_Left() {
 				if(this.$store.state.rod.moveToLeft === 'can') {
@@ -480,8 +519,25 @@
 			background-size: cover;
 
 			.wawaji_left_light {
-				width: 95%;
-				height: 90%;
+				width: 104%;
+				height: 98%;
+			}
+		}
+
+		.gift {
+			width: 2.4rem;
+			height: 3.4rem;
+			background-image: url('~@/assets/bg/package-bg.png');
+			background-size: 100% 100%;
+			position: absolute;
+			top: 50%;
+			margin-top: -1.7rem;
+			z-index: 10;
+
+			.img {
+				width: 80%;
+				height: 70%;
+				margin: 15% 10%;
 			}
 		}
 
@@ -497,8 +553,8 @@
 			background-size: cover;
 
 			.wawaji_right_light {
-				width: 95%;
-				height: 90%;
+				width: 104%;
+				height: 98%;
 			}
 		}
 
@@ -508,10 +564,70 @@
 			bottom: 0.5rem;
 			width: 100%;
 			height: 0.8rem;
+			line-height: 0.8rem;
 			background-image: url('~@/assets/bg/box-bottom.png');
 			background-repeat: repeat;
 			background-position: center;
 			background-size: cover;
+			text-align: center;
+
+			.luckBar {
+				display: inline-block;
+				width: 12.5rem;
+				height: 0.8rem;
+				background-image: url('~@/assets/luckValue/price-bg.png');
+				background-size: 100% 100%;
+				background-repeat: no-repeat;
+				position: relative;
+
+				.info {
+					color: #000;
+					font-weight: 600;
+					font-size: 0.6rem;
+					position: relative;
+					z-index: 10;
+				}
+
+				.value {
+					width: 0rem;
+					height: 0.56rem;
+					border-radius: 1rem;
+					background-image: url('~@/assets/luckValue/price.jpg');
+					filter:alpha(opacity=50);  
+					position: relative;
+					top: -0.68rem;
+					left: 0.1rem;
+
+					.bubble {
+						width: 6.3rem;
+						height: 4.7rem;
+						background-image: url('~@/assets/luckValue/frame-box.png');
+						background-size: cover;
+						background-repeat: no-repeat;
+						position: absolute;
+						top: -4.5rem;
+						right: -4rem;
+						z-index: 2;
+						text-align: center;
+
+						.rule {
+							margin-top: 1.3rem;
+							line-height: 1rem;
+
+							.rule1 {
+								font-size: 0.7rem;
+								color: #29ac07;
+							}
+
+							.rule2 {
+								font-size: 0.6rem;
+								font-weight: 500;
+								color: #000;
+							}
+						}
+					}
+				}
+			}
 		}
 
 		.maskBottom {

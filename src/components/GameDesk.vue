@@ -3,7 +3,13 @@
 		<div class="play">
 			<div class="desk_left">
 				<div class="startGame" v-if="!startGame">
-					<img src="~@/assets/gameDesk/go-ico.png" class="img" @click="start">
+					<div class="goldNumContainer">
+						<img src="~@/assets/gameDesk/gold-ico.png" class="goldIcon">
+						<span class="goldNum">{{wawaJiGold}}</span>
+					</div>
+					<div class="startGameImg" @click="start">
+						<img src="~@/assets/gameDesk/go-ico.gif" class="img">
+					</div>
 				</div>
 				<div class="controlMove" v-else>
 					<div class="left">
@@ -74,6 +80,9 @@
 			}
 		},
 		computed: {
+			wawaJiGold() {
+				return this.$store.state.info.wawaJiGold;
+			},
 			userGold() {
 				return this.$store.state.info.userGold;
 			}
@@ -414,23 +423,61 @@
 				float: left;
 
 				.startGame {
-					width: 6.5rem;
+					width: 8.7rem;
 					height: 2.5rem;
 					margin-left: 1.5rem;
 					margin-top: 1rem;
+					overflow: hidden;
 
-					.img {
-						width: 100%;
-						height: 100%;
+					.goldNumContainer {
+						display: inline-block;
+						width: 2.5rem;
+						height: 1.8rem;
+						line-height: 1.8rem;
+						float: left;
+						margin-top: 0.2rem;
+						background-image: url('~@/assets/gameDesk/gold-bg.png');
+						background-size: 100% 100%;
+						background-repeat: no-repeat;
+
+						.goldIcon {
+							display: inline-block;
+							width: 0.8rem;
+							height: 0.8rem;
+							position: relative;
+							top: 0.1rem;
+							margin-left: 0.3rem;
+						}
+
+						.goldNum {
+							font-size: 0.65rem;
+							color: #fff;
+							position: relative;
+							top: -0.05rem;
+						}
+					}
+
+					.startGameImg {
+						display: inline-block;
+						width: 5.8rem;
+						height: 2.6rem;
+						margin-top: -0.2rem;
+
+						.img {
+							width: 100%;
+							height: 100%;
+						}
 					}
 				}
 
 				.controlMove {
 					width: 6.5rem;
-					height: 4.3rem;
+					height: 3.7rem;
 					margin-left: 1.5rem;
-					margin-top: 0.1rem;
+					margin-top: 0.5rem;
 					overflow: hidden;
+					background-image: url('~@/assets/gameDesk/direction.png');
+					background-size: 100% 100%;
 
 					.left {
 						float: left;
@@ -446,7 +493,7 @@
 						}
 
 						.img_l {
-							background-image: url('~@/assets/gameDesk/ico-left.png');
+							/* background-image: url('~@/assets/gameDesk/ico-left.png'); */
 							background-size: cover;
 						}
 
@@ -469,7 +516,7 @@
 							}
 
 							.img_t {
-								background-image: url('~@/assets/gameDesk/ico-top.png');
+								/* background-image: url('~@/assets/gameDesk/ico-top.png'); */
 								background-size: cover;
 							}
 
@@ -487,7 +534,7 @@
 							}
 
 							.img_b {
-								background-image: url('~@/assets/gameDesk/ico-bottom.png');
+								/* background-image: url('~@/assets/gameDesk/ico-bottom.png'); */
 								background-size: cover;
 							}
 						}
@@ -507,7 +554,7 @@
 						}
 
 						.img_r {
-							background-image: url('~@/assets/gameDesk/ico-right.png');
+							/* background-image: url('~@/assets/gameDesk/ico-right.png'); */
 							background-size: cover;
 						}
 					}
@@ -518,11 +565,11 @@
 				float: right;
 
 				.changeOther {
-					width: 3.5rem;
-					height: 2.8rem;
+					width: 2.8rem;
+					height: 2.2rem;
 					background-image: url('~@/assets/gameDesk/grab-ico.png');
-					background-size: cover;
-					margin-right: 2.3rem;
+					background-size: 100% 100%;
+					margin-right: 2rem;
 					margin-top: 0.8rem;
 					text-align: center;
 
@@ -530,7 +577,7 @@
 						display: inline-block;
 						width: 60%;
 						height: 30%;
-						margin-top: 0.5rem;
+						margin-top: 0.35rem;
 					}
 
 					.grab {
