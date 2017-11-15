@@ -25,7 +25,8 @@ export default {
 			show: false,
 			count: 20
 		},
-		showSetting: false
+		showSetting: false,
+		showNoticeBoard: true
 	},
 
 	mutations: {
@@ -88,6 +89,9 @@ export default {
 		},
 		setSetting(state, data) {
 			state.showSetting = data.showSetting;
+		},
+		setNoticeBoard(state, data) {
+			state.showNoticeBoard = data.showNoticeBoard;
 		},
 	},
 

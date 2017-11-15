@@ -10,6 +10,7 @@
 		<task></task>
 		<functionIcon></functionIcon>
 		<notice></notice>
+		<noticeBoard></noticeBoard>
 		<catch></catch>
 		<gift></gift>
 		<countDown></countDown>
@@ -22,6 +23,7 @@
 
 <script>
 	import Notice from './Notice.vue';
+	import NoticeBoard from './modal/NoticeBoard.vue';
 	import FunctionIcon from './FunctionIcon.vue';
 	import CountDown from './modal/CountDown.vue';
 	import GameBox from './GameBox.vue';
@@ -57,7 +59,8 @@
 			PublishShow,
 			Catch,
 			Gift,
-			Setting
+			Setting,
+			NoticeBoard
 		},
 		mounted() {
 			// 每20分钟刷新一下 token

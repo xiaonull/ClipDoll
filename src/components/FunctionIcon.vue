@@ -3,7 +3,7 @@
 		<div class="icon">
 			<img src="~@/assets/functionIcon/sz-ico04.png" class="img">
 		</div>
-		<div class="icon">
+		<div class="icon" @click="favorite">
 			<img src="~@/assets/functionIcon/sz-ico03.png" class="img">
 		</div>
 		<div class="icon">
@@ -22,6 +22,9 @@
 				this.$store.commit('modal/setSetting', {
 					showSetting: true
 				});
+			},
+			favorite() {
+				
 			}
 		}
 	}
