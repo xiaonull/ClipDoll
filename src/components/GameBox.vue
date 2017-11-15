@@ -463,14 +463,14 @@
 								'transform': 'rotate(' + n + 'deg)'
 							});
 
-							if(n >= 16) {
+							if(n >= 26) {
 								clearInterval(interval);
 							}
-						}, 80);
+						}, 50);
 					}
 
 					if(val.grabWaWa === false) {
-						let n = 16;
+						let n = 26;
 						let interval = setInterval(() => {
 							n -= 2;
 							$(this.$refs.rod_paw_l).css({
@@ -483,7 +483,7 @@
 							if(n <= 0) {
 								clearInterval(interval);
 							}
-						}, 80);
+						}, 50);
 					}
 				},
 				deep: true

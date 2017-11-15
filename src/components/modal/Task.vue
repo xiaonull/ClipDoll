@@ -13,9 +13,11 @@
 							<span class="text">{{item.mission_title}}({{item.finish_num}}/{{item.mission_need_num}})</span>
 							<span class="reward">{{item.awards_contents}}</span>
 						</div>
-						<span class="state" :class="{green : item.mission_status === '1'}">
+						<span class="state reach" v-if=" item.mission_status === '1' " @click="receive(item.mission_id)">
+							<img src="~@/assets/modal/receive.png" class="img">
+						</span>
+						<span class="state" :class="{green : item.mission_status === '2'}" v-else>
 							{{item.mission_status === '0' ? '未达成' : ''}}
-							{{item.mission_status === '1' ? '已达成' : ''}}
 							{{item.mission_status === '2' ? '已领取' : ''}}
 						</span>
 					</div>
@@ -53,10 +55,57 @@
 				};
 
 				myAjax(option);
+			},
+			receive(mission_id) {
+				let option = {
+					url: 'api/finishmission/' + mission_id + '?token=' + sessionStorage.token,
+					type: 'POST',
+					success: function(result, status, xhr) {
+						if(result.code === 1) {
+							this.$store.commit('modal/setMsg', {
+								msg: '领取成功！',
+								display: true
+							});
+							
+							// 刷新任务状态
+							this.init();
+
+							// 刷新用户数据
+							let data = JSON.parse(sessionStorage.loginUrlData);
+							let option = {
+								url: 'api/login',
+								type: 'POST',
+								data: data,
+								success: function(result, status, xhr) {
+									if(result.code === 1) {
+										sessionStorage.token = result.token;
+										sessionStorage.userData =  JSON.stringify(result.user);
+
+										let userData = JSON.parse(sessionStorage.userData);
+										this.$store.commit('info/setUserGold', userData.coin);
+									}
+								}.bind(this)
+							};
+
+							myAjax(option);
+
+							let t = setTimeout(() => {
+								this.$store.commit('modal/resetMsg');
+								clearTimeout(t);
+							}, 2000);
+						}
+					}.bind(this)
+				};
+
+				myAjax(option);
 			}
 		},
 		computed: {
 			show() {
+				if(this.$store.state.modal.showTask === true) {
+					this.init();
+				}
+
 				return this.$store.state.modal.showTask;
 			}
 		}
@@ -166,6 +215,16 @@
 							right: 0.5rem;
 							top: 0.8rem;
 							color: #4C2C0B;
+						}
+
+						.reach {
+							width: 2.1rem;
+							height: 1rem;
+							
+							.img {
+								width: 100%;
+								height: 100%;
+							}
 						}
 
 						.green {

@@ -115,6 +115,10 @@
 							}, 2000);
 
 							htsBus.$emit('loadBackpackData');
+
+							this.$store.commit('modal/setReceiptInfo', {
+								showReceiptInfo: false
+							});
 						}else {
 							this.$store.commit('modal/setMsg', {
 								msg: '提取失败',

@@ -358,15 +358,19 @@
 					}
 
 					if(option && option.failed === false) {
-						this.$store.commit('modal/setMsg', {
-							msg: '恭喜抓到一个娃娃',
-							display: true
-						});
+						// this.$store.commit('modal/setMsg', {
+						// 	msg: '恭喜抓到一个娃娃',
+						// 	display: true
+						// });
 
-						let t1 = setTimeout(() => {
-							this.$store.commit('modal/resetMsg');
-							clearTimeout(t1);
-						}, 2000);
+						// let t1 = setTimeout(() => {
+						// 	this.$store.commit('modal/resetMsg');
+						// 	clearTimeout(t1);
+						// }, 2000);
+
+						this.$store.commit('modal/setCatch', {
+							showCatch: true
+						});
 					}
 
 					let t1 = setTimeout(() => {

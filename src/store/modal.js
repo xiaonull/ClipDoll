@@ -20,10 +20,12 @@ export default {
 		showBubble: false,
 		bubble_luckValue: 0,
 		showGift: false,
+		showCatch: false,
 		countDown: {
 			show: false,
 			count: 20
-		}
+		},
+		showSetting: false
 	},
 
 	mutations: {
@@ -73,6 +75,9 @@ export default {
 		setGift(state, data) {
 			state.showGift = data.showGift;
 		},
+		setCatch(state, data) {
+			state.showCatch = data.showCatch;
+		},
 		setCountDown(state, data) {
 			if(data.show || data.show === false) {
 				state.countDown.show = data.show;
@@ -80,7 +85,10 @@ export default {
 			if(data.count || data.count === 0) {
 				state.countDown.count = data.count;
 			}
-		}
+		},
+		setSetting(state, data) {
+			state.showSetting = data.showSetting;
+		},
 	},
 
 	actions: {

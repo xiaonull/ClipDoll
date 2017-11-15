@@ -1,5 +1,5 @@
 <template>
-	<section class="catch" v-show="false">
+	<section class="catch" v-if="show" @click="close">
 		<div class="pannel">
 			<div class="title">
 				<img src="~@/assets/modal/box-bt07.png" class="img_title">
@@ -14,7 +14,7 @@
 						赶快刺激他们吧
 					</p>
 				</div>
-				<div class="tellFriends">
+				<div class="tellFriends" @click.stop="tellFriends">
 					<img src="~@/assets/modal/an-ico06.png" class="img">
 				</div>
 			</div>
@@ -24,7 +24,21 @@
 
 <script type="text/javascript">
 	export default {
-
+		computed: {
+			show() {
+				return this.$store.state.modal.showCatch;
+			}
+		},
+		methods: {
+			close() {
+				this.$store.commit('modal/setCatch', {
+					showCatch: false
+				});
+			},
+			tellFriends() {
+				
+			}
+		}
 	}
 </script>
 

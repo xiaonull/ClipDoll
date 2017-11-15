@@ -67,7 +67,7 @@
 		min-height: 1.8rem;
 		line-height: 1.8rem;
 		margin-left: 2.5%;
-		top: 1.5rem;
+		top: 3rem;
 		background-image: url('~@/assets/bg/notice-bg.png');
 		background-size: 100% 100%;
 		overflow: hidden;
