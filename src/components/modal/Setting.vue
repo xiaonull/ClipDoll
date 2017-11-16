@@ -7,7 +7,7 @@
 			<div class="closeMusic">
 				<img src="~@/assets/modal/an-ico11.png" class="img">
 			</div>
-			<div class="help">
+			<div class="help" @click="toHelp">
 				<img src="~@/assets/modal/an-ico13.png" class="img">
 			</div>
 		</div>
@@ -26,6 +26,9 @@
 				this.$store.commit('modal/setSetting', {
 					showSetting: false
 				});
+			},
+			toHelp() {
+				this.$router.push('/help');
 			}
 		}
 	}

@@ -26,7 +26,8 @@ export default {
 			count: 20
 		},
 		showSetting: false,
-		showNoticeBoard: true
+		showNoticeBoard: false,
+		showLoginReward: false,
 	},
 
 	mutations: {
@@ -92,6 +93,9 @@ export default {
 		},
 		setNoticeBoard(state, data) {
 			state.showNoticeBoard = data.showNoticeBoard;
+		},
+		setLoginReward(state, data) {
+			state.showLoginReward = data.showLoginReward;
 		},
 	},
 

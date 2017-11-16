@@ -21,7 +21,7 @@
 
 	export default {
 		mounted() {
-			let data = parseQueryString(location.href);
+			let data = parseQueryString(decodeURI(location.href));
 			// console.log(data);
 			let option = {
 				url: 'api/login',

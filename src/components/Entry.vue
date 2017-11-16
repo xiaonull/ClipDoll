@@ -27,7 +27,9 @@
 						<input type="text" name="name" class="input" placeholder="请输入验证码" v-model="register_code">
 					</div>
 					<div class="right">
-						<div class="img_code"></div>
+						<div class="img_code" @click="getVerifycode">
+							<img :src="verifycodeUrl" class="img" v-show="verifycodeUrl !== ''">
+						</div>
 					</div>
 				</div>
 			</div>
@@ -49,11 +51,26 @@
 				register_phoneCode: '',
 				register_password: '',
 				register_code: '',
+				verifycodeUrl: ''
 			}
 		},
 		methods: {
 			toRegister() {
 				this.type = 'register';
+				this.getVerifycode();
+			},
+			getVerifycode() {
+				let option = {
+					url: 'api/verifycode',
+					type: 'GET',
+					success: function(result, status, xhr) {
+						if(result) {
+							this.verifycodeUrl = result;
+						}
+					}.bind(this)
+				};
+
+				myAjax(option);
 			}
 		}
 	}
@@ -189,6 +206,11 @@
 							position: relative;
 							top: 0.5rem;
 							background-color: #f5f5f5;
+
+							.img {
+								width: 100%;
+								height: 100%;
+							}
 						}
 					}
 				}

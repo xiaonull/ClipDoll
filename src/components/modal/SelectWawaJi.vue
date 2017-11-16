@@ -1,5 +1,6 @@
 <template>
 	<section class="selectWawaJi" v-if="show">
+		<img src="~@/assets/modal/cat.png" class="catImg">
 		<div class="pannel">
 			<div class="title">
 				<img src="~@/assets/modal/close.png" class="img_close" @click="close">
@@ -85,11 +86,22 @@
 		background-color: rgba(0, 0, 0, 0.3);
 		z-index: 20;
 
+		.catImg {
+			display: block;
+			width: 40%;
+			height: 16.7%;
+			position: absolute;
+			z-index: 21;
+			top: 0;
+			left: 50%;
+			margin-left: -20%;
+		}
+
 		.pannel {
 			position: absolute;
 			width: 95%;
-			height: 90%;
-			top: 5%;
+			height: 82%;
+			top: 14.5%;
 			left: 50%;
 			margin-left: -47.5%;
 			background-image: url('~@/assets/modal/box-bg03.png');

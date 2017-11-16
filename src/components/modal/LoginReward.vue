@@ -1,16 +1,16 @@
 <template>
-	<section class="task" v-if="show">
+	<section class="loginReward" v-if="show">
 		<div class="pannel">
 			<div class="title">
-				<img src="~@/assets/modal/box-bt04.png" class="img_title">
+				<img src="~@/assets/modal/box-bt09.png" class="img_title">
 				<img src="~@/assets/modal/close.png" class="img_close" @click="close">
 			</div>
 			<div class="content">
 				<div class="list">
-					<div class="item" v-for="item in taskList" :key="item.mission_id">
-						<img src="~@/assets/modal/gold-ico02.png" class="icon">
+					<div class="item" v-for="item in rewardList" :key="item.mission_id">
+						<img :src="'http://' + item.mission_icon" class="icon">
 						<div class="main">
-							<span class="text">{{item.mission_title}}({{item.finish_num}}/{{item.mission_need_num}})</span>
+							<span class="text">{{item.mission_title}}</span>
 							<span class="reward">{{item.awards_contents}}</span>
 						</div>
 						<span class="state reach" v-if=" item.mission_status === '1' " @click="receive(item.mission_id)">
@@ -31,31 +31,41 @@
 	export default {
 		data() {
 			return {
-				taskList: []
+				rewardList: []
 			}
 		},
-		mounted() {
-			this.init();
+		computed: {
+			show() {
+				if(this.$store.state.modal.showLoginReward === true) {
+					this.init();
+				}
+
+				return this.$store.state.modal.showLoginReward;
+			}
 		},
 		methods: {
-			close() {
-				this.$store.commit('modal/setTask', {
-					showTask: false
-				});
-			},
 			init() {
 				let option = {
-					url: 'api/mission?token=' + sessionStorage.token,
+					url: 'api/daymission?token=' + sessionStorage.token,
 					type: 'GET',
 					success: function(result, status, xhr) {
 						if(result.code === 1) {
-							this.taskList = [];
-							this.taskList = result.data;
+							this.rewardList = [];
+							this.rewardList = result.data;
 						}
 					}.bind(this)
 				};
 
 				myAjax(option);
+			},
+			close() {
+				this.$store.commit('modal/setLoginReward', {
+					showLoginReward: false
+				});
+
+				this.$store.commit('modal/setNoticeBoard', {
+					showNoticeBoard: true
+				});
 			},
 			receive(mission_id) {
 				let option = {
@@ -100,21 +110,12 @@
 
 				myAjax(option);
 			}
-		},
-		computed: {
-			show() {
-				if(this.$store.state.modal.showTask === true) {
-					this.init();
-				}
-
-				return this.$store.state.modal.showTask;
-			}
 		}
 	}
 </script>
 
 <style scoped lang="less"> 
-	.task {
+	.loginReward {
 		position: absolute;
 		width: 100%;
 		height: 100%;
@@ -125,8 +126,8 @@
 		.pannel {
 			position: absolute;
 			width: 95%;
-			height: 70%;
-			top: 15%;
+			height: 80%;
+			top: 10%;
 			left: 50%;
 			margin-left: -47.5%;
 			background-image: url('~@/assets/modal/box-bg01.png');
@@ -149,16 +150,15 @@
 					width: 1.5rem;
 					height: 1.5rem;
 				}
-
 			}
 
 			.content {
 				width: 90%;
-				height: 77%;
+				height: 85%;
 				margin-left: 5%;
 				margin-top: 0.2rem;
 				background-color: #f2cd5b;
-				border-radius: 1rem;
+				border-radius: 0.2rem;
 				overflow-y: scroll;
 
 				.list {
@@ -178,8 +178,9 @@
 
 						.icon {
 							display: inline-block;
-							width: 2.4rem;
-							height: 2.4rem;
+							width: 2.3rem;
+							height: 2.3rem;
+							margin: 0.1rem;
 							position: relative;
 							top: 0.1rem;
 						}
@@ -187,7 +188,8 @@
 						.main {
 							display: inline-block;
 							position: relative;
-							top: -0.85rem;
+							top: -1.1rem;
+							margin-left: 0.4rem;
 
 							.text {
 								display: block;
@@ -235,7 +237,6 @@
 				}
 
 			}
-
 		}
 	}
 </style>

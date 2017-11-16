@@ -1,7 +1,7 @@
 <template>
 	<section class="notice" ref="notice">
-		<!-- <p class="text">恭喜<span class="name">一步一步</span>走狗屎运抓到奶牛维尼熊了！</p> -->
-		<p class="text" v-if="currentIndex >= 0">{{noticeList[currentIndex].contents}}</p>
+		<p class="text">恭喜<span class="name">{{nickname.length > 4 ? nickname.slice(0, 4) + '...' : nickname}}</span>走狗屎运抓到{{goods_name}}了！</p>
+		<!-- <p class="text" v-if="currentIndex >= 0">{{noticeList[currentIndex].contents}}</p> -->
 	</section>
 </template>
 
@@ -12,32 +12,32 @@
 		},
 		data() {
 			return {
-				noticeList: [],
-				currentIndex: -1,
+				nickname: '',
+				goods_name: ''
 			}
 		},
 		methods: {
 			init() {
 				let option = {
-					url: 'api/notice?token=' + sessionStorage.token,
+					url: 'api/randdata?token=' + sessionStorage.token,
 					type: 'GET',
 					success: function(result, status, xhr) {
-						if(result.code === 1 && result.data.length > 0) {
-							this.noticeList = result.data;
-							this.currentIndex = 0;
-							this.startRoll();
+						if(result.code === 1) {
+							this.nickname = result.nickname;
+							this.goods_name = result.goods_name;
+							this.roll();
 						}
 					}.bind(this)
 				};
 
 				myAjax(option);
 			},
-			startRoll() {
-				this.roll();
-				setInterval(() => {
-					this.roll();
-				}, 8000);
-			},
+			// startRoll() {
+			// 	this.roll();
+			// 	setInterval(() => {
+			// 		this.roll();
+			// 	}, 8000);
+			// },
 			roll() {
 				$(this.$refs.notice).animate({
 					width: '95%'
@@ -46,13 +46,14 @@
 						$(this.$refs.notice).animate({
 							width: '0'
 						}, 200, () => {
-							this.currentIndex++;
-							if(this.currentIndex >= this.noticeList.length) {
-								this.currentIndex = 0;
-							}
 							clearTimeout(t);
 						});
 					}, 2000);
+
+					let t2 = setTimeout(() => {
+						this.init();
+						clearTimeout(t2);
+					}, 10000);
 				});
 			}
 		}

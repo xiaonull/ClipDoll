@@ -27,17 +27,23 @@
 					<div class="shadow" ref="shadow"></div>
 				</div>
 				<img :src="'http://' + currentWaWaList[0].sc_pic" :class="currentWaWaList[0].id" class="img wawa wawa_1" v-if="currentWaWaList[0]">
-				<div class="shadow1 shadowImg"></div>
+				<div class="expression expression1" v-if="currentWaWaList[0] && showExpression === 1"><img src="~@/assets/bg/expression.png" class="img"></div>
+				<div class="shadow1 shadowImg" v-if="currentWaWaList[0]"></div>
 				<img :src="'http://' + currentWaWaList[1].sc_pic" :class="currentWaWaList[1].id" class="img wawa wawa_2" v-if="currentWaWaList[1]">
-				<div class="shadow2 shadowImg"></div>
+				<div class="expression expression2" v-if="currentWaWaList[1] && showExpression === 2"><img src="~@/assets/bg/expression.png" class="img"></div>
+				<div class="shadow2 shadowImg" v-if="currentWaWaList[1]"></div>
 				<img :src="'http://' + currentWaWaList[2].sc_pic" :class="currentWaWaList[2].id" class="img wawa wawa_3" v-if="currentWaWaList[2]">
-				<div class="shadow3 shadowImg"></div>
+				<div class="expression expression3" v-if="currentWaWaList[2] && showExpression === 3"><img src="~@/assets/bg/expression.png" class="img"></div>
+				<div class="shadow3 shadowImg" v-if="currentWaWaList[2]"></div>
 				<img :src="'http://' + currentWaWaList[3].sc_pic" :class="currentWaWaList[3].id" class="img wawa wawa_4" v-if="currentWaWaList[3]">
-				<div class="shadow4 shadowImg"></div>
+				<div class="expression expression4" v-if="currentWaWaList[3] && showExpression === 4"><img src="~@/assets/bg/expression.png" class="img"></div>
+				<div class="shadow4 shadowImg" v-if="currentWaWaList[3]"></div>
 				<img :src="'http://' + currentWaWaList[4].sc_pic" :class="currentWaWaList[4].id" class="img wawa wawa_5" v-if="currentWaWaList[4]">
-				<div class="shadow5 shadowImg"></div>
+				<div class="expression expression5" v-if="currentWaWaList[4] && showExpression === 5"><img src="~@/assets/bg/expression.png" class="img"></div>
+				<div class="shadow5 shadowImg" v-if="currentWaWaList[4]"></div>
 				<img :src="'http://' + currentWaWaList[5].sc_pic" :class="currentWaWaList[5].id" class="img wawa wawa_6" v-if="currentWaWaList[5]">
-				<div class="shadow6 shadowImg"></div>
+				<div class="expression expression6" v-if="currentWaWaList[5] && showExpression === 6"><img src="~@/assets/bg/expression.png" class="img"></div>
+				<div class="shadow6 shadowImg" v-if="currentWaWaList[5]"></div>
 			</div>
 		</div>
 		<div class="wawaji_subTop"></div>
@@ -78,7 +84,8 @@
 				grabWaWa: this.$store.state.rod.action,
 				layer: this.$store.state.rod.layer,
 				light_img_index: 1,
-				currentWaWaList: []
+				currentWaWaList: [],
+				showExpression: 0
 			}
 		},
 		mounted() {
@@ -150,11 +157,24 @@
 				this.currentWaWaList = wawaJiData.data;
 				this.$store.commit('info/setWawaJiGold', wawaJiData.coin);
 				this.$store.commit('info/setLuckyValue', wawaJiData.lucky);
+
+				this.showExpressionX();
 			},
 			changeLightImg() {
 				setInterval(() => {
 					this.light_img_index = (this.light_img_index + 1) % 3 === 0 ? 3 : (this.light_img_index + 1) % 3 ;
 				}, 1000);
+			},
+			showExpressionX() {
+				setInterval(() => {
+					let index = Math.floor(Math.random() * 6 + 1);
+					this.showExpression = index;
+
+					let t = setTimeout(() => {
+						this.showExpression = 0;
+						clearTimeout(t);
+					}, 1500);
+				}, 5000);
 			},
 			openGift() {
 				this.$store.commit('modal/setGift', {
@@ -851,6 +871,48 @@
 			.shadow6 {
 				bottom: 2.3rem;
 				left: 8.5rem;
+			}
+
+			.expression {
+				position: absolute;
+				z-index: 7;
+				width: 1.8rem;
+				height: 1.5rem;
+
+				.img {
+					width: 100%;
+					height: 100%;
+				}
+			}
+
+			.expression1 {
+				bottom: 3.5rem;
+				left: 5.5rem;
+			}
+
+			.expression2 {
+				bottom: 3.5rem;
+				left: 8.5rem;
+			}
+
+			.expression3 {
+				bottom: 3.5rem;
+				left: 11.3rem;
+			}
+
+			.expression4 {
+				bottom: 5.5rem;
+				left: 5rem;
+			}
+
+			.expression5 {
+				bottom: 5.5rem;
+				left: 7.5rem;
+			}
+
+			.expression6 {
+				bottom: 5.5rem;
+				left: 10rem;
 			}
 		}
 

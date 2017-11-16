@@ -8,6 +8,7 @@
 		<playerShow></playerShow>
 		<publishShow></publishShow>
 		<task></task>
+		<loginReward></loginReward>
 		<functionIcon></functionIcon>
 		<notice></notice>
 		<noticeBoard></noticeBoard>
@@ -35,6 +36,7 @@
 	import ReceiptInfo from './modal/ReceiptInfo.vue';
 	import Recharge from './modal/Recharge.vue';
 	import Task from './modal/Task.vue';
+	import LoginReward from './modal/LoginReward.vue';
 	import PlayerShow from './modal/PlayerShow.vue';
 	import PublishShow from './modal/PublishShow.vue';
 	import Catch from './modal/Catch.vue';
@@ -55,6 +57,7 @@
 			ReceiptInfo,
 			Recharge,
 			Task,
+			LoginReward,
 			PlayerShow,
 			PublishShow,
 			Catch,
@@ -95,6 +98,10 @@
 			};
 
 			myAjax(option);
+
+			this.$store.commit('modal/setLoginReward', {
+				showLoginReward: true
+			});
 		}
 	}
 </script>
