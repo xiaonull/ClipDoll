@@ -1,5 +1,7 @@
 <template>
 	<section class="index">
+		<help></help>
+		<share></share>
 		<msg></msg>
 		<selectWawaJi></selectWawaJi>
 		<recharge></recharge>
@@ -23,6 +25,8 @@
 </template>
 
 <script>
+	import Help from './Help.vue';
+	import Share from './Share.vue';
 	import Notice from './Notice.vue';
 	import NoticeBoard from './modal/NoticeBoard.vue';
 	import FunctionIcon from './FunctionIcon.vue';
@@ -45,6 +49,8 @@
 
 	export default {
 		components: {
+			Help,
+			Share,
 			FunctionIcon,
 			Notice,
 			CountDown,

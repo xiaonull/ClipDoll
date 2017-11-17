@@ -28,6 +28,8 @@ export default {
 		showSetting: false,
 		showNoticeBoard: false,
 		showLoginReward: false,
+		showHelp: false,
+		showShare: false,
 	},
 
 	mutations: {
@@ -97,6 +99,12 @@ export default {
 		setLoginReward(state, data) {
 			state.showLoginReward = data.showLoginReward;
 		},
+		setHelp(state, data) {
+			state.showHelp = data.showHelp;
+		},
+		setShare(state, data) {
+			state.showShare = data.showShare;
+		}
 	},
 
 	actions: {

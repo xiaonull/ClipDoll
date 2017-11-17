@@ -1,5 +1,5 @@
 <template>
-	<section class="help">
+	<section class="help" v-if="show">
 		<div class="header">
 			<div class="back" @click="back"></div>
 			<div class="title">求助中心</div>
@@ -24,17 +24,28 @@
 			}
 		},
 		mounted() {
-			this.init();
+			// this.init();
+		},
+		computed: {
+			show() {
+				if(this.$store.state.modal.showHelp === true) {
+					this.init();
+				}
+
+				return this.$store.state.modal.showHelp;
+			}
 		},
 		methods: {
 			back() {
-				this.$router.push('/index');
+				this.$store.commit('modal/setHelp', {
+					showHelp: false
+				});
 				
-				setTimeout(() => {
-					this.$store.commit('modal/setLoginReward', {
-						showLoginReward: false
-					});
-				}, 0);
+				// setTimeout(() => {
+				// 	this.$store.commit('modal/setLoginReward', {
+				// 		showLoginReward: false
+				// 	});
+				// }, 0);
 			},
 			openAnswer(index) {
 				if($(this.$refs.content).find('.openAnswer').eq(index).hasClass('endOpenAnswer')) {
@@ -79,6 +90,7 @@
 		width: 100%;
 		height: 100%;
 		background-color: #fff;
+		z-index: 50;
 
 		.header {
 			position: fixed;

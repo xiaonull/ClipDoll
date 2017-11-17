@@ -5,7 +5,7 @@
 		</div>
 		<div class="icon favoriteIcon" @click="favorite">
 			<img src="~@/assets/functionIcon/sz-ico03.png" class="img">
-			<div class="bubble">
+			<div class="bubble" ref="bubble">
 				<p class="text">点击收藏，下次也是可以玩</p>
 			</div>
 		</div>
@@ -15,13 +15,40 @@
 		<div class="icon" @click="openSetting">
 			<img src="~@/assets/functionIcon/sz-ico01.png" class="img">
 		</div>
+		<audio id="mainBgMusic" ref="bgm" loop autoplay>
+			<source src="~@/assets/music/bgm.mp3" type="audio/mpeg">
+		</audio>
 	</section>
 </template>
 
 <script type="text/javascript">
 	export default {
+		mounted() {
+			if(this.$store.state.info.bgm === false) {
+				$(this.$refs.bgm)[0].pause();
+			}
+		},
+		data() {
+			return {
+				startMusic: this.$store.state.info
+			}
+		},
+		watch: {
+			startMusic: {
+				handler: function(val, oldVal) {
+					if(val.bgm === false) {
+						$(this.$refs.bgm)[0].pause();
+					}
+				},
+				deep: true
+			}
+		},
 		methods: {
 			download() {
+				if(this.$store.state.info.startGame === true) {
+					return;
+				}
+
 				this.$store.commit('modal/setMsg', {
 					msg: '请在浏览器的设置中保存本页',
 					display: true
@@ -33,11 +60,21 @@
 				}, 3000);
 			},
 			openSetting() {
+				if(this.$store.state.info.startGame === true) {
+					return;
+				}
+
 				this.$store.commit('modal/setSetting', {
 					showSetting: true
 				});
 			},
 			favorite() {
+				if(this.$store.state.info.startGame === true) {
+					return;
+				}
+
+				$(this.$refs.bubble).hide();
+
 				if(isWeiXin()) {
 					this.$store.commit('modal/setMsg', {
 						msg: '请在微信中收藏本页',
@@ -56,7 +93,13 @@
 				}, 3000);
 			},
 			share() {
-				this.$router.push('/share');
+				if(this.$store.state.info.startGame === true) {
+					return;
+				}
+				
+				this.$store.commit('modal/setShare', {
+					showShare: true
+				});
 			}
 		}
 	}
@@ -112,7 +155,7 @@
 				.text {
 					transform: rotate(180deg);
 					font-size: 0.5rem;
-					margin: 0.65rem 1rem 0 1rem;
+					margin: 0.6rem 1rem 0 1rem;
 				}
 			}
 		}

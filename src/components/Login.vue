@@ -21,8 +21,11 @@
 
 	export default {
 		mounted() {
-			let data = parseQueryString(decodeURI(location.href));
-			// console.log(data);
+			let data = parseQueryString((decodeURIComponent(location.href)));
+			console.log(data.userImg)
+			// console.log('1:  ' + location.href)
+			// console.log('2:  ' + decodeURIComponent(location.href))
+			alert(decodeURI(location.href));
 			let option = {
 				url: 'api/login',
 				type: 'POST',

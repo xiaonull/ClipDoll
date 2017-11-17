@@ -4,7 +4,7 @@
 			<div class="close" @click="close">
 				<img src="~@/assets/modal/close01.png" class="img">
 			</div>
-			<div class="closeMusic">
+			<div class="closeMusic" @click="closeMusic">
 				<img src="~@/assets/modal/an-ico11.png" class="img">
 			</div>
 			<div class="help" @click="toHelp">
@@ -27,8 +27,13 @@
 					showSetting: false
 				});
 			},
+			closeMusic() {
+				this.$store.commit('info/setBgm', false);
+			},
 			toHelp() {
-				this.$router.push('/help');
+				this.$store.commit('modal/setHelp', {
+					showHelp: true
+				});
 			}
 		}
 	}

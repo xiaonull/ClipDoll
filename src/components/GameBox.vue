@@ -177,6 +177,9 @@
 				}, 5000);
 			},
 			openGift() {
+				if(this.$store.state.info.startGame === true) {
+					return;
+				}
 				this.$store.commit('modal/setGift', {
 					showGift: true
 				});
@@ -234,11 +237,8 @@
 
 					if(distance < level1) {
 						// console.log('level1')
-						// 准确抓到，有90%的概率向后台请求抓起概率
-						// 获取1～10之间的随机整数
-						if(Math.floor(Math.random() * 10 + 1) <= 9) {
-							this.isCatch(this.currentWaWaList[i].id)
-							.then((data) => {
+						this.isCatch(this.currentWaWaList[i].id)
+						.then((data) => {
 								// level表示抓取的准确度，在抓取失败时准确度越高能抓起的高度越高；catch表示能否完全抓起，由后台控制
 								htsBus.$emit('grabing', {
 									level: 1,
@@ -248,40 +248,26 @@
 									$rod_lid: $(this.$refs.rod_lid),
 									$rod_paws: $(this.$refs.rod_paws)
 								});
+
+								if(data) {
+									this.$store.commit('info/setWawa_position', {
+										left: $wawa.css('left'),
+										bottom: $wawa.css('bottom'),
+										zIndex: $wawa.css('zIndex')
+									});
+								}
 							}, (err) => {
 
 							})
-							.catch((err) => {
-								
-							});
-						}else {
-							this.isCatch(this.currentWaWaList[i].id)
-							.then((data) => {
-								// level表示抓取的准确度，在抓取失败时准确度越高能抓起的高度越高；catch表示能否完全抓起，由后台控制
-								htsBus.$emit('grabing', {
-									level: 1,
-									catch: data,
-									$obj: $wawa,
-									$wawa_shadow: $wawa_shadow,
-									$rod_lid: $(this.$refs.rod_lid),
-									$rod_paws: $(this.$refs.rod_paws)
-								});
-							}, (err) => {
+						.catch((err) => {
 
-							})
-							.catch((err) => {
-								
-							});
-						}
+						});
 						
 						return;
 					} else if(distance < level2) {
 						// console.log('level2')
-						// 较准确抓到，有70%的概率向后台请求抓起概率
-						// 获取1～10之间的随机整数
-						if(Math.floor(Math.random() * 10 + 1) <= 7) {
-							this.isCatch(this.currentWaWaList[i].id)
-							.then((data) => {
+						this.isCatch(this.currentWaWaList[i].id)
+						.then((data) => {
 								// level表示抓取的准确度，在抓取失败时准确度越高能抓起的高度越高；catch表示能否完全抓起，由后台控制
 								htsBus.$emit('grabing', {
 									level: 2,
@@ -291,40 +277,26 @@
 									$rod_lid: $(this.$refs.rod_lid),
 									$rod_paws: $(this.$refs.rod_paws)
 								});
+
+								if(data) {
+									this.$store.commit('info/setWawa_position', {
+										left: $wawa.css('left'),
+										bottom: $wawa.css('bottom'),
+										zIndex: $wawa.css('zIndex')
+									});
+								}
 							}, (err) => {
 
 							})
-							.catch((err) => {
-								
-							});
-						}else {
-							this.isCatch(this.currentWaWaList[i].id)
-							.then((data) => {
-								// level表示抓取的准确度，在抓取失败时准确度越高能抓起的高度越高；catch表示能否完全抓起，由后台控制
-								htsBus.$emit('grabing', {
-									level: 2,
-									catch: data,
-									$obj: $wawa,
-									$wawa_shadow: $wawa_shadow,
-									$rod_lid: $(this.$refs.rod_lid),
-									$rod_paws: $(this.$refs.rod_paws)
-								});
-							}, (err) => {
+						.catch((err) => {
 
-							})
-							.catch((err) => {
-								
-							});
-						}
+						});
 						
 						return;
 					} else if(distance < level3) {
 						// console.log('level3')
-						// 较准确抓到，有50%的概率向后台请求抓起概率
-						// 获取1～10之间的随机整数
-						if(Math.floor(Math.random() * 10 + 1) <= 5) {
-							this.isCatch(this.currentWaWaList[i].id)
-							.then((data) => {
+						this.isCatch(this.currentWaWaList[i].id)
+						.then((data) => {
 								// level表示抓取的准确度，在抓取失败时准确度越高能抓起的高度越高；catch表示能否完全抓起，由后台控制
 								htsBus.$emit('grabing', {
 									level: 3,
@@ -334,31 +306,20 @@
 									$rod_lid: $(this.$refs.rod_lid),
 									$rod_paws: $(this.$refs.rod_paws)
 								});
+
+								if(data) {
+									this.$store.commit('info/setWawa_position', {
+										left: $wawa.css('left'),
+										bottom: $wawa.css('bottom'),
+										zIndex: $wawa.css('zIndex')
+									});
+								}
 							}, (err) => {
 
 							})
-							.catch((err) => {
-								
-							});
-						}else {
-							this.isCatch(this.currentWaWaList[i].id)
-							.then((data) => {
-								// level表示抓取的准确度，在抓取失败时准确度越高能抓起的高度越高；catch表示能否完全抓起，由后台控制
-								htsBus.$emit('grabing', {
-									level: 3,
-									catch: data,
-									$obj: $wawa,
-									$wawa_shadow: $wawa_shadow,
-									$rod_lid: $(this.$refs.rod_lid),
-									$rod_paws: $(this.$refs.rod_paws)
-								});
-							}, (err) => {
+						.catch((err) => {
 
-							})
-							.catch((err) => {
-								
-							});
-						}
+						});
 						
 						return;
 					}
@@ -401,6 +362,10 @@
 								}
 
 								if(result.data === 'get') {
+									this.$store.commit('info/setWawa_id', {
+										id: wawa_id
+									});
+
 									resolve(true);
 								}else if(result.data === 'lost') {
 									resolve(false);

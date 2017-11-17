@@ -70,7 +70,7 @@
 					this.showImgUrl = this.showList[this.currentItem].pic;
 					this.nickname = this.showList[this.currentItem].nickname;
 					this.contents = this.showList[this.currentItem].contents;
-					this.headerImg = this.showList[this.currentItem].icon;
+					this.headerImg = decodeURIComponent(this.showList[this.currentItem].icon);
 					this.contents = this.showList[this.currentItem].contents;
 				}
 			},

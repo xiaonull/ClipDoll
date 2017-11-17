@@ -106,10 +106,12 @@
 				// 判断金币够不够
 				if(this.$store.state.info.userGold >= this.$store.state.info.wawaJiGold) {
 					this.$store.commit('info/setUserGold', this.$store.state.info.userGold - this.$store.state.info.wawaJiGold);
+
 					this.$store.commit('modal/setCountDown', {
 						show: true,
 						count: 20
 					});
+
 					this.$store.dispatch('modal/startCountDown')
 					.then((data)  => {
 						if(this.startGame === true && this.grabState === false) {
@@ -120,6 +122,8 @@
 					.catch(response => {
 						console.log('error: ' + response);
 					});
+
+					this.$store.commit('info/setStartGame', true);
 					this.startGame = true;
 				}else {
 					this.$store.commit('modal/setMsg', {
@@ -268,7 +272,21 @@
 
 								option.$obj.animate({
 									marginBottom: '-500px'
-								}, 2000);
+								}, 2000, () => {
+									console.log(this.$store.state.info.wawa_position)
+									setTimeout(() => {
+										// option.$obj.css('left', this.$store.state.info.wawa_position.left);
+										// option.$obj.css('bottom', this.$store.state.info.wawa_position.bottom);
+										option.$obj.css('zIndex', this.$store.state.info.wawa_position.zIndex);
+										option.$obj.css('marginBottom', 0);
+										option.$obj.css('marginLeft', 0);
+										option.$obj.css('transform', 'rotate(0deg)');
+
+										if(option.$wawa_shadow) {
+											option.$wawa_shadow.css('display', 'block');
+										}
+									}, 500);
+								});
 
 								clearTimeout(timeout);
 							}, 200);
@@ -345,6 +363,7 @@
 				})
 				.then((data) => {
 					this.$store.commit('rod/setLayer', 5);
+					this.$store.commit('info/setStartGame', false);
 					this.startGame = false;
 					this.grabState = false;
 

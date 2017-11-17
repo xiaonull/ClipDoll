@@ -1,5 +1,5 @@
 <template>
-	<section class="share">
+	<section class="share" v-if="show">
 		<div class="header">
 			<div class="back" @click="back"></div>
 			<div class="title">分享至朋友圈</div>
@@ -18,17 +18,28 @@
 			}
 		},
 		mounted() {
-			this.init();
+			// this.init();
+		},
+		computed: {
+			show() {
+				if(this.$store.state.modal.showShare === true) {
+					this.init();
+				}
+
+				return this.$store.state.modal.showShare;
+			}
 		},
 		methods: {
 			back() {
-				this.$router.push('/index');
+				this.$store.commit('modal/setShare', {
+					showShare: false
+				});
 				
-				setTimeout(() => {
-					this.$store.commit('modal/setLoginReward', {
-						showLoginReward: false
-					});
-				}, 0);
+				// setTimeout(() => {
+				// 	this.$store.commit('modal/setLoginReward', {
+				// 		showLoginReward: false
+				// 	});
+				// }, 0);
 			},
 			init() {
 				let option = {
@@ -55,6 +66,7 @@
 		background-image: url('~@/assets/share/fx-bg.jpg');
 		background-size: 100% 100%;
 		background-position: 0 1.8rem;
+		z-index: 50;
 
 		.header {
 			position: relative;

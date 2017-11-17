@@ -17,8 +17,8 @@
 						</div>
 					</div>
 					<div class="item_noImg" v-else>
-						<h2 class="title">欢乐模式开启！</h2>
-						<p class="msg">哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈</p>
+						<h2 class="title">{{item.title}}</h2>
+						<p class="msg">{{item.contents}}</p>
 					</div>
 				</div>
 			</div>

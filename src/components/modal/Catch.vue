@@ -1,15 +1,16 @@
 <template>
 	<section class="catch" v-if="show" @click="close">
+		<!-- <div class="share"></div> -->
 		<div class="pannel">
 			<div class="title">
 				<img src="~@/assets/modal/box-bt07.png" class="img_title">
 			</div>	
 			<div class="main">
-				<img src="~@/assets/modal/wawa2.png" class="wawaImg">
+				<img :src="pic" class="wawaImg">
 				<div class="info">
-					<p class="text">粉红猴子</p>
-					<p class="text">你抓了8次抓到，超越了90%玩家</p>
-					<p class="text">感谢 <span class="friends">你的好友</span> 为你填坑了~
+					<p class="text">{{goods_name}}</p>
+					<p class="text">你抓了{{catchnum}}次抓到，超越了{{Math.floor(Math.random() * 45 + 50)}}%玩家</p>
+					<p class="text">感谢 <span class="friends">{{user_names[0] + '、' + user_names[1]}}</span> 为你填坑了~
 						<br>
 						赶快刺激他们吧
 					</p>
@@ -24,8 +25,20 @@
 
 <script type="text/javascript">
 	export default {
+		data() {
+			return {
+				goods_name: '',
+				pic: '',
+				user_names: [],
+				catchnum: '',
+			}
+		},
 		computed: {
 			show() {
+				if(this.$store.state.modal.showCatch === true) {
+					this.init();
+				}
+
 				return this.$store.state.modal.showCatch;
 			}
 		},
@@ -37,6 +50,23 @@
 			},
 			tellFriends() {
 				
+			},
+			init() {
+				let id = this.$store.state.info.wawa_id;
+				let option = {
+					url: 'api/getshare/' + id + '?token=' + sessionStorage.token,
+					type: 'GET',
+					success: function(result, status, xhr) {
+						if(result.code === 1) {
+							this.goods_name = result.data.goods_name;
+							this.pic = 'http://' + result.data.pic;
+							this.user_names = result.data.user_name;
+							this.catchnum = result.data.catchnum;
+						}
+					}.bind(this)
+				};
+
+				myAjax(option);
 			}
 		}
 	}
@@ -50,6 +80,16 @@
 		background-color: rgba(0, 0, 0, 0.7);
 		z-index: 20;
 		text-align: center;
+
+		.share {
+			/* position: absolute;
+			width: 3rem;
+			height: 5rem;
+			top: 0;
+			right: 0;
+			background-image: url('~@/assets/modal/share.png');
+			background-size: 100% 100%; */
+		}
 
 		.pannel {
 			position: absolute;
