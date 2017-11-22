@@ -1,6 +1,8 @@
 <template>
 	<section class="catch" v-if="show" @click="close">
-		<!-- <div class="share"></div> -->
+		<transition name="bounce">
+			<div class="share" v-if="showShare"></div>
+		</transition>
 		<div class="pannel">
 			<div class="title">
 				<img src="~@/assets/modal/box-bt07.png" class="img_title">
@@ -31,6 +33,7 @@
 				pic: '',
 				user_names: [],
 				catchnum: '',
+				showShare: false
 			}
 		},
 		computed: {
@@ -49,7 +52,7 @@
 				});
 			},
 			tellFriends() {
-				
+				this.showShare = true;
 			},
 			init() {
 				let id = this.$store.state.info.wawa_id;
@@ -82,13 +85,14 @@
 		text-align: center;
 
 		.share {
-			/* position: absolute;
-			width: 3rem;
-			height: 5rem;
-			top: 0;
-			right: 0;
-			background-image: url('~@/assets/modal/share.png');
-			background-size: 100% 100%; */
+			position: absolute;
+			width: 5rem;
+			height: 4rem;
+			top: 1.5rem;
+			right: 0.5rem;
+			z-index: 21;
+			background-image: url('~@/assets/modal/arrow.png');
+			background-size: 100% 100%;
 		}
 
 		.pannel {
@@ -140,6 +144,30 @@
 					}
 				}
 			}
+		}
+	}
+
+	.bounce-enter-active {
+		animation: bounce-in .5s;
+	}
+	.bounce-leave-active {
+		animation: bounce-in .5s reverse;
+	}
+	@keyframes bounce-in {
+		0% {
+			transform: scale(0);
+		}
+		25% {
+			transform: scale(0.5);
+		}
+		50% {
+			transform: scale(1);
+		}
+		75% {
+			transform: scale(1.5);
+		}
+		100% {
+			transform: scale(1);
 		}
 	}
 </style>

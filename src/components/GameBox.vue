@@ -1,23 +1,28 @@
 <template>
 	<section class="gameBox">
 		<div class="main" ref="gameBox">
+			<!-- 落口处 -->
+			<div class="exit"></div>
 			<!-- 抓杆 -->
 			<div class="rod" ref="rod">
 				<!-- 抓杆的柄 -->
 				<div class="rod_handle_container" ref="rod_handle_container">
+					<div class="rod_handle_top"></div>
 					<div class="rod_handle" v-for="i in rod_length"></div>
 				</div>
-				<!-- 盖子 -->
-				<div class="rod_lid" ref="rod_lid">
-					<img src="~@/assets/rod/hooktu02.png" class="rod_lid_img">
-				</div>
-				<!-- 爪子 -->
-				<div class="rod_paws" ref="rod_paws">
-					<div class="rod_paw_l" ref="rod_paw_l">
-						<img src="~@/assets/rod/hooktu03.png" class="rod_paw_l_img">
+				<div class="rod_bottom">
+					<!-- 盖子 -->
+					<div class="rod_lid" ref="rod_lid">
+						<img src="~@/assets/rod/hooktu02.png" class="rod_lid_img">
 					</div>
-					<div class="rod_paw_r" ref="rod_paw_r">
-						<img src="~@/assets/rod/hooktu04.png" class="rod_paw_r_img">
+					<!-- 爪子 -->
+					<div class="rod_paws" ref="rod_paws">
+						<div class="rod_paw_l" ref="rod_paw_l">
+							<img src="~@/assets/rod/hooktu03.png" class="rod_paw_l_img">
+						</div>
+						<div class="rod_paw_r" ref="rod_paw_r">
+							<img src="~@/assets/rod/hooktu04.png" class="rod_paw_r_img">
+						</div>
 					</div>
 				</div>
 			</div>
@@ -629,7 +634,7 @@
 
 		.maskBottom {
 			position: absolute;
-			z-index: 2;
+			z-index: 4;
 			bottom: 0;
 			width: 100%;
 			height: 1.3rem;
@@ -641,12 +646,23 @@
 			top: 25px;
 			left: 0.9rem;
 			right: 0.9rem;
-			bottom: 1.3rem;
+			bottom: 1rem;
 			background-color: #34ccdd;
 			background-image: url('~@/assets/bg/house.jpg');
 			background-repeat: no-repeat;
 			background-position: center;
 			background-size: 100% 100%;
+
+			.exit {
+				width: 4.5rem;
+				height: 4rem;
+				position: absolute;
+				left: 0;
+				bottom: 0;
+				background-image: url('~@/assets/bg/house01.png');
+				background-size: 100% 100%;
+				z-index: 3;
+			}
 		}
 
 		.rod {
@@ -655,12 +671,143 @@
 			left: 80px;
 			margin-top: -50px;
 
+			.rod_handle_top {
+				position: relative;
+				top: 52px;
+				left: -0.65rem;
+				width: 1.6rem;
+				height: 0.65rem;
+				background-image: url('~@/assets/rod/hook-ico01.png');
+				background-size: 100% 100%;
+			}
+
 			.rod_handle {
 				width: 5px;
 				height: 1px;
 				background-image: url('~@/assets/rod/hooktu01.jpg');
 				background-position: center;
 				background-size: contain;
+			}
+
+			.rod_bottom {
+				margin-top: -0.05rem;
+				transform-origin: 0 0;
+			}
+
+			.rod_bottom_animation_left {
+				animation: shakeRod_left 2s;
+			}
+
+			.rod_bottom_animation_right {
+				animation: shakeRod_right 2s;
+			}
+
+			@keyframes shakeRod_left {
+				0% {
+					transform: rotate(0deg);
+				}
+				5% {
+					transform: rotate(12deg);
+				}
+				10% {
+					transform: rotate(20deg);
+				}
+				15% {
+					transform: rotate(12deg);
+				}
+				20% {
+					transform: rotate(0deg);
+				}
+				25% {
+					transform: rotate(-8deg);
+				}
+				30% {
+					transform: rotate(-14deg);
+				}
+				40% {
+					transform: rotate(-8deg);
+				}
+				50% {
+					transform: rotate(0deg);
+				}
+				60% {
+					transform: rotate(6deg);
+				}
+				70% {
+					transform: rotate(10deg);
+				}
+				75% {
+					transform: rotate(4deg);
+				}
+				80% {
+					transform: rotate(0deg);
+				}
+				85% {
+					transform: rotate(-4deg);
+				}
+				90% {
+					transform: rotate(-6deg);
+				}
+				95% {
+					transform: rotate(-4deg);
+				}
+				100% {
+					transform: rotate(0deg);
+				}
+			}
+
+			@keyframes shakeRod_right {
+				0% {
+					transform: rotate(0deg);
+				}
+				5% {
+					transform: rotate(-12deg);
+				}
+				10% {
+					transform: rotate(-20deg);
+				}
+				15% {
+					transform: rotate(-12deg);
+				}
+				20% {
+					transform: rotate(0deg);
+				}
+				25% {
+					transform: rotate(8deg);
+				}
+				30% {
+					transform: rotate(14deg);
+				}
+				40% {
+					transform: rotate(8deg);
+				}
+				50% {
+					transform: rotate(0deg);
+				}
+				60% {
+					transform: rotate(-6deg);
+				}
+				70% {
+					transform: rotate(-10deg);
+				}
+				75% {
+					transform: rotate(-4deg);
+				}
+				80% {
+					transform: rotate(0deg);
+				}
+				85% {
+					transform: rotate(4deg);
+				}
+				90% {
+					transform: rotate(6deg);
+				}
+				95% {
+					transform: rotate(4deg);
+				}
+				100% {
+					transform: rotate(0deg);
+				}
 			}
 
 			.rod_lid {
@@ -677,6 +824,7 @@
 				width: 2.7rem;;
 				height: 4rem;
 				margin-left: -1.3rem;
+				margin-top: -0.05rem;
 				overflow: hidden;
 
 				transform-origin: 50% 0;

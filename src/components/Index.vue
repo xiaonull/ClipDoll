@@ -1,23 +1,47 @@
 <template>
 	<section class="index">
 		<help></help>
-		<share></share>
+		<transition name="slide-fade">
+			<share></share>
+		</transition>
 		<msg></msg>
-		<selectWawaJi></selectWawaJi>
-		<recharge></recharge>
-		<backpack></backpack>
+		<transition name="bounce">
+			<selectWawaJi></selectWawaJi>
+		</transition>
+		<transition name="bounce">
+			<recharge></recharge>
+		</transition>
+		<transition name="bounce">
+			<backpack></backpack>
+		</transition>
 		<receiptInfo></receiptInfo>
-		<playerShow></playerShow>
-		<publishShow></publishShow>
-		<task></task>
-		<loginReward></loginReward>
+		<transition name="bounce">
+			<playerShow></playerShow>
+		</transition>
+		<transition name="bounce">
+			<publishShow></publishShow>
+		</transition>
+		<transition name="bounce">
+			<task></task>
+		</transition>
+		<transition name="bounce">
+			<loginReward></loginReward>
+		</transition>
 		<functionIcon></functionIcon>
 		<notice></notice>
-		<noticeBoard></noticeBoard>
-		<catch></catch>
-		<gift></gift>
+		<transition name="bounce">
+			<noticeBoard></noticeBoard>
+		</transition>
+		<transition name="bounce">
+			<catch></catch>
+		</transition>
+		<transition name="bounce">
+			<gift></gift>
+		</transition>
 		<countDown></countDown>
-		<setting></setting>
+		<transition name="bounce">
+			<setting></setting>
+		</transition>
 		<game-box></game-box>
 		<!-- <luck-value></luck-value> -->
 		<game-desk></game-desk>
@@ -104,10 +128,18 @@
 			};
 
 			myAjax(option);
+			
+			if(sessionStorage.init === 'true') {
+				this.$store.commit('modal/setLoginReward', {
+					showLoginReward: false
+				});
+			}else {
+				this.$store.commit('modal/setLoginReward', {
+					showLoginReward: true
+				});
 
-			this.$store.commit('modal/setLoginReward', {
-				showLoginReward: true
-			});
+				sessionStorage.init = 'true';
+			}
 		}
 	}
 </script>
@@ -120,5 +152,41 @@
 		height: 100%;
 		background-color: #f26fa5;
 		overflow: hidden;
+	}
+
+	.slide-fade-enter-active {
+		transition: all .3s ease;
+	}
+	.slide-fade-leave-active {
+		transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+	}
+	.slide-fade-enter, .slide-fade-leave-to
+	/* .slide-fade-leave-active for below version 2.1.8 */ {
+		transform: translateX(10px);
+		opacity: 0;
+	}
+
+	.bounce-enter-active {
+		animation: bounce-in .3s;
+	}
+	.bounce-leave-active {
+		animation: bounce-in .5s reverse;
+	}
+	@keyframes bounce-in {
+		0% {
+			transform: scale(0);
+		}
+		25% {
+			transform: scale(0.3);
+		}
+		50% {
+			transform: scale(0.7);
+		}
+		75% {
+			transform: scale(0.9);
+		}
+		100% {
+			transform: scale(1);
+		}
 	}
 </style>

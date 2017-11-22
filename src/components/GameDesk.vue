@@ -115,6 +115,7 @@
 					this.$store.dispatch('modal/startCountDown')
 					.then((data)  => {
 						if(this.startGame === true && this.grabState === false) {
+							clearInterval(this.interval);
 							this.grabState = true;
 							htsBus.$emit('grab');
 						}
@@ -139,9 +140,19 @@
 			},
 			left(event) {
 				if(this.grabState === false) {
+					let i = 0;
 					this.interval = setInterval(() => {
 						this.$store.commit('rod/move_Left');
 						htsBus.$emit('move_Left');
+
+						if(!$('.rod_bottom').hasClass('rod_bottom_animation_right')) {
+							if($('.rod_bottom').hasClass('rod_bottom_animation_left')) {
+								$('.rod_bottom').removeClass('rod_bottom_animation_left');
+							}
+							$('.rod_bottom').addClass('rod_bottom_animation_right');
+						}else {
+							// $('.rod_bottom').removeClass('rod_bottom_animation_right');
+						}
 					}, 20);
 				}
 				event.preventDefault();
@@ -169,12 +180,27 @@
 					this.interval = setInterval(() => {
 						this.$store.commit('rod/move_Right');
 						htsBus.$emit('move_Right');
+
+						if(!$('.rod_bottom').hasClass('rod_bottom_animation_left')) {
+							if($('.rod_bottom').hasClass('rod_bottom_animation_right')) {
+								$('.rod_bottom').removeClass('rod_bottom_animation_right');
+							}
+							$('.rod_bottom').addClass('rod_bottom_animation_left');
+						}else {
+							// $('.rod_bottom').removeClass('rod_bottom_animation_left');
+						}
 					}, 20);
 				}
 				event.preventDefault();
 			},
 			stopMove() {
 				clearInterval(this.interval);
+				if($('.rod_bottom').hasClass('rod_bottom_animation_left')) {
+					$('.rod_bottom').removeClass('rod_bottom_animation_left');
+				}
+				if($('.rod_bottom').hasClass('rod_bottom_animation_right')) {
+					$('.rod_bottom').removeClass('rod_bottom_animation_right');
+				}
 			},
 			changeOther() {
 				this.$store.commit('modal/setSelectWawaJi', {
@@ -246,14 +272,14 @@
 									option.$obj.css('marginLeft', moveLeft + 'px');
 								}
 
-								if(this.$store.state.rod.position.scale < 1.02) {
+								if(this.$store.state.rod.position.scale < 1.03) {
 									this.$store.commit('rod/move_Front');
 									htsBus.$emit('move_Front');
 								}
 
 								shake(option.$obj);
 
-								if(this.$store.state.rod.position.left <= 45 && this.$store.state.rod.position.scale >= 1.02) {
+								if(this.$store.state.rod.position.left <= 45 && this.$store.state.rod.position.scale >= 1.03) {
 									clearInterval(interval);
 									resolve();
 								}
@@ -268,7 +294,7 @@
 						return new Promise((resolve, reject) => {
 							this.$store.commit('rod/release');
 							let timeout = setTimeout(() => {
-								option.$obj.css('zIndex', '0');
+								option.$obj.css('zIndex', 4);
 
 								option.$obj.animate({
 									marginBottom: '-500px'
@@ -580,6 +606,7 @@
 								position: relative;
 								top: 50%;
 								margin-top: -1rem;
+								margin-left: 0.4rem;
 							}
 
 							.img_t {
@@ -648,8 +675,8 @@
 					}
 
 					.grab {
-						width: 40%;
-						height: 30%;
+						width: 50%;
+						height: 40%;
 					}
 				}
 			}

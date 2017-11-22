@@ -22,10 +22,18 @@
 	export default {
 		mounted() {
 			let data = parseQueryString((decodeURIComponent(location.href)));
-			console.log(data.userImg)
+			// console.log(data.userImg)
+			// console.log(data)
+
+			sessionStorage.init = 'false';
+
+			if(data.from === 'recharge') {
+				sessionStorage.init = 'true';
+			}
+
 			// console.log('1:  ' + location.href)
 			// console.log('2:  ' + decodeURIComponent(location.href))
-			alert(decodeURI(location.href));
+			// alert(decodeURIComponent(location.href));
 			let option = {
 				url: 'api/login',
 				type: 'POST',

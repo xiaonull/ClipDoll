@@ -236,7 +236,7 @@ export default {
 					}else {
 						clearInterval(i);
 					}
-				}, 7);
+				}, 1);
 			}
 
 		}

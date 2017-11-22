@@ -15,7 +15,7 @@
 				</div>
 			</div>
 			<span class="line"></span>
-			<div class="go">
+			<div class="go" @click="go">
 				<img src="~@/assets/modal/an-ico07.png" class="img">
 			</div>
 		</div>
@@ -35,6 +35,9 @@
 					showGift: false
 				});
 			},
+			go() {
+				window.location.assign('https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzU1MzMzMTY4Mw==&scene=124#wechat_redirect');
+			}
 		}
 	}
 </script>
@@ -44,7 +47,7 @@
 		position: absolute;
 		width: 100%;
 		height: 100%;
-		background-color: rgba(0, 0, 0, 0.3);
+		/* background-color: rgba(0, 0, 0, 0.3); */
 		z-index: 20;
 		text-align: center;
 
@@ -61,7 +64,7 @@
 			position: absolute;
 			z-index: 25;
 			width: 95%;
-			height: 55%;
+			height: 60%;
 			top: 27%;
 			left: 50%;
 			margin-left: -47.5%;

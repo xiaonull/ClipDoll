@@ -82,6 +82,9 @@
 					},
 					success: function(result, status, xhr) {
 						console.log(result);
+						if(result.code === 1) {
+							window.location.assign(result.url);
+						}
 					}.bind(this)
 				};
 
@@ -128,7 +131,7 @@
 		position: absolute;
 		width: 100%;
 		height: 100%;
-		background-color: rgba(0, 0, 0, 0.3);
+		/* background-color: rgba(0, 0, 0, 0.3); */
 		z-index: 20;
 		text-align: center;
 
@@ -145,7 +148,7 @@
 			position: absolute;
 			z-index: 25;
 			width: 95%;
-			height: 60%;
+			height: 65%;
 			top: 27%;
 			left: 50%;
 			margin-left: -47.5%;
