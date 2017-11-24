@@ -31,7 +31,9 @@ export default {
 			state.action.grabWaWa = false;
 		},
 		grabUp(state) {
-			state.handle_length -= 1;
+			if(state.handle_length > 100) {
+				state.handle_length -= 1;
+			}
 		},
 		move_Left(state) {
 			if(state.position.left >= 40) {
@@ -87,9 +89,15 @@ export default {
 			let h = gameBox.getHeight().slice(0, gameBox.getHeight().length - 2);
 			let downL = 0;
 			if(context.state.position.scale > 1 && context.state.position.scale <= 1.058) {
-				downL = h - 200;
+				downL = h - 205;
+				if(h > 420) {
+					downL = h - 215;
+				}
 			}else {
-				downL = h - 240;
+				downL = h - 255;
+				if(h > 420) {
+					downL = h - 265;
+				}
 			}
 			if(context.state.position.scale > 1.023) {
 				context.commit('setLayer', 8);
@@ -114,9 +122,15 @@ export default {
 			let downL = 0;
 			let wawaUp = 0;
 			if(context.state.position.scale > 1 && context.state.position.scale <= 1.058) {
-				downL = h - 200;
+				downL = h - 205;
+				if(h > 420) {
+					downL = h - 215;
+				}
 			}else {
-				downL = h - 240;
+				downL = h - 255;
+				if(h > 420) {
+					downL = h - 265;
+				}
 			}
 			return new Promise((resolve, reject) => {
 				let intervalUp = setInterval(() => {
@@ -160,32 +174,32 @@ export default {
 			if(option.level === 1) {
 				if(context.state.position.scale > 1 && context.state.position.scale <= 1.058) {
 					downL = h - 200;
-					wawaUpHeight = h - 240;
-					wawaDownHeight = h - 240;
-				}else {
-					downL = h - 240;
-					wawaUpHeight = h - 260;
-					wawaDownHeight = h - 260;
-				}				
-			}else if(option.level === 2) {
-				if(context.state.position.scale > 1 && context.state.position.scale <= 1.058) {
-					downL = h - 200;
 					wawaUpHeight = h - 250;
 					wawaDownHeight = h - 250;
 				}else {
 					downL = h - 240;
-					wawaUpHeight = h - 280;
-					wawaDownHeight = h - 280;
-				}
-			}else if(option.level === 3) {
+					wawaUpHeight = h - 270;
+					wawaDownHeight = h - 270;
+				}				
+			}else if(option.level === 2) {
 				if(context.state.position.scale > 1 && context.state.position.scale <= 1.058) {
 					downL = h - 200;
 					wawaUpHeight = h - 260;
 					wawaDownHeight = h - 260;
 				}else {
 					downL = h - 240;
-					wawaUpHeight = h - 300;
-					wawaDownHeight = h - 300;
+					wawaUpHeight = h - 290;
+					wawaDownHeight = h - 290;
+				}
+			}else if(option.level === 3) {
+				if(context.state.position.scale > 1 && context.state.position.scale <= 1.058) {
+					downL = h - 200;
+					wawaUpHeight = h - 270;
+					wawaDownHeight = h - 270;
+				}else {
+					downL = h - 240;
+					wawaUpHeight = h - 310;
+					wawaDownHeight = h - 310;
 				}
 			}
 

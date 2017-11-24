@@ -8,12 +8,12 @@
 			</div>
 			<div class="content">
 				<div class="list">
-					<!-- <div class="item" v-for="item in rechargeData" :key="item.id">
-						<img src="~@/assets/modal/gold-ico02.png" class="icon">
+					<div class="item" v-for="item in rechargeData" :key="item.id">
+						<img :src="'http://' + item.pic" class="icon">
 						<span class="num">{{item.coin_num}}<span class="green" v-if="item.award_num !== 0">+{{item.award_num}}</span>金币</span>
 						<img src="~@/assets/modal/buy-ico.png" class="img_buy" @click="buyGold(item.id)">
-					</div> -->
-					<div class="item">
+					</div>
+					<!-- <div class="item">
 						<img src="~@/assets/modal/gold-ico02.png" class="icon">
 						<span class="num">100金币</span>
 						<img src="~@/assets/modal/price-an01.png" class="img_buy" @click="buyGold(100, 9.9)">
@@ -32,7 +32,7 @@
 						<img src="~@/assets/modal/gold-ico05.png" class="icon">
 						<span class="num">1000<span class="green">+120 </span>金币</span>
 						<img src="~@/assets/modal/price-an04.png" class="img_buy" @click="buyGold(1120, 99.9)">
-					</div>
+					</div> -->
 				</div>
 			</div>
 		</div>
@@ -51,35 +51,49 @@
 		},
 		methods: {
 			init() {
-				// let option = {
-				// 	url: 'api/rechargeamount?token=' + sessionStorage.token,
-				// 	type: 'GET',
-				// 	success: function(result, status, xhr) {
-				// 		if(result.code === 1) {
-				// 			this.rechargeData = sort_rechargeData(result.data);
-				// 			// let arr = sort_rechargeData(result.data);
-				// 			// for(let i = 0, j = arr.length; i < j; i++) {
-				// 			// 	this.rechargeData.push(arr[i]);
-				// 			// }
-				// 		}
-				// 	}.bind(this)
-				// };
+				let option = {
+					url: 'api/rechargeamount?token=' + sessionStorage.token,
+					type: 'GET',
+					success: function(result, status, xhr) {
+						if(result.code === 1) {
+							this.rechargeData = sort_rechargeData(result.data);
+							// let arr = sort_rechargeData(result.data);
+							// for(let i = 0, j = arr.length; i < j; i++) {
+							// 	this.rechargeData.push(arr[i]);
+							// }
+						}
+					}.bind(this)
+				};
 
-				// myAjax(option);
+				myAjax(option);
 			},
 			close() {
 				this.$store.commit('modal/setRecharge', {
 					showRecharge: false
 				});
 			},
-			buyGold(coin, price) {
+			// buyGold(coin, price) {
+			// 	let option = {
+			// 		url: 'api/pay?token=' + sessionStorage.token,
+			// 		type: 'POST',
+			// 		data: {
+			// 			coin: coin,
+			// 			price: price
+			// 		},
+			// 		success: function(result, status, xhr) {
+			// 			console.log(result);
+			// 			if(result.code === 1) {
+			// 				window.location.assign(result.url);
+			// 			}
+			// 		}.bind(this)
+			// 	};
+
+			// 	myAjax(option);
+			// }
+			buyGold(id) {
 				let option = {
-					url: 'api/pay?token=' + sessionStorage.token,
-					type: 'POST',
-					data: {
-						coin: coin,
-						price: price
-					},
+					url: 'api/pay/' + id + '?token=' + sessionStorage.token,
+					type: 'GET',
 					success: function(result, status, xhr) {
 						console.log(result);
 						if(result.code === 1) {
@@ -90,17 +104,6 @@
 
 				myAjax(option);
 			}
-			// buyGold() {
-			// 	// let option = {
-			// 	// 	url: 'api/pay/' + id + '?token=' + sessionStorage.token,
-			// 	// 	type: 'GET',
-			// 	// 	success: function(result, status, xhr) {
-			// 	// 		console.log(result);
-			// 	// 	}.bind(this)
-			// 	// };
-
-			// 	// myAjax(option);
-			// }
 		},
 		computed: {
 			show() {
@@ -187,6 +190,7 @@
 				.list {
 					padding: 0.6rem 0.3rem 0 0.3rem;
 					height: 93%;
+					overflow-y: scroll;
 
 					.item {
 						position: relative;

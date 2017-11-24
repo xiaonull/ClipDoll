@@ -9,6 +9,7 @@
 				<div class="item" :class="{item_L : index % 2 === 0, item_R : index % 2 === 1}" v-for="(item, index) in wawajiList" :key="item.id">
 					<div class="wawaImg" @click="selectWawaji(item.id)">
 						<img :src="'http://' + item.pic" class="img">
+						<img :src="'http://' + item.tag_icon" class="tag_icon">
 					</div>
 					<div class="info">
 						<h2 class="name">{{item.name}}</h2>
@@ -140,6 +141,7 @@
 					margin-bottom: 1rem;
 
 					.wawaImg {
+						position: relative;
 						width: 100%;
 						height: 4.5rem;
 						background-color: #fff;
@@ -148,8 +150,16 @@
 
 						.img {
 							width: 80%;
-							height: 65%;
-							margin: 20% 10% 15% 10%;;
+							height: 80%;
+							margin: 10% 10% 15% 10%;;
+						}
+
+						.tag_icon {
+							position: absolute;
+							width: 2rem;
+							height: 0.8rem;
+							top: 0.2rem;
+							right: 0;
 						}
 					}
 

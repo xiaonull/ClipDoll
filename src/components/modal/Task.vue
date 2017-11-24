@@ -8,7 +8,7 @@
 			<div class="content">
 				<div class="list">
 					<div class="item" v-for="item in taskList" :key="item.mission_id">
-						<img src="~@/assets/modal/gold-ico02.png" class="icon">
+						<img :src="'http://' + item.mission_icon" class="icon">
 						<div class="main">
 							<span class="text">{{item.mission_title}}({{item.finish_num}}/{{item.mission_need_num}})</span>
 							<span class="reward">{{item.awards_contents}}</span>
