@@ -220,6 +220,13 @@
 			},
 			grabing(option) {
 				// console.log(option.level);
+
+				// 将娃娃的阴影去掉
+				if(option.$wawa_shadow) {
+					option.$wawa_shadow.css('display', 'none');
+				}
+
+				
 				// 抓不到娃娃
 				if(option.level === 4) {
 					this.$store.dispatch('rod/grabDown').then((data) => {
@@ -333,6 +340,11 @@
 				
 				// level表示抓取的准确度，在抓取失败时准确度越高能抓起的高度越高
 				if(option.catch === false) {
+					// 将娃娃的阴影去掉
+					if(option.$wawa_shadow) {
+						option.$wawa_shadow.css('display', 'none');
+					}
+
 					this.$store.dispatch('rod/grabDown').then((data) => {
 						return new Promise((resolve, reject) => {
 							this.$store.commit('rod/grabWaWa');
@@ -346,6 +358,11 @@
 						this.grabed({
 							failed: true
 						});
+
+						// 将娃娃的阴影显示
+						if(option.$wawa_shadow) {
+							option.$wawa_shadow.css('display', 'block');
+						}
 					})
 					.catch(response => {
 						console.log('error: ' + response);

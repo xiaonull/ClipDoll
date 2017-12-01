@@ -31,7 +31,7 @@
 				<div class="shadowContainer">
 					<div class="shadow" ref="shadow"></div>
 				</div>
-				<img :src="'http://' + currentWaWaList[0].sc_pic" :class="currentWaWaList[0].id" class="img wawa wawa_1" v-if="currentWaWaList[0]">
+				<!-- <img :src="'http://' + currentWaWaList[0].sc_pic" :class="currentWaWaList[0].id" class="img wawa wawa_1" v-if="currentWaWaList[0]">
 				<div class="expression expression1" v-if="currentWaWaList[0] && showExpression === 1"><img src="~@/assets/bg/expression.png" class="img"></div>
 				<div class="shadow1 shadowImg" v-if="currentWaWaList[0]"></div>
 				<img :src="'http://' + currentWaWaList[1].sc_pic" :class="currentWaWaList[1].id" class="img wawa wawa_2" v-if="currentWaWaList[1]">
@@ -48,7 +48,12 @@
 				<div class="shadow5 shadowImg" v-if="currentWaWaList[4]"></div>
 				<img :src="'http://' + currentWaWaList[5].sc_pic" :class="currentWaWaList[5].id" class="img wawa wawa_6" v-if="currentWaWaList[5]">
 				<div class="expression expression6" v-if="currentWaWaList[5] && showExpression === 6"><img src="~@/assets/bg/expression.png" class="img"></div>
-				<div class="shadow6 shadowImg" v-if="currentWaWaList[5]"></div>
+				<div class="shadow6 shadowImg" v-if="currentWaWaList[5]"></div> -->
+				<div class="wawa_wrapper" :class="'wawa_' + (index + 1) + '_wrapper'" v-for="(item, index) in currentWaWaList" :key="item.id">
+					<img :src="'http://' + item.sc_pic" :class="item.id" class="img wawa">
+					<div class="expression" v-if="showExpression === (index + 1)"><img src="~@/assets/bg/expression.png" class="img"></div>
+					<div class="shadowImg" v-if="currentWaWaList[0]"></div>
+				</div>
 			</div>
 		</div>
 		<div class="wawaji_subTop"></div>
@@ -90,7 +95,7 @@
 				layer: this.$store.state.rod.layer,
 				light_img_index: 1,
 				currentWaWaList: [],
-				showExpression: 0
+				showExpression: 1
 			}
 		},
 		mounted() {
@@ -214,7 +219,7 @@
 				let shadowLeft = $shadow.css('left').slice(0, $shadow.css('left').length - 2) * 1 + $shadow.css('width').slice(0, $shadow.css('width').length - 2) / 2;
 				let shadowBottom = parseFloat($shadow.css('bottom').slice(0, $shadow.css('bottom').length - 2));
 
-				let $wawas = $(this.$refs.underpan).find('.wawa');
+				let $wawas = $(this.$refs.underpan).find('.wawa_wrapper');
 				for(let i = 0, j = $wawas.length; i < j; i++) {
 					let $wawa_shadow = $(this.$refs.underpan).find('.shadowImg').eq(i);
 
@@ -453,14 +458,14 @@
 								'transform': 'rotate(' + n + 'deg)'
 							});
 
-							if(n >= 30) {
+							if(n >= 5) {
 								clearInterval(interval);
 							}
 						}, 40);
 					}
 
 					if(val.grabWaWa === false) {
-						let n = 30;
+						let n = 5;
 						let interval = setInterval(() => {
 							n -= 2;
 							$(this.$refs.rod_paw_l).css({
@@ -873,10 +878,10 @@
 
 				.shadow {
 					position: absolute;
-					left: 52px;
-					bottom: 1rem;
-					width: 2.5rem;
-					height: 1.5rem;
+					left: 40px;
+					bottom: 0.9rem;
+					width: 2.9rem;
+					height: 1.8rem;
 					background-image: url('~@/assets/bg/shadow.png');
 					background-size: 100% 100%;
 					filter:alpha(opacity=50);  
@@ -893,145 +898,112 @@
 
 			.img {
 				width: 2.75rem;
-				height: 3.85rem;
+				height: 3.85rem;  
 			}
 
-			.wawa {
+			.wawa_wrapper {
 				position: absolute;
-				bottom: 0;
-			}
-
-			.wawa_1 {
-				bottom: 0.2rem;
-				left: 4rem;
-				z-index: 6;
-				/* -ms-transform:scale(1.1, 1.1); 
-				-webkit-transform: scale(1.1, 1.1); 
-				transform: scale(1.1, 1.1);  */
-			}
-
-			.wawa_2 {
-				bottom: 0.2rem;
-				left: 7rem;
-				z-index: 6;
-				/* -ms-transform:scale(1.1, 1.1); 
-				-webkit-transform: scale(1.1, 1.1); 
-				transform: scale(1.1, 1.1);  */
-			}
-
-			.wawa_3 {
-				bottom: 0.2rem;
-				left: 10rem;
-				z-index: 6;
-				/* -ms-transform:scale(1.1, 1.1); 
-				-webkit-transform: scale(1.1, 1.1); 
-				transform: scale(1.1, 1.1);  */
-			}
-
-			.wawa_4 {
-				bottom: 2.3rem;
-				left: 3.5rem;
-				z-index: 2;
-			}
-
-			.wawa_5 {
-				bottom: 2.3rem;
-				left: 6rem;
-				z-index: 2;
-			}
-
-			.wawa_6 {
-				bottom: 2.3rem;
-				left: 8.5rem;
-				z-index: 2;
-			}
-
-			.shadowImg {
-				position: absolute;
-				width: 2.2rem;
-				height: 1.3rem;
-				z-index: 1;
-				background-image: url('~@/assets/bg/shadow.png');
-				background-repeat: no-repeat;
-				background-size: 98% 98%;
-				filter:alpha(opacity=50);  
-				-moz-opacity: 0.7;  
-				-khtml-opacity: 0.7;  
-				opacity: 0.7;
-			}
-
-			.shadow1 {
-				bottom: 0;
-				left: 4rem;
-			}
-
-			.shadow2 {
-				bottom: 0;
-				left: 7rem;
-			}
-
-			.shadow3 {
-				bottom: 0;
-				left: 10rem;
-			}
-
-			.shadow4 {
-				bottom: 2.3rem;
-				left: 3.5rem;
-			}
-
-			.shadow5 {
-				bottom: 2.3rem;
-				left: 6rem;
-			}
-
-			.shadow6 {
-				bottom: 2.3rem;
-				left: 8.5rem;
-			}
-
-			.expression {
-				position: absolute;
-				z-index: 7;
-				width: 1.8rem;
-				height: 1.5rem;
 
 				.img {
-					width: 100%;
-					height: 100%;
+					position: relative;
+				}
+
+				.shadowImg {
+					position: absolute;
+					width: 2.75rem;
+					height: 1.6rem;
+					z-index: 1;
+					background-image: url('~@/assets/bg/shadow.png');
+					background-repeat: no-repeat;
+					background-size: 98% 98%;
+					filter:alpha(opacity=50);  
+					-moz-opacity: 0.7;  
+					-khtml-opacity: 0.7;  
+					opacity: 0.7;
+					bottom: -0.2rem;
+					left: 0;
+				}
+
+				.expression {
+					position: absolute;
+					z-index: 7;
+					width: 1.8rem;
+					height: 1.5rem;
+					top: -0.5rem;
+					right: -0.5rem;
+
+					.img {
+						width: 100%;
+						height: 100%;
+					}
 				}
 			}
 
-			.expression1 {
-				bottom: 3.5rem;
-				left: 5.5rem;
+			.wawa_1_wrapper {
+				bottom: 0.2rem;
+				left: 4rem;
+				z-index: 6;
+				
+				.img {
+					z-index: 6;
+				}
+
 			}
 
-			.expression2 {
-				bottom: 3.5rem;
-				left: 8.5rem;
+			.wawa_2_wrapper {
+				bottom: 0.2rem;
+				left: 7rem;
+				z-index: 6;
+				
+				.img {
+					z-index: 6;
+				}
+
 			}
 
-			.expression3 {
-				bottom: 3.5rem;
-				left: 11.3rem;
-			}
-
-			.expression4 {
-				bottom: 5.5rem;
-				left: 5rem;
-			}
-
-			.expression5 {
-				bottom: 5.5rem;
-				left: 7.5rem;
-			}
-
-			.expression6 {
-				bottom: 5.5rem;
+			.wawa_3_wrapper {
+				bottom: 0.2rem;
 				left: 10rem;
+				z-index: 6;
+				
+				.img {
+					z-index: 6;
+				}
+
+			}
+
+			.wawa_4_wrapper {
+				bottom: 2.3rem;
+				left: 3.5rem;
+				z-index: 2;
+				
+				.img {
+					z-index: 2;
+				}
+
+			}
+
+			.wawa_5_wrapper {
+				bottom: 2.3rem;
+				left: 6rem;
+				z-index: 2;
+				
+				.img {
+					z-index: 2;
+				}
+
+			}
+
+			.wawa_6_wrapper {
+				bottom: 2.3rem;
+				left: 8.5rem;
+				z-index: 2;
+				
+				.img {
+					z-index: 2;
+				}
+
 			}
 		}
-
 	}
 </style>
