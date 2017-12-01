@@ -85,7 +85,7 @@
 
 <script>
 	import Rod from '../js/rod.js';
-
+	
 	export default {
 		data() {
 			return {
@@ -161,6 +161,17 @@
 				}
 				GameBox.prototype.getHeight = function() {
 					return $(self.$refs.gameBox).css('height');
+				}
+
+				window.getRod_paw_l_position = () => {
+					let left = this.$store.state.rod.position.left + parseInt($(this.$refs.rod_paws).css('marginLeft').slice(0, $(this.$refs.rod_paws).css('marginLeft').length - 2));
+					return left;
+				}
+
+				window.getRod_paw_r_position = () => {
+					let left = this.$store.state.rod.position.left + parseInt($(this.$refs.rod_paws).css('marginLeft').slice(0, $(this.$refs.rod_paws).css('marginLeft').length - 2)) + parseInt($(this.$refs.rod_paws).css('width').slice(0, $(this.$refs.rod_paws).css('width').length - 2));
+					
+					return left;
 				}
 				
 				let wawaJiData = JSON.parse(sessionStorage.initWaWaJi);
@@ -238,11 +249,27 @@
 					if(phoneWidth <= 410) {
 						level1 = 7;
 						level2 = 8;
-						level3 = 10;
+						level3 = 20;
 					}else {
 						level1 = 8;
 						level2 = 10;
-						level3 = 12;
+						level3 = 22;
+					}
+					
+					if(distance < level3) {
+						let gameBox = new GameBox();
+						let gameBoxH = gameBox.getHeight().slice(0, gameBox.getHeight().length - 2);
+						let handle_downLength = gameBoxH - $wawa.css('bottom').slice(0, $wawa.css('bottom').length - 2) - parseInt($wawa.css('height').slice(0, $wawa.css('height').length - 2) * 2 / 3) - $(this.$refs.rod).css('height').slice(0, $(this.$refs.rod).css('height').length - 2) + 32;
+
+						this.$store.commit('rod/setHandle_downLength', handle_downLength);
+
+						let wawa_l = parseInt($wawa.css('left').slice(0, $wawa.css('left').length - 2));
+						let wawa_r = parseInt($wawa.css('left').slice(0, $wawa.css('left').length - 2)) + parseInt($wawa.css('width').slice(0, $wawa.css('width').length - 2));
+						this.$store.commit('rod/setRod_paw_EndPosition', {
+							left: wawa_l,
+							right: wawa_r
+						});
+
 					}
 
 					if(distance < level1) {
@@ -338,6 +365,18 @@
 				this.lost()
 				.then((data) => {
 					// 完全没抓到
+					let $wawa = $wawas.eq(0);
+					let gameBox = new GameBox();
+					let gameBoxH = gameBox.getHeight().slice(0, gameBox.getHeight().length - 2);
+					let handle_downLength = gameBoxH - $wawa.css('bottom').slice(0, $wawa.css('bottom').length - 2) - parseInt($wawa.css('height').slice(0, $wawa.css('height').length - 2) * 2 / 3) - $(this.$refs.rod).css('height').slice(0, $(this.$refs.rod).css('height').length - 2) + 32;
+
+					this.$store.commit('rod/setHandle_downLength', handle_downLength);
+
+					this.$store.commit('rod/setRod_paw_EndPosition', {
+						left: '-1',
+						right: '-1'
+					});
+
 					htsBus.$emit('grabing', {
 						level: 4,
 						catch: false,
@@ -441,24 +480,61 @@
 			},
 			scale: {
 				handler: function (val, oldVal) {
-					$(this.$refs.rod).css('transform', 'scale(' + val.scale + ',' + val.scale + ')');
+					// $(this.$refs.rod).css('transform', 'scale(' + val.scale + ',' + val.scale + ')');
 				},
 				deep: true
 			},
 			grabWaWa: {
 				handler: function (val, oldVal) {
+					// alert(this.$store.state.rod.rod_paw_EndPosition.left)
+					// alert(getRod_paw_l_position())
 					if(val.grabWaWa === true) {
 						let n = 0;
+						let rod_paw_l_EndPosition = this.$store.state.rod.rod_paw_EndPosition.left;
+						let distance = 0;
+						if(rod_paw_l_EndPosition === '-1') {
+							distance = 20;
+						}else {
+							distance = rod_paw_l_EndPosition - getRod_paw_l_position() + 10;
+						}
+
 						let interval = setInterval(() => {
+
 							n += 2;
+							distance -= 2;
+							// alert(distance)
+
 							$(this.$refs.rod_paw_l).css({
 								'transform': 'rotate(-' + n + 'deg)'
 							});
+
+							if(distance <= 0) {
+								clearInterval(interval);
+							}
+						}, 40);
+					}
+
+					if(val.grabWaWa === true) {
+						let n = 0;
+						let rod_paw_r_EndPosition = this.$store.state.rod.rod_paw_EndPosition.right;
+						let distance = 0;
+						if(rod_paw_r_EndPosition === '-1') {
+							distance = 20;
+						}else {
+							distance = getRod_paw_r_position() - rod_paw_r_EndPosition;
+						}
+
+						let interval = setInterval(() => {
+
+							n += 2;
+							distance -= 2;
+							// alert(distance)
+
 							$(this.$refs.rod_paw_r).css({
 								'transform': 'rotate(' + n + 'deg)'
 							});
 
-							if(n >= 5) {
+							if(distance <= 0) {
 								clearInterval(interval);
 							}
 						}, 40);
@@ -821,16 +897,15 @@
 				.rod_lid_img {
 					position: relative;
 					z-index: 3;
-					width: 2rem;
+					width: 2.7rem;
 					height: 1.5rem;
-					margin-left: -0.95rem;	
+					margin-left: -1.32rem;	
 				}
 			}
 
 			.rod_paws {
-				width: 2.7rem;;
-				height: 4rem;
-				margin-left: -1.3rem;
+				width: 3.3rem;
+				margin-left: -1.6rem;
 				margin-top: -0.05rem;
 				overflow: hidden;
 
@@ -853,13 +928,13 @@
 
 			.rod_paw_l_img {
 				margin-top: -0.05rem;
-				width: 0.8rem;
+				width: 1.3rem;
 				height: 2rem;
 			}
 
 			.rod_paw_r_img {
 				margin-top: -0.05rem;
-				width:0.8rem;
+				width: 1.3rem;
 				height: 2rem;
 			}
 		}
@@ -878,10 +953,10 @@
 
 				.shadow {
 					position: absolute;
-					left: 40px;
+					left: 43px;
 					bottom: 0.9rem;
-					width: 2.9rem;
-					height: 1.8rem;
+					width: 3rem;
+					height: 1.9rem;
 					background-image: url('~@/assets/bg/shadow.png');
 					background-size: 100% 100%;
 					filter:alpha(opacity=50);  
@@ -897,8 +972,8 @@
 			}
 
 			.img {
-				width: 2.75rem;
-				height: 3.85rem;  
+				width: 2.5rem;
+				height: 3.5rem;  
 			}
 
 			.wawa_wrapper {
@@ -910,8 +985,8 @@
 
 				.shadowImg {
 					position: absolute;
-					width: 2.75rem;
-					height: 1.6rem;
+					width: 2.5rem;
+					height: 1.4rem;
 					z-index: 1;
 					background-image: url('~@/assets/bg/shadow.png');
 					background-repeat: no-repeat;

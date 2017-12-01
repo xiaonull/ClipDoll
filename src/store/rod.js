@@ -4,6 +4,7 @@ let phone = new Phone();
 export default {
 	state: {
 		handle_length: 100,
+		handle_downLength: 0,
 		position: {
 			left: 80,
 			scale: 1
@@ -18,6 +19,11 @@ export default {
 		moveToRight: 'can',
 		moveToBehind: 'can',
 		moveToFront: 'can',
+		// 夹子夹紧后的位置，用来判断夹子合拢的角度
+		rod_paw_EndPosition: {
+			left: 0,
+			right: 0
+		}
 	},
 
 	mutations: {
@@ -29,6 +35,12 @@ export default {
 		},
 		release(state) {
 			state.action.grabWaWa = false;
+		},
+		setHandle_downLength(state, val) {
+			state.handle_downLength = val;
+		},
+		setRod_paw_EndPosition(state, data) {
+			state.rod_paw_EndPosition = data;
 		},
 		grabUp(state) {
 			if(state.handle_length > 100) {
@@ -80,13 +92,15 @@ export default {
 		},
 		setLayer(state, zIndex) {
 			state.layer.zIndex = zIndex;
-		}
+		},
 	},
 
 	actions: {
 		grabDown(context) {
 			let gameBox = new GameBox();
 			let h = gameBox.getHeight().slice(0, gameBox.getHeight().length - 2);
+
+
 			let downL = 0;
 			if(context.state.position.scale > 1 && context.state.position.scale <= 1.058) {
 				downL = h - 225;
@@ -120,6 +134,10 @@ export default {
 			if(context.state.position.scale > 1.023) {
 				context.commit('setLayer', 8);
 			}
+
+			downL = context.state.handle_downLength;
+
+
 			return new Promise((resolve, reject) => {
 				let n = 0;
 				let intervalDowm = setInterval(() => {
@@ -182,7 +200,7 @@ export default {
 					downL--;
 					if(downL <= 0) {
 						clearInterval(intervalUp);
-
+						
 						resolve();
 					}
 				}, 20);
@@ -272,6 +290,8 @@ export default {
 					
 					if(downL <= 0) {
 						clearInterval(intervalUp);
+						
+						option.$obj.css('transform', 'rotate(' + 0 + 'deg)');
 
 						resolve();
 					}
@@ -281,7 +301,7 @@ export default {
 			function wawaDown(wawaDown_) {
 				let i = setInterval(() => {
 					if(wawaDown_ > 0) {
-						wawaDown_--;
+						wawaDown_ -= 2;
 						option.$obj.css('marginBottom', wawaDown_ + 'px');
 					}else {
 						clearInterval(i);
