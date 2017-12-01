@@ -231,13 +231,13 @@
 					let level2 = 0;
 					let level3 = 0;
 					if(phoneWidth <= 410) {
-						level1 = 9;
-						level2 = 12;
-						level3 = 15;
+						level1 = 7;
+						level2 = 8;
+						level3 = 10;
 					}else {
-						level1 = 11;
-						level2 = 14;
-						level3 = 18;
+						level1 = 8;
+						level2 = 10;
+						level3 = 12;
 					}
 
 					if(distance < level1) {
@@ -358,7 +358,7 @@
 										showBubble: false,
 										bubble_luckValue: 0
 									});	
-									this.$store.commit('info/setLuckyValue', 0);
+									// this.$store.commit('info/setLuckyValue', 0);
 								}else {
 									this.$store.commit('modal/setbubble_luckValue', {
 										showBubble: false,
@@ -453,14 +453,14 @@
 								'transform': 'rotate(' + n + 'deg)'
 							});
 
-							if(n >= 36) {
+							if(n >= 30) {
 								clearInterval(interval);
 							}
 						}, 40);
 					}
 
 					if(val.grabWaWa === false) {
-						let n = 36;
+						let n = 30;
 						let interval = setInterval(() => {
 							n -= 2;
 							$(this.$refs.rod_paw_l).css({
@@ -814,6 +814,8 @@
 				transform-origin: 50% 0;
 
 				.rod_lid_img {
+					position: relative;
+					z-index: 3;
 					width: 2rem;
 					height: 1.5rem;
 					margin-left: -0.95rem;	
@@ -845,13 +847,15 @@
 			}
 
 			.rod_paw_l_img {
+				margin-top: -0.05rem;
 				width: 0.8rem;
-				height: 1.4rem;
+				height: 2rem;
 			}
 
 			.rod_paw_r_img {
+				margin-top: -0.05rem;
 				width:0.8rem;
-				height: 1.4rem;
+				height: 2rem;
 			}
 		}
 

@@ -72,7 +72,7 @@ export default {
 		},
 		setbubble_luckValue(state, data) {
 			state.showBubble = data.showBubble;
-			if(data.bubble_luckValue) {
+			if(data.bubble_luckValue === 0 || data.bubble_luckValue) {
 				state.bubble_luckValue = data.bubble_luckValue;
 			}
 		},

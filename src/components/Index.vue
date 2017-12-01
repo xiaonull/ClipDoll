@@ -221,7 +221,7 @@
 		    success: function () { 
 
 		        // 用户确认分享后执行的回调函数
-				
+
 		    },
 
 		    cancel: function () { 
@@ -231,7 +231,7 @@
 		    }
 
 		});
-		
+
 		wx.onMenuShareAppMessage({
 
 		    title: data.title, // 分享标题

@@ -5,6 +5,18 @@
 				<img src="~@/assets/modal/box-bt04.png" class="img_title">
 				<img src="~@/assets/modal/close.png" class="img_close" @click="close">
 			</div>
+			<div class="header">
+				<div class="main">
+					<span class="state" v-if="status === 0">未达成</span>
+					<span class="state reach" v-else @click="exchange">
+						<img src="~@/assets/modal/receive.png" class="img">
+					</span>
+				</div>
+				<div class="bar">
+					<span class="barInfo"><span class="value">{{current_point}}</span>/<span class="total">{{max_point}}</span></span>
+					<div class="subBar" ref="subBar"></div>
+				</div>
+			</div>
 			<div class="content">
 				<div class="list">
 					<div class="item" v-for="item in taskList" :key="item.mission_id">
@@ -31,7 +43,10 @@
 	export default {
 		data() {
 			return {
-				taskList: []
+				taskList: [],
+				current_point: '',
+				max_point: '',
+				status: 0
 			}
 		},
 		mounted() {
@@ -56,6 +71,65 @@
 				};
 
 				myAjax(option);
+
+				let option2 = {
+					url: 'api/getpoint?token=' + sessionStorage.token,
+					type: 'GET',
+					success: function(result, status, xhr) {
+						if(result.code === 1) {
+							this.current_point = result.current_point;
+							this.max_point = result.max_point;
+							this.status = result.status;
+							
+							$(this.$refs.subBar).css('width', this.current_point / this.max_point * 100 + '%');
+						}
+					}.bind(this)
+				};
+
+				myAjax(option2);
+			},
+			exchange() {
+				let option = {
+					url: 'api/exchange?token=' + sessionStorage.token,
+					type: 'GET',
+					success: function(result, status, xhr) {
+						if(result.code === 1) {
+							this.$store.commit('modal/setMsg', {
+								msg: result.msg,
+								display: true
+							});
+
+							// 刷新任务状态
+							this.init();
+
+							// 刷新用户数据
+							let data = JSON.parse(sessionStorage.loginUrlData);
+							let option = {
+								url: 'api/login',
+								type: 'POST',
+								data: data,
+								success: function(result, status, xhr) {
+									if(result.code === 1) {
+										sessionStorage.token = result.token;
+										sessionStorage.userData =  JSON.stringify(result.user);
+
+										let userData = JSON.parse(sessionStorage.userData);
+										this.$store.commit('info/setUserGold', userData.coin);
+									}
+								}.bind(this)
+							};
+
+							myAjax(option);
+
+							let t = setTimeout(() => {
+								this.$store.commit('modal/resetMsg');
+								clearTimeout(t);
+							}, 2000);
+						}
+					}.bind(this)
+				};
+
+				myAjax(option);
 			},
 			receive(mission_id) {
 				let option = {
@@ -67,7 +141,7 @@
 								msg: '领取成功！',
 								display: true
 							});
-							
+
 							// 刷新任务状态
 							this.init();
 
@@ -125,8 +199,8 @@
 		.pannel {
 			position: absolute;
 			width: 95%;
-			height: 70%;
-			top: 15%;
+			height: 80%;
+			top: 12%;
 			left: 50%;
 			margin-left: -47.5%;
 			background-image: url('~@/assets/modal/box-bg01.png');
@@ -149,16 +223,75 @@
 					width: 1.5rem;
 					height: 1.5rem;
 				}
+			}
+			
+			.header {
+				position: relative;
+				margin: 0 0.5rem -0.2rem 0.5rem;
+				height: 2.7rem;
+				background-image: url('~@/assets/modal/banner-tu.png');
+				background-size: 100% 100%;
 
+				.main {
+					position: relative;
+					top: 0.7rem;
+					padding-right: 0.5rem;
+					text-align: right;
+					color: #4C2C0B;
+					font-size: 0.65rem;
+
+					.reach {
+						display: inline-block;
+						font-size: 0.7rem;
+						position: absolute;
+						right: 0.5rem;
+						top: 0.3rem;
+						color: #4C2C0B;
+						width: 2rem;
+						height: 0.9rem;
+
+						.img {
+							width: 100%;
+							height: 100%;
+						}
+					}
+				}
+
+				.bar {
+					position: absolute;
+					left: 1.5%;
+					bottom: 0;
+					width: 97%;
+					height: 0.4rem;
+					line-height: 0.4rem;
+					background-image: url('~@/assets/modal/banner-xian.png');
+					background-size: 100% 100%;
+					font-size: 0.4rem;
+					color: #fff;
+
+					.barInfo {
+						position: relative;
+						z-index: 25;
+					}
+
+					.subBar {
+						position: absolute;
+						width: 10%;
+						height: 0.4rem;
+						top: 0rem;
+						background-color: #125A76;
+						border-radius: 1rem;
+					}
+				}
 			}
 
 			.content {
 				width: 90%;
-				height: 77%;
+				height: 73%;
 				margin-left: 5%;
 				margin-top: 0.2rem;
 				background-color: #f2cd5b;
-				border-radius: 1rem;
+				border-radius: 0.2rem 0.2rem 1rem 1rem;
 				overflow-y: scroll;
 
 				.list {

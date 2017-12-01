@@ -22,6 +22,7 @@
 	export default {
 		mounted() {
 			let data = parseQueryString((decodeURIComponent(location.href)));
+			sessionStorage.loginData = JSON.stringify(data);
 			// console.log(data.userImg)
 			// console.log(data)
 

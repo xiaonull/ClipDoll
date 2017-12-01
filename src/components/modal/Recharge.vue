@@ -91,6 +91,8 @@
 			// 	myAjax(option);
 			// }
 			buyGold(id) {
+				$(window).off('beforeunload');
+
 				let option = {
 					url: 'api/pay/' + id + '?token=' + sessionStorage.token,
 					type: 'GET',

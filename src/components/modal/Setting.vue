@@ -4,8 +4,11 @@
 			<div class="close" @click="close">
 				<img src="~@/assets/modal/close01.png" class="img">
 			</div>
-			<div class="closeMusic" @click="closeMusic">
+			<div class="closeMusic" @click="closeMusic" v-if="musicState">
 				<img src="~@/assets/modal/an-ico11.png" class="img">
+			</div>
+			<div class="startMusic" @click="startMusic" v-else>
+				<img src="~@/assets/modal/an-ico12.png" class="img">
 			</div>
 			<div class="help" @click="toHelp">
 				<img src="~@/assets/modal/an-ico13.png" class="img">
@@ -19,6 +22,9 @@
 		computed: {
 			show() {
 				return this.$store.state.modal.showSetting;
+			},
+			musicState() {
+				return this.$store.state.info.bgm;
 			}
 		},
 		methods: {
@@ -29,6 +35,9 @@
 			},
 			closeMusic() {
 				this.$store.commit('info/setBgm', false);
+			},
+			startMusic() {
+				this.$store.commit('info/setBgm', true);
 			},
 			toHelp() {
 				this.$store.commit('modal/setHelp', {
@@ -71,6 +80,14 @@
 			}
 
 			.closeMusic {
+				width: 6rem;
+				height: 2rem;
+				margin: 0 auto;
+				position: relative;
+				top: 2.2rem;
+			}
+
+			.startMusic {
 				width: 6rem;
 				height: 2rem;
 				margin: 0 auto;

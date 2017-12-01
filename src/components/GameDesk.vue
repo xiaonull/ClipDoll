@@ -416,6 +416,7 @@
 						this.$store.commit('modal/setCatch', {
 							showCatch: true
 						});
+						this.$store.commit('info/setLuckyValue', 0);
 					}
 
 					let t1 = setTimeout(() => {

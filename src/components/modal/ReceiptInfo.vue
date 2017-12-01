@@ -11,11 +11,11 @@
 				</div>
 				<div class="formGroup">
 					<label>姓名：</label>
-					<input type="text" name="name" class="input" placeholder="输入姓名" v-model="name">
+					<input type="text" name="name" class="input" ref="name" placeholder="输入姓名" v-model="name">
 				</div>
 				<div class="formGroup">
 					<label>手机：</label>
-					<input type="number" name="phone" class="input" placeholder="输入手机号" v-model="phone">
+					<input type="number" name="phone" class="input" ref="phone" placeholder="输入手机号" v-model="phone">
 				</div>
 				<div class="formGroup">
 					<label>地址：</label>
@@ -25,7 +25,7 @@
 				</div>
 				<div class="formGroup">
 					<label></label>
-					<textarea placeholder="详细地址" v-model="addressDetail"></textarea>
+					<textarea placeholder="详细地址" ref="addressDetail" v-model="addressDetail"></textarea>
 				</div>
 				<img src="~@/assets/modal/an-ico05.png" class="commit" @click="commit">
 			</div>
@@ -149,7 +149,7 @@
 							});
 						}else {
 							this.$store.commit('modal/setMsg', {
-								msg: '提取失败',
+								msg: result.msg,
 								display: true
 							});
 							let t = setTimeout(() => {
@@ -173,6 +173,7 @@
 		height: 100%;
 		/* background-color: rgba(0, 0, 0, 0.3); */
 		z-index: 30;
+		-webkit-user-select: auto;
 
 		.pannel {
 			position: absolute;

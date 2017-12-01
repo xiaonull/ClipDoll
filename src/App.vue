@@ -34,4 +34,14 @@
     height: 100%;
     width: 100%;
   }
+
+  @media screen and (min-width: 450px) {
+    #app {
+      position: relative;
+      width: 420px;
+      height: 650px;
+      top: 50%;
+      margin: -325px auto 0 auto;
+    }
+  }
 </style>

@@ -89,14 +89,32 @@ export default {
 			let h = gameBox.getHeight().slice(0, gameBox.getHeight().length - 2);
 			let downL = 0;
 			if(context.state.position.scale > 1 && context.state.position.scale <= 1.058) {
-				downL = h - 205;
+				downL = h - 225;
+				if(h > 400) {
+					downL = h - 230;
+				}
 				if(h > 420) {
-					downL = h - 215;
+					downL = h - 235;
+				}
+				if(h > 440) {
+					downL = h - 240;
+				}
+				if(h > 450) {
+					downL = h - 245;
 				}
 			}else {
-				downL = h - 255;
+				downL = h - 275;
+				if(h > 400) {
+					downL = h - 280;
+				}
 				if(h > 420) {
-					downL = h - 265;
+					downL = h - 285;
+				}
+				if(h > 440) {
+					downL = h - 290;
+				}
+				if(h > 450) {
+					downL = h - 295;
 				}
 			}
 			if(context.state.position.scale > 1.023) {
@@ -122,14 +140,32 @@ export default {
 			let downL = 0;
 			let wawaUp = 0;
 			if(context.state.position.scale > 1 && context.state.position.scale <= 1.058) {
-				downL = h - 205;
+				downL = h - 225;
+				if(h > 400) {
+					downL = h - 230;
+				}
 				if(h > 420) {
-					downL = h - 215;
+					downL = h - 235;
+				}
+				if(h > 440) {
+					downL = h - 240;
+				}
+				if(h > 450) {
+					downL = h - 245;
 				}
 			}else {
-				downL = h - 255;
+				downL = h - 275;
+				if(h > 400) {
+					downL = h - 280;
+				}
 				if(h > 420) {
-					downL = h - 265;
+					downL = h - 285;
+				}
+				if(h > 440) {
+					downL = h - 290;
+				}
+				if(h > 450) {
+					downL = h - 295;
 				}
 			}
 			return new Promise((resolve, reject) => {

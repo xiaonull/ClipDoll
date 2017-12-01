@@ -15,7 +15,7 @@
 		<div class="icon" @click="openSetting">
 			<img src="~@/assets/functionIcon/sz-ico01.png" class="img">
 		</div>
-		<audio id="mainBgMusic" ref="bgm" loop autoplay>
+		<audio id="mainBgMusic" ref="bgm" loop autoplay preload>
 			<source src="~@/assets/music/bgm.mp3" type="audio/mpeg">
 		</audio>
 	</section>
@@ -27,6 +27,37 @@
 			if(this.$store.state.info.bgm === false) {
 				$(this.$refs.bgm)[0].pause();
 			}
+
+			let that = this;
+			function audioAutoPlay() {
+				setTimeout(() => {
+					$(that.$refs.bgm)[0].play();
+					that.$store.commit('info/setBgm', true);
+				}, 1000);
+				document.addEventListener("WeixinJSBridgeReady", function () {
+					setTimeout(() => {
+						$(that.$refs.bgm)[0].play();
+						that.$store.commit('info/setBgm', true);
+					}, 1000);
+				}, false);
+			}
+			audioAutoPlay();
+
+			if (window.WeixinJSBridge) {
+                wx.getNetworkType({
+                    success:(res)=> {
+                        this.$refs.bgm.play();
+                        this.$store.commit('info/setBgm', true);
+                    },
+                    fail:(res)=> {
+                        this.$refs.bgm.play();
+                        this.$store.commit('info/setBgm', true);
+                    }
+                });
+            }else{
+                this.$refs.bgm.play();
+                this.$store.commit('info/setBgm', true);
+            }
 		},
 		data() {
 			return {
@@ -38,6 +69,8 @@
 				handler: function(val, oldVal) {
 					if(val.bgm === false) {
 						$(this.$refs.bgm)[0].pause();
+					}else {
+						$(this.$refs.bgm)[0].play();
 					}
 				},
 				deep: true
@@ -48,16 +81,20 @@
 				if(this.$store.state.info.startGame === true) {
 					return;
 				}
+				
+				let loginData = JSON.parse(sessionStorage.loginData);
+				$(window).off('beforeunload');
+				window.location.assign('http://114.215.106.114:8081/sdk_new/tdpay/toPhoneCode.do?sdkId=' + loginData.sdkId + '&sysUserId=' + loginData.userId);
 
-				this.$store.commit('modal/setMsg', {
-					msg: '请在浏览器的设置中保存本页',
-					display: true
-				});
+				// this.$store.commit('modal/setMsg', {
+				// 	msg: '请在浏览器的设置中保存本页',
+				// 	display: true
+				// });
 
-				let t = setTimeout(() => {
-					this.$store.commit('modal/resetMsg');
-					clearTimeout(t);
-				}, 3000);
+				// let t = setTimeout(() => {
+				// 	this.$store.commit('modal/resetMsg');
+				// 	clearTimeout(t);
+				// }, 3000);
 			},
 			openSetting() {
 				if(this.$store.state.info.startGame === true) {
