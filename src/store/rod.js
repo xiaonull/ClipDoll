@@ -69,8 +69,8 @@ export default {
 			}
 		},
 		move_Behind(state) {
-			if(state.position.scale >= 0.965) {
-				if(state.position.left < phone.getWidth() - 110 || state.position.scale > 0.98) {
+			if(state.position.scale >= 0.945) {
+				if(state.position.left < phone.getWidth() - 120 || state.position.scale > 0.96) {
 					state.moveToBehind = 'can';
 					state.position.scale -= 0.001;
 				}else {
@@ -102,35 +102,36 @@ export default {
 
 
 			let downL = 0;
-			if(context.state.position.scale > 1 && context.state.position.scale <= 1.058) {
-				downL = h - 225;
-				if(h > 400) {
-					downL = h - 230;
-				}
-				if(h > 420) {
-					downL = h - 235;
-				}
-				if(h > 440) {
-					downL = h - 240;
-				}
-				if(h > 450) {
-					downL = h - 245;
-				}
-			}else {
-				downL = h - 275;
-				if(h > 400) {
-					downL = h - 280;
-				}
-				if(h > 420) {
-					downL = h - 285;
-				}
-				if(h > 440) {
-					downL = h - 290;
-				}
-				if(h > 450) {
-					downL = h - 295;
-				}
-			}
+			// if(context.state.position.scale > 1 && context.state.position.scale <= 1.058) {
+			// 	downL = h - 225;
+			// 	if(h > 400) {
+			// 		downL = h - 230;
+			// 	}
+			// 	if(h > 420) {
+			// 		downL = h - 235;
+			// 	}
+			// 	if(h > 440) {
+			// 		downL = h - 240;
+			// 	}
+			// 	if(h > 450) {
+			// 		downL = h - 245;
+			// 	}
+			// }else {
+			// 	downL = h - 275;
+			// 	if(h > 400) {
+			// 		downL = h - 280;
+			// 	}
+			// 	if(h > 420) {
+			// 		downL = h - 285;
+			// 	}
+			// 	if(h > 440) {
+			// 		downL = h - 290;
+			// 	}
+			// 	if(h > 450) {
+			// 		downL = h - 295;
+			// 	}
+			// }
+
 			if(context.state.position.scale > 1.023) {
 				context.commit('setLayer', 8);
 			}
@@ -157,35 +158,38 @@ export default {
 			let h = gameBox.getHeight().slice(0, gameBox.getHeight().length - 2);
 			let downL = 0;
 			let wawaUp = 0;
-			if(context.state.position.scale > 1 && context.state.position.scale <= 1.058) {
-				downL = h - 225;
-				if(h > 400) {
-					downL = h - 230;
-				}
-				if(h > 420) {
-					downL = h - 235;
-				}
-				if(h > 440) {
-					downL = h - 240;
-				}
-				if(h > 450) {
-					downL = h - 245;
-				}
-			}else {
-				downL = h - 275;
-				if(h > 400) {
-					downL = h - 280;
-				}
-				if(h > 420) {
-					downL = h - 285;
-				}
-				if(h > 440) {
-					downL = h - 290;
-				}
-				if(h > 450) {
-					downL = h - 295;
-				}
-			}
+			// if(context.state.position.scale > 1 && context.state.position.scale <= 1.058) {
+			// 	downL = h - 225;
+			// 	if(h > 400) {
+			// 		downL = h - 230;
+			// 	}
+			// 	if(h > 420) {
+			// 		downL = h - 235;
+			// 	}
+			// 	if(h > 440) {
+			// 		downL = h - 240;
+			// 	}
+			// 	if(h > 450) {
+			// 		downL = h - 245;
+			// 	}
+			// }else {
+			// 	downL = h - 275;
+			// 	if(h > 400) {
+			// 		downL = h - 280;
+			// 	}
+			// 	if(h > 420) {
+			// 		downL = h - 285;
+			// 	}
+			// 	if(h > 440) {
+			// 		downL = h - 290;
+			// 	}
+			// 	if(h > 450) {
+			// 		downL = h - 295;
+			// 	}
+			// }
+
+			downL = context.state.handle_downLength;
+			
 			return new Promise((resolve, reject) => {
 				let intervalUp = setInterval(() => {
 					context.commit('grabUp');

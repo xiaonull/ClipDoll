@@ -49,7 +49,7 @@
 				<img :src="'http://' + currentWaWaList[5].sc_pic" :class="currentWaWaList[5].id" class="img wawa wawa_6" v-if="currentWaWaList[5]">
 				<div class="expression expression6" v-if="currentWaWaList[5] && showExpression === 6"><img src="~@/assets/bg/expression.png" class="img"></div>
 				<div class="shadow6 shadowImg" v-if="currentWaWaList[5]"></div> -->
-				<div class="wawa_wrapper" :class="'wawa_' + (index + 1) + '_wrapper'" v-for="(item, index) in currentWaWaList" :key="item.id">
+				<div class="wawa_wrapper" :class="'wawa_' + (index + 1) + '_wrapper'" v-for="(item, index) in currentWaWaList" :key="item.id" :grabHeight="item.xdheight">
 					<img :src="'http://' + item.sc_pic" :class="item.id" class="img wawa">
 					<div class="expression" v-if="showExpression === (index + 1)"><img src="~@/assets/bg/expression.png" class="img"></div>
 					<div class="shadowImg" v-if="currentWaWaList[0]"></div>
@@ -257,9 +257,11 @@
 					}
 					
 					if(distance < level3) {
+						let grabHeight = $wawa.attr('grabHeight') / 100;
+
 						let gameBox = new GameBox();
 						let gameBoxH = gameBox.getHeight().slice(0, gameBox.getHeight().length - 2);
-						let handle_downLength = gameBoxH - $wawa.css('bottom').slice(0, $wawa.css('bottom').length - 2) - parseInt($wawa.css('height').slice(0, $wawa.css('height').length - 2) * 2 / 3) - $(this.$refs.rod).css('height').slice(0, $(this.$refs.rod).css('height').length - 2) + 32;
+						let handle_downLength = gameBoxH - $wawa.css('bottom').slice(0, $wawa.css('bottom').length - 2) - parseInt($wawa.css('height').slice(0, $wawa.css('height').length - 2) * grabHeight) - $(this.$refs.rod).css('height').slice(0, $(this.$refs.rod).css('height').length - 2) + 32;
 
 						this.$store.commit('rod/setHandle_downLength', handle_downLength);
 
@@ -469,6 +471,43 @@
 
 					myAjax(option);
 				});
+			},
+			randomWaWaPosition() {
+				let $wawas = $(this.$refs.underpan).find('.wawa_wrapper');
+				for(let i = 0, j = $wawas.length; i < j; i++) {
+					let $wawa = $wawas.eq(i);
+					if(i < 3) {
+						let left;
+						if(i === 0) {
+							left = (Math.random() * 0.3 + 4).toFixed(2) + 'rem';
+						}
+						if(i === 1) {
+							left = (Math.random() * 0.3 + 6).toFixed(2) + 'rem';
+						}
+						if(i === 2) {
+							left = (Math.random() * 0.3 + 10).toFixed(2) + 'rem';
+						}
+
+						let bottom = Math.floor(Math.random() * 0.5 + 0.2) + 'rem';
+						$wawa.css('left', left);
+						$wawa.css('bottom', bottom);
+					}else {
+						let left;
+						if(i === 3) {
+							left = (Math.random() * 0.3 + 2.5).toFixed(2) + 'rem';
+						}
+						if(i === 4) {
+							left = (Math.random() * 0.3 + 5.5).toFixed(2) + 'rem';
+						}
+						if(i === 5) {
+							left = (Math.random() * 0.3 + 8.5).toFixed(2) + 'rem';
+						}
+
+						let bottom = (Math.floor(Math.random() * 1.2 + 2.2)).toFixed(2) + 'rem';
+						$wawa.css('left', left);
+						$wawa.css('bottom', bottom);
+					}
+				}
 			}
 		},
 		watch: {
@@ -495,7 +534,7 @@
 						if(rod_paw_l_EndPosition === '-1') {
 							distance = 20;
 						}else {
-							distance = rod_paw_l_EndPosition - getRod_paw_l_position() + 10;
+							distance = rod_paw_l_EndPosition - getRod_paw_l_position() + 2;
 						}
 
 						let interval = setInterval(() => {
@@ -521,7 +560,7 @@
 						if(rod_paw_r_EndPosition === '-1') {
 							distance = 20;
 						}else {
-							distance = getRod_paw_r_position() - rod_paw_r_EndPosition;
+							distance = getRod_paw_r_position() - rod_paw_r_EndPosition + 2;
 						}
 
 						let interval = setInterval(() => {
@@ -565,6 +604,14 @@
 				},
 				deep: true
 			},
+			currentWaWaList: {
+				handler: function (val, oldVal) {
+					setTimeout(() => {
+						this.randomWaWaPosition();
+					}, 0);
+				},
+				deep: true
+			}, 
 		}
 	}
 </script>
@@ -953,9 +1000,9 @@
 
 				.shadow {
 					position: absolute;
-					left: 43px;
+					left: 38px;
 					bottom: 0.9rem;
-					width: 3rem;
+					width: 3.2rem;
 					height: 1.9rem;
 					background-image: url('~@/assets/bg/shadow.png');
 					background-size: 100% 100%;
@@ -1015,8 +1062,8 @@
 			}
 
 			.wawa_1_wrapper {
-				bottom: 0.2rem;
-				left: 4rem;
+				/* bottom: 0.2rem;
+				left: 4rem; */
 				z-index: 6;
 				
 				.img {
@@ -1026,8 +1073,8 @@
 			}
 
 			.wawa_2_wrapper {
-				bottom: 0.2rem;
-				left: 7rem;
+				/* bottom: 0.2rem;
+				left: 7rem; */
 				z-index: 6;
 				
 				.img {
@@ -1037,8 +1084,8 @@
 			}
 
 			.wawa_3_wrapper {
-				bottom: 0.2rem;
-				left: 10rem;
+				/* bottom: 0.2rem;
+				left: 10rem; */
 				z-index: 6;
 				
 				.img {
@@ -1048,8 +1095,8 @@
 			}
 
 			.wawa_4_wrapper {
-				bottom: 2.3rem;
-				left: 3.5rem;
+				/* bottom: 2.3rem;
+				left: 3.5rem; */
 				z-index: 2;
 				
 				.img {
@@ -1059,8 +1106,8 @@
 			}
 
 			.wawa_5_wrapper {
-				bottom: 2.3rem;
-				left: 6rem;
+				/* bottom: 2.3rem;
+				left: 6rem; */
 				z-index: 2;
 				
 				.img {
@@ -1070,8 +1117,8 @@
 			}
 
 			.wawa_6_wrapper {
-				bottom: 2.3rem;
-				left: 8.5rem;
+				/* bottom: 2.3rem;
+				left: 8.5rem; */
 				z-index: 2;
 				
 				.img {

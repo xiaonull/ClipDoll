@@ -153,7 +153,7 @@
 						}else {
 							// $('.rod_bottom').removeClass('rod_bottom_animation_right');
 						}
-					}, 20);
+					}, 10);
 				}
 				event.preventDefault();
 			},
@@ -189,7 +189,7 @@
 						}else {
 							// $('.rod_bottom').removeClass('rod_bottom_animation_left');
 						}
-					}, 20);
+					}, 10);
 				}
 				event.preventDefault();
 			},
