@@ -49,10 +49,13 @@
 				<img :src="'http://' + currentWaWaList[5].sc_pic" :class="currentWaWaList[5].id" class="img wawa wawa_6" v-if="currentWaWaList[5]">
 				<div class="expression expression6" v-if="currentWaWaList[5] && showExpression === 6"><img src="~@/assets/bg/expression.png" class="img"></div>
 				<div class="shadow6 shadowImg" v-if="currentWaWaList[5]"></div> -->
-				<div class="wawa_wrapper" :class="'wawa_' + (index + 1) + '_wrapper'" v-for="(item, index) in currentWaWaList" :key="item.id" :grabHeight="item.xdheight">
+				<div class="wawa_wrapper" :class="'wawa_' + (index + 1) + '_wrapper'" v-for="(item, index) in currentWaWaList" :key="item.id" :grabHeight="item.xdheight" @click="setWaWaBubble(index + 1)">
 					<img :src="'http://' + item.sc_pic" :class="item.id" class="img wawa">
 					<div class="expression" v-if="showExpression === (index + 1)"><img src="~@/assets/bg/expression.png" class="img"></div>
 					<div class="shadowImg" v-if="currentWaWaList[0]"></div>
+					<div class="bubble" v-if="showWaWaBubble === (index + 1)">
+						<p class="text">你好</p>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -83,99 +86,101 @@
 	</section>
 </template>
 
-<script>
-	import Rod from '../js/rod.js';
-	
-	export default {
-		data() {
-			return {
-				left: this.$store.state.rod.position,
-				scale: this.$store.state.rod.position,
-				grabWaWa: this.$store.state.rod.action,
-				layer: this.$store.state.rod.layer,
-				light_img_index: 1,
-				currentWaWaList: [],
-				showExpression: 1
+<script type="text/javascript">
+import Rod from '../js/rod.js';
+
+export default {
+	data() {
+		return {
+			left: this.$store.state.rod.position,
+			scale: this.$store.state.rod.position,
+			grabWaWa: this.$store.state.rod.action,
+			layer: this.$store.state.rod.layer,
+			light_img_index: 1,
+			currentWaWaList: [],
+			showExpression: 1,
+			showWaWaBubble: 0
+		}
+	},
+	mounted() {
+		this.init();
+		this.bindEvevt();
+		this.changeLightImg();
+	},
+	computed: {
+		light_img() {
+			return './static/light/light0' + this.light_img_index + '.png';
+		},
+		rod_length() {
+			return this.$store.state.rod.handle_length;
+		},
+		luckyValue() {
+			if(this.$store.state.info.luckyValue < 80) {
+				let len = 12.3 * (this.$store.state.info.luckyValue / 100);
+				$(this.$refs.barValue).css('width', len + 'rem');
+				$(this.$refs.bubble).css('right', '-4rem');
+			}else {
+				let len = 12.3 * (this.$store.state.info.luckyValue / 100);
+				$(this.$refs.barValue).css('width', len + 'rem');
+				$(this.$refs.bubble).css('right', '-1rem');
 			}
+
+			return this.$store.state.info.luckyValue;
 		},
-		mounted() {
-			this.init();
-			this.bindEvevt();
-			this.changeLightImg();
+		showBubble() {
+			return this.$store.state.modal.showBubble;
 		},
-		computed: {
-			light_img() {
-				return './static/light/light0' + this.light_img_index + '.png';
-			},
-			rod_length() {
-				return this.$store.state.rod.handle_length;
-			},
-			luckyValue() {
-				if(this.$store.state.info.luckyValue < 80) {
-					let len = 12.3 * (this.$store.state.info.luckyValue / 100);
-					$(this.$refs.barValue).css('width', len + 'rem');
-					$(this.$refs.bubble).css('right', '-4rem');
-				}else {
-					let len = 12.3 * (this.$store.state.info.luckyValue / 100);
-					$(this.$refs.barValue).css('width', len + 'rem');
-					$(this.$refs.bubble).css('right', '-1rem');
-				}
-				
-				return this.$store.state.info.luckyValue;
-			},
-			showBubble() {
-				return this.$store.state.modal.showBubble;
-			},
-			bubble_luckValue() {
-				return this.$store.state.modal.bubble_luckValue;
+		bubble_luckValue() {
+			return this.$store.state.modal.bubble_luckValue;
+		}
+	},
+	methods: {
+		bindEvevt() {
+			htsBus.$on('move_Left', () => {
+				this.move_Left();
+			});
+			htsBus.$on('move_Right', () => {
+				this.move_Right();
+			});
+			htsBus.$on('move_Behind', () => {
+				this.move_Behind();
+			});
+			htsBus.$on('move_Front', () => {
+				this.move_Front();
+			});
+
+			htsBus.$on('grab', () => {
+				this.grab();
+			});
+
+			htsBus.$on('setCurrentWaWaList', (data) => {
+				this.currentWaWaList = data;
+			});
+		},
+		init() {
+			let self = this;
+
+			window.GameBox = function GameBox() {
+
 			}
-		},
-		methods: {
-			bindEvevt() {
-				htsBus.$on('move_Left', () => {
-					this.move_Left();
-				});
-				htsBus.$on('move_Right', () => {
-					this.move_Right();
-				});
-				htsBus.$on('move_Behind', () => {
-					this.move_Behind();
-				});
-				htsBus.$on('move_Front', () => {
-					this.move_Front();
-				});
+			GameBox.prototype.getHeight = function() {
+				return $(self.$refs.gameBox).css('height');
+			}
 
-				htsBus.$on('grab', () => {
-					this.grab();
-				});
+			window.getRod_paw_l_position = () => {
+				let left = this.$store.state.rod.position.left + parseInt($(this.$refs.rod_paws).css('marginLeft').slice(0, $(this.$refs.rod_paws).css('marginLeft').length - 2));
+				return left;
+			}
 
-				htsBus.$on('setCurrentWaWaList', (data) => {
-					this.currentWaWaList = data;
-				});
-			},
-			init() {
-				let self = this;
+			window.getRod_paw_r_position = () => {
+				let left = this.$store.state.rod.position.left + parseInt($(this.$refs.rod_paws).css('marginLeft').slice(0, $(this.$refs.rod_paws).css('marginLeft').length - 2)) + parseInt($(this.$refs.rod_paws).css('width').slice(0, $(this.$refs.rod_paws).css('width').length - 2));
 
-				window.GameBox = function GameBox() {
-					
-				}
-				GameBox.prototype.getHeight = function() {
-					return $(self.$refs.gameBox).css('height');
-				}
+				return left;
+			}
 
-				window.getRod_paw_l_position = () => {
-					let left = this.$store.state.rod.position.left + parseInt($(this.$refs.rod_paws).css('marginLeft').slice(0, $(this.$refs.rod_paws).css('marginLeft').length - 2));
-					return left;
-				}
-
-				window.getRod_paw_r_position = () => {
-					let left = this.$store.state.rod.position.left + parseInt($(this.$refs.rod_paws).css('marginLeft').slice(0, $(this.$refs.rod_paws).css('marginLeft').length - 2)) + parseInt($(this.$refs.rod_paws).css('width').slice(0, $(this.$refs.rod_paws).css('width').length - 2));
-					
-					return left;
-				}
-				
-				let wawaJiData = JSON.parse(sessionStorage.initWaWaJi);
-				this.currentWaWaList = wawaJiData.data;
+			let wawaJiData = JSON.parse(sessionStorage.initWaWaJi);
+			this.currentWaWaList = wawaJiData.data;
+				// console.log('娃娃机ID：' + this.currentWaWaList[0].goods_cate_id);
 				this.$store.commit('info/setWawaJiGold', wawaJiData.coin);
 				this.$store.commit('info/setLuckyValue', wawaJiData.lucky);
 
@@ -186,6 +191,7 @@
 					this.light_img_index = (this.light_img_index + 1) % 3 === 0 ? 3 : (this.light_img_index + 1) % 3 ;
 				}, 1000);
 			},
+			// 随机一个娃娃弹出表情
 			showExpressionX() {
 				setInterval(() => {
 					let index = Math.floor(Math.random() * 6 + 1);
@@ -196,6 +202,17 @@
 						clearTimeout(t);
 					}, 1500);
 				}, 5000);
+			},
+			setWaWaBubble(index) {
+				if(this.showWaWaBubble !== 0) {
+					return;
+				}
+
+				this.showWaWaBubble = index;
+				let t = setTimeout(() => {
+					this.showWaWaBubble = 0;
+					clearTimeout(t);
+				}, 1000);
 			},
 			openGift() {
 				if(this.$store.state.info.startGame === true) {
@@ -614,9 +631,9 @@
 			}, 
 		}
 	}
-</script>
+	</script>
 
-<style scoped lang="less">
+	<style scoped lang="less">
 	.gameBox {
 		width: 100%;
 		height: 71%;
@@ -1059,6 +1076,26 @@
 						height: 100%;
 					}
 				}
+
+				.bubble {
+					position: absolute;
+					z-index: 8;
+					width: 4rem;
+					height: 2.5rem;
+					line-height: 2.5rem;
+					text-align: center;
+					overflow: hidden;
+					top: -1rem;
+					left: -0.5rem;
+					background-image: url('~@/assets/luckValue/frame-box.png');
+					background-size: 100% 100%;
+
+					.text {
+						padding: 0 0.2rem;
+						height: 2.5rem;
+						color: #DA840A;
+					}
+				}
 			}
 
 			.wawa_1_wrapper {
@@ -1128,4 +1165,4 @@
 			}
 		}
 	}
-</style>
+	</style>

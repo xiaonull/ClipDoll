@@ -290,7 +290,7 @@
 									clearInterval(interval);
 									resolve();
 								}
-							}, 20);
+							}, 10);
 
 							// if(this.$store.state.rod.position.scale < 1) {
 							// 	option.$obj.animate({width: '2.5rem', height: '3.7rem'}, 5000);
