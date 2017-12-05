@@ -6,6 +6,8 @@ export default {
 			msg: '11',
 			display: false
 		},
+		showColorfulMsg: false,
+		showTips: false,
 		showSelectWawaJi: false,
 		showBackpack: false,
 		showReceiptInfo: false,
@@ -40,6 +42,12 @@ export default {
 			if(data.display) {
 				state.Msg.display = data.display
 			}			
+		},
+		setColorfulMsg(state, val) {
+			state.showColorfulMsg = val;		
+		},
+		setTips(state, val) {
+			state.showTips = val;		
 		},
 		resetMsg(state) {
 			state.Msg.msg = '';

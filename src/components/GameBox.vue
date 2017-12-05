@@ -51,10 +51,10 @@
 				<div class="shadow6 shadowImg" v-if="currentWaWaList[5]"></div> -->
 				<div class="wawa_wrapper" :class="'wawa_' + (index + 1) + '_wrapper'" v-for="(item, index) in currentWaWaList" :key="item.id" :grabHeight="item.xdheight" @click="setWaWaBubble(index + 1)">
 					<img :src="'http://' + item.sc_pic" :class="item.id" class="img wawa">
-					<div class="expression" v-if="showExpression === (index + 1)"><img src="~@/assets/bg/expression.png" class="img"></div>
+					<div class="expression" v-if="showExpression === (index + 1)"><img :src="expressionImg" class="img"></div>
 					<div class="shadowImg" v-if="currentWaWaList[0]"></div>
 					<div class="bubble" v-if="showWaWaBubble === (index + 1)">
-						<p class="text">你好</p>
+						<p class="text">{{static_talk}}</p>
 					</div>
 				</div>
 			</div>
@@ -87,99 +87,121 @@
 </template>
 
 <script type="text/javascript">
-import Rod from '../js/rod.js';
+	import Rod from '../js/rod.js';
 
-export default {
-	data() {
-		return {
-			left: this.$store.state.rod.position,
-			scale: this.$store.state.rod.position,
-			grabWaWa: this.$store.state.rod.action,
-			layer: this.$store.state.rod.layer,
-			light_img_index: 1,
-			currentWaWaList: [],
-			showExpression: 1,
-			showWaWaBubble: 0
-		}
-	},
-	mounted() {
-		this.init();
-		this.bindEvevt();
-		this.changeLightImg();
-	},
-	computed: {
-		light_img() {
-			return './static/light/light0' + this.light_img_index + '.png';
-		},
-		rod_length() {
-			return this.$store.state.rod.handle_length;
-		},
-		luckyValue() {
-			if(this.$store.state.info.luckyValue < 80) {
-				let len = 12.3 * (this.$store.state.info.luckyValue / 100);
-				$(this.$refs.barValue).css('width', len + 'rem');
-				$(this.$refs.bubble).css('right', '-4rem');
-			}else {
-				let len = 12.3 * (this.$store.state.info.luckyValue / 100);
-				$(this.$refs.barValue).css('width', len + 'rem');
-				$(this.$refs.bubble).css('right', '-1rem');
+	export default {
+		data() {
+			return {
+				goods_cate_id: -1,
+				left: this.$store.state.rod.position,
+				scale: this.$store.state.rod.position,
+				grabWaWa: this.$store.state.rod.action,
+				layer: this.$store.state.rod.layer,
+				light_img_index: 1,
+				currentWaWaList: [],
+				showExpression: 1, // 随机一个娃娃
+				expression_state: 'static',
+				waWaXState: this.$store.state.rod.waWaXState,
+				expressionImg: 'static/expression/expression.png', // 静止时随机一个娃娃弹出表情
+				static_talk: '你好~', // 点击娃娃触发问候语
+				static_expressionImg: 'static/expression/expression.png', // 静止时随机一个娃娃弹出表情
+				grab_expressionImg: 'static/expression/expression.png', // 娃娃被抓时弹出的表情
+				down_expressionImg: '', // 娃娃掉落时弹出的表情
+				down_msg: '', // 抓取娃娃失败时的语句
+				showWaWaBubble: 0
 			}
-
-			return this.$store.state.info.luckyValue;
 		},
-		showBubble() {
-			return this.$store.state.modal.showBubble;
+		mounted() {
+			this.init();
+			this.bindEvevt();
+			this.changeLightImg();
 		},
-		bubble_luckValue() {
-			return this.$store.state.modal.bubble_luckValue;
-		}
-	},
-	methods: {
-		bindEvevt() {
-			htsBus.$on('move_Left', () => {
-				this.move_Left();
-			});
-			htsBus.$on('move_Right', () => {
-				this.move_Right();
-			});
-			htsBus.$on('move_Behind', () => {
-				this.move_Behind();
-			});
-			htsBus.$on('move_Front', () => {
-				this.move_Front();
-			});
+		computed: {
+			light_img() {
+				return './static/light/light0' + this.light_img_index + '.png';
+			},
+			rod_length() {
+				return this.$store.state.rod.handle_length;
+			},
+			luckyValue() {
+				if(this.$store.state.info.luckyValue < 80) {
+					let len = 12.3 * (this.$store.state.info.luckyValue / 100);
+					$(this.$refs.barValue).css('width', len + 'rem');
+					$(this.$refs.bubble).css('right', '-4rem');
+				}else {
+					let len = 12.3 * (this.$store.state.info.luckyValue / 100);
+					$(this.$refs.barValue).css('width', len + 'rem');
+					$(this.$refs.bubble).css('right', '-1rem');
+				}
 
-			htsBus.$on('grab', () => {
-				this.grab();
-			});
-
-			htsBus.$on('setCurrentWaWaList', (data) => {
-				this.currentWaWaList = data;
-			});
+				return this.$store.state.info.luckyValue;
+			},
+			showBubble() {
+				return this.$store.state.modal.showBubble;
+			},
+			bubble_luckValue() {
+				return this.$store.state.modal.bubble_luckValue;
+			}
 		},
-		init() {
-			let self = this;
+		methods: {
+			bindEvevt() {
+				htsBus.$on('move_Left', () => {
+					this.move_Left();
+				});
+				htsBus.$on('move_Right', () => {
+					this.move_Right();
+				});
+				htsBus.$on('move_Behind', () => {
+					this.move_Behind();
+				});
+				htsBus.$on('move_Front', () => {
+					this.move_Front();
+				});
 
-			window.GameBox = function GameBox() {
+				htsBus.$on('grab', () => {
+					this.grab();
+				});
 
-			}
-			GameBox.prototype.getHeight = function() {
-				return $(self.$refs.gameBox).css('height');
-			}
+				htsBus.$on('setCurrentWaWaList', (data) => {
+					this.currentWaWaList = data.length > 6 ? data.slice(0, 6) : data;
+				});
 
-			window.getRod_paw_l_position = () => {
-				let left = this.$store.state.rod.position.left + parseInt($(this.$refs.rod_paws).css('marginLeft').slice(0, $(this.$refs.rod_paws).css('marginLeft').length - 2));
-				return left;
-			}
+				// htsBus.$on('setDown_expression', () => {
+					
+				// });
 
-			window.getRod_paw_r_position = () => {
-				let left = this.$store.state.rod.position.left + parseInt($(this.$refs.rod_paws).css('marginLeft').slice(0, $(this.$refs.rod_paws).css('marginLeft').length - 2)) + parseInt($(this.$refs.rod_paws).css('width').slice(0, $(this.$refs.rod_paws).css('width').length - 2));
+				htsBus.$on('reset_expression', () => {
+					// 重置娃娃表情
+					this.expressionImg = this.static_expressionImg;
+					this.expression_state = 'static';
+					this.showExpression = 1;
+					this.$store.commit('rod/setGrabWaWaX', -1);
+					this.$store.commit('rod/setWaWaXState', 'static');
+				});
+			},
+			init() {
+				let self = this;
 
-				return left;
-			}
+				window.GameBox = function GameBox() {
 
-			let wawaJiData = JSON.parse(sessionStorage.initWaWaJi);
-			this.currentWaWaList = wawaJiData.data;
+				}
+				GameBox.prototype.getHeight = function() {
+					return $(self.$refs.gameBox).css('height');
+				}
+
+				window.getRod_paw_l_position = () => {
+					let left = this.$store.state.rod.position.left + parseInt($(this.$refs.rod_paws).css('marginLeft').slice(0, $(this.$refs.rod_paws).css('marginLeft').length - 2));
+					return left;
+				}
+
+				window.getRod_paw_r_position = () => {
+					let left = this.$store.state.rod.position.left + parseInt($(this.$refs.rod_paws).css('marginLeft').slice(0, $(this.$refs.rod_paws).css('marginLeft').length - 2)) + parseInt($(this.$refs.rod_paws).css('width').slice(0, $(this.$refs.rod_paws).css('width').length - 2));
+
+					return left;
+				}
+
+				let wawaJiData = JSON.parse(sessionStorage.initWaWaJi);
+				this.currentWaWaList = wawaJiData.data.length > 6 ? wawaJiData.data.slice(0, 6) : wawaJiData.data;;
 				// console.log('娃娃机ID：' + this.currentWaWaList[0].goods_cate_id);
 				this.$store.commit('info/setWawaJiGold', wawaJiData.coin);
 				this.$store.commit('info/setLuckyValue', wawaJiData.lucky);
@@ -193,15 +215,47 @@ export default {
 			},
 			// 随机一个娃娃弹出表情
 			showExpressionX() {
-				setInterval(() => {
-					let index = Math.floor(Math.random() * 6 + 1);
-					this.showExpression = index;
+				let t = setTimeout(() => {
+					this.showExpression = 0;
+					clearTimeout(t);
+				}, 1500);
 
-					let t = setTimeout(() => {
-						this.showExpression = 0;
-						clearTimeout(t);
-					}, 1500);
+				setInterval(() => {
+					if(this.expression_state === 'static') {
+						let index = Math.floor(Math.random() * 6 + 1);
+						this.showExpression = index;
+
+						let t = setTimeout(() => {
+							this.showExpression = 0;
+							clearTimeout(t);
+						}, 1500);
+					}
 				}, 5000);
+			},
+			setExpressionImg(type) {
+				let option = {
+					url: 'api/getdollinteraction?machine_id=' + this.goods_cate_id + '&type=' + type + '&token=' + sessionStorage.token,
+					type: 'GET',
+					success: function(result, status, xhr) {
+						if(result.code === 1) {
+							if(type === 1) {
+								// 抓取时触发
+								this.grab_expressionImg = result.expression !== '' ? 'http://' + result.expression : 'static/expression/expression.png';
+							}else if(type === 2) {
+								// 掉落触发 
+								this.down_expressionImg = result.expression !== '' ? 'http://' + result.expression : 'static/expression/expression.png';
+								this.down_msg = result.talk !== '' ? result.talk : '啊噢';
+							}else if(type === 3) {
+								// 静止的时候随机触发
+								this.static_expressionImg = result.expression !== '' ? 'http://' + result.expression : 'static/expression/expression.png';
+								this.static_talk = result.talk !== '' ? result.talk : '抓我啊';
+								this.expressionImg = this.static_expressionImg;
+							}
+						}
+					}.bind(this)
+				};
+
+				myAjax(option);
 			},
 			setWaWaBubble(index) {
 				if(this.showWaWaBubble !== 0) {
@@ -289,6 +343,7 @@ export default {
 							right: wawa_r
 						});
 
+						this.$store.commit('rod/setGrabWaWaX', i + 1);
 					}
 
 					if(distance < level1) {
@@ -499,19 +554,21 @@ export default {
 							left = (Math.random() * 0.3 + 4).toFixed(2) + 'rem';
 						}
 						if(i === 1) {
-							left = (Math.random() * 0.3 + 6).toFixed(2) + 'rem';
+							left = (Math.random() * 0.4 + 6.8).toFixed(2) + 'rem';
 						}
 						if(i === 2) {
 							left = (Math.random() * 0.3 + 10).toFixed(2) + 'rem';
 						}
 
-						let bottom = Math.floor(Math.random() * 0.5 + 0.2) + 'rem';
+						let bottom = Math.floor(Math.random() * 5 + 2) / 10 + 'rem';
 						$wawa.css('left', left);
+						// console.log($wawa.css('bottom'));
+						// console.log(bottom);
 						$wawa.css('bottom', bottom);
 					}else {
 						let left;
 						if(i === 3) {
-							left = (Math.random() * 0.3 + 2.5).toFixed(2) + 'rem';
+							left = (Math.random() * 0.8 + 2.5).toFixed(2) + 'rem';
 						}
 						if(i === 4) {
 							left = (Math.random() * 0.3 + 5.5).toFixed(2) + 'rem';
@@ -540,6 +597,22 @@ export default {
 				},
 				deep: true
 			},
+			waWaXState: {
+				handler: function (val, oldVal) {
+					if(val.state === 'down') {
+						// 娃娃掉落时弹出表情
+						this.expressionImg = this.down_expressionImg;
+						this.expression_state = 'down';
+						this.showExpression = this.$store.state.rod.grabWaWaX;
+
+						let t = setTimeout(() => {
+							this.showExpression = 0;
+							clearTimeout(t);
+						}, 500);
+					}
+				},
+				deep: true
+			},
 			grabWaWa: {
 				handler: function (val, oldVal) {
 					// alert(this.$store.state.rod.rod_paw_EndPosition.left)
@@ -565,6 +638,20 @@ export default {
 							});
 
 							if(distance <= 0) {
+								// 抓取娃娃时弹出表情
+								let t1 = setTimeout(() => {
+									this.expressionImg = this.grab_expressionImg;
+									this.expression_state = 'grab';
+									this.showExpression = this.$store.state.rod.grabWaWaX;
+
+									let t = setTimeout(() => {
+										this.showExpression = 0;
+										clearTimeout(t);
+									}, 1000);
+
+									clearTimeout(t1);
+								}, 500);
+
 								clearInterval(interval);
 							}
 						}, 40);
@@ -591,6 +678,16 @@ export default {
 							});
 
 							if(distance <= 0) {
+								// 抓取娃娃时弹出表情
+								this.expressionImg = this.grab_expressionImg;
+								this.expression_state = 'grab';
+								this.showExpression = this.$store.state.rod.grabWaWaX;
+
+								let t = setTimeout(() => {
+									this.showExpression = 0;
+									clearTimeout(t);
+								}, 1000);
+
 								clearInterval(interval);
 							}
 						}, 40);
@@ -625,15 +722,19 @@ export default {
 				handler: function (val, oldVal) {
 					setTimeout(() => {
 						this.randomWaWaPosition();
+						this.goods_cate_id = val[0].goods_cate_id;
+						this.setExpressionImg(3);
+						this.setExpressionImg(1);
+						this.setExpressionImg(2);
 					}, 0);
 				},
 				deep: true
 			}, 
 		}
 	}
-	</script>
+</script>
 
-	<style scoped lang="less">
+<style scoped lang="less">
 	.gameBox {
 		width: 100%;
 		height: 71%;
@@ -1165,4 +1266,4 @@ export default {
 			}
 		}
 	}
-	</style>
+</style>

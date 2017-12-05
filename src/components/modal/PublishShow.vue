@@ -118,7 +118,7 @@
 							this.previewImgUrl = '';
 						}else {
 							this.$store.commit('modal/setMsg', {
-								msg: '发表失败，请稍后重试',
+								msg: result.msg,
 								display: true
 							});
 

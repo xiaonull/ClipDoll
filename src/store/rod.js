@@ -15,6 +15,10 @@ export default {
 		action: {
 			grabWaWa: false
 		},
+		grabWaWaX: -1,
+		waWaXState: {
+			state: ''
+		},
 		moveToLeft: 'can',
 		moveToRight: 'can',
 		moveToBehind: 'can',
@@ -32,6 +36,13 @@ export default {
 		},
 		grabWaWa(state) {
 			state.action.grabWaWa = true;
+		},
+		setGrabWaWaX(state, val) {
+			// 抓哪个娃娃
+			state.grabWaWaX = val;
+		},
+		setWaWaXState(state, val) {
+			state.waWaXState.state = val;
 		},
 		release(state) {
 			state.action.grabWaWa = false;
@@ -198,7 +209,7 @@ export default {
 						wawaUp++;
 						$obj.css('marginBottom', wawaUp + 'px');
 
-						shake($obj);
+						// shake($obj);
 					}
 
 					downL--;
@@ -276,7 +287,7 @@ export default {
 
 					// 摇晃动画
 					if(option.$obj) {
-						shake(option.$obj, option.$rod_lid, option.$rod_paws);
+						// shake(option.$obj, option.$rod_lid, option.$rod_paws);
 					}
 					
 					if(wawaUpHeight <= 0 && wawaDownFlag) {
@@ -290,12 +301,14 @@ export default {
 						// });
 						wawaDownFlag = false;
 						wawaDown(wawaDown_);
+						context.commit('setWaWaXState', 'down');
 					}
 					
 					if(downL <= 0) {
 						clearInterval(intervalUp);
 						
 						option.$obj.css('transform', 'rotate(' + 0 + 'deg)');
+						stopShake = false;
 
 						resolve();
 					}
@@ -308,6 +321,7 @@ export default {
 						wawaDown_ -= 2;
 						option.$obj.css('marginBottom', wawaDown_ + 'px');
 					}else {
+						stopShake = true;
 						clearInterval(i);
 					}
 				}, 1);
@@ -322,9 +336,15 @@ let angle = 0;
 let rod_angle = 0;
 let direction = 'left';
 let $current_wawa = null;
+let stopShake = false;
 
 
 function shake($wawa, $rod_lid, $rod_paws) {
+	if(stopShake == true) {
+		$wawa.css('transform', 'rotate(' + 0 + 'deg)');
+		return;
+	}
+
 	$current_wawa = $wawa;
 	if(direction === 'left') {
 		angle += 0.35;

@@ -402,21 +402,25 @@
 							resolve();
 						}, 4000);
 
-					}, 20);
+					}, 10);
 				})
 				.then((data) => {
+					this.$store.commit('rod/setGrabWaWaX', -1);
 					this.$store.commit('rod/setLayer', 5);
 					this.$store.commit('info/setStartGame', false);
+					htsBus.$emit('reset_expression');
 					this.startGame = false;
 					this.grabState = false;
 
 					if(option && option.failed && option.failed === true) {
 						this.$store.commit('rod/release');
 						
-						this.$store.commit('modal/setMsg', {
-							msg: '好可惜抓取失败',
-							display: true
-						});
+						// this.$store.commit('modal/setMsg', {
+						// 	msg: '好可惜抓取失败',
+						// 	display: true
+						// });
+
+						this.$store.commit('modal/setColorfulMsg', true);
 					}
 
 					if(option && option.failed === false) {

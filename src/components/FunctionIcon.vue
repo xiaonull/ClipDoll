@@ -112,22 +112,24 @@
 
 				$(this.$refs.bubble).hide();
 
-				if(isWeiXin()) {
-					this.$store.commit('modal/setMsg', {
-						msg: '请在微信中收藏本页',
-						display: true
-					});
-				}else {
-					this.$store.commit('modal/setMsg', {
-						msg: '请在浏览器的设置中收藏本页',
-						display: true
-					});
-				}
+				this.$store.commit('modal/setTips', true);
 
-				let t = setTimeout(() => {
-					this.$store.commit('modal/resetMsg');
-					clearTimeout(t);
-				}, 3000);
+				// if(isWeiXin()) {
+				// 	this.$store.commit('modal/setMsg', {
+				// 		msg: '请在微信中收藏本页',
+				// 		display: true
+				// 	});
+				// }else {
+				// 	this.$store.commit('modal/setMsg', {
+				// 		msg: '请在浏览器的设置中收藏本页',
+				// 		display: true
+				// 	});
+				// }
+
+				// let t = setTimeout(() => {
+				// 	this.$store.commit('modal/resetMsg');
+				// 	clearTimeout(t);
+				// }, 3000);
 			},
 			share() {
 				if(this.$store.state.info.startGame === true) {

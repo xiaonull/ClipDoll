@@ -5,6 +5,8 @@
 			<share></share>
 		</transition>
 		<msg></msg>
+		<colorfulMsg></colorfulMsg>
+		<FavoriteTips></FavoriteTips>
 		<transition name="bounce">
 			<selectWawaJi></selectWawaJi>
 		</transition>
@@ -59,6 +61,8 @@
 	import LuckValue from './LuckValue.vue';
 	import GameDesk from './GameDesk.vue';
 	import Msg from './modal/Msg.vue';
+	import ColorfulMsg from './modal/ColorfulMsg.vue';
+	import FavoriteTips from './modal/FavoriteTips.vue';
 	import SelectWawaJi from './modal/SelectWawaJi.vue';
 	import Backpack from './modal/Backpack.vue';
 	import ReceiptInfo from './modal/ReceiptInfo.vue';
@@ -82,6 +86,8 @@
 			LuckValue,
 			GameDesk,
 			Msg,
+			ColorfulMsg,
+			FavoriteTips,
 			SelectWawaJi,
 			Backpack,
 			ReceiptInfo,
