@@ -80,6 +80,7 @@
 						</div>
 					</div>
 				</div>
+				<p class="tips">幸运值与抓中的几率无关，幸运值只是保底必出的哦</p>
 			</div>
 		</div>
 		<div class="maskBottom"></div>
@@ -809,9 +810,9 @@
 		.wawaji_subBottom {
 			position: absolute;
 			z-index: 7;
-			bottom: 0.5rem;
+			bottom: 0.8rem;
 			width: 100%;
-			height: 0.8rem;
+			height: 0.7rem;
 			line-height: 0.8rem;
 			background-image: url('~@/assets/bg/box-bottom.png');
 			background-repeat: repeat;
@@ -827,6 +828,7 @@
 				background-size: 100% 100%;
 				background-repeat: no-repeat;
 				position: relative;
+				overflow: visible;
 
 				.info {
 					color: #000;
@@ -875,6 +877,16 @@
 						}
 					}
 				}
+
+				.tips {
+					position: absolute;
+					width: 100%;
+					bottom: -0.6rem;
+					height: 0.7rem;
+					font-size: 0.5rem;
+					text-align: center;
+					color: #EAE8E9;
+				}
 			}
 		}
 
@@ -892,7 +904,7 @@
 			top: 25px;
 			left: 0.9rem;
 			right: 0.9rem;
-			bottom: 1rem;
+			bottom: 1.2rem;
 			background-color: #34ccdd;
 			background-image: url('~@/assets/bg/house.jpg');
 			background-repeat: no-repeat;

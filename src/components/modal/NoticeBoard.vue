@@ -139,16 +139,17 @@
 
 						.title {
 							font-size: 0.7rem;
-							color: #7c7c7b;
-							font-weight: 500;
+							color: #262323;
+							font-weight: 600;
 							text-align: left;
 							margin-left: 0.5rem;
 							margin-top: -0.05rem;
 							margin-bottom: 0.1rem;
+							line-height: 1rem;
 						}
 
 						.msg {
-							font-size: 0.6rem;
+							font-size: 0.5rem;
 							color: #af8a51;
 							margin-left: 0.5rem;
 							word-wrap:break-word; 
@@ -168,14 +169,15 @@
 
 					.title {
 						font-size: 0.7rem;
-						color: #7c7c7b;
-						font-weight: 500;
+						color: #262323;
+						font-weight: 600;
 						text-align: left;
 						margin-bottom: 0.1rem;
+						line-height: 1rem;
 					}
 
 					.msg {
-						font-size: 0.6rem;
+						font-size: 0.5rem;
 						color: #af8a51;
 						word-wrap:break-word; 
 						word-break:break-all;

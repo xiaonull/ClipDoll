@@ -47,6 +47,7 @@
 						<div class="currentState">
 							<span class="text" :class="{suc: item.status === '已发货'}">{{item.status}}</span>
 						</div>
+						<div class="track">快递单号：{{item.track === '' ? '暂无快递信息' : item.track}}</div>
 					</div>
 				</div>
 			</div>
@@ -291,9 +292,8 @@
 
 				.list {
 					.item {
-						height: 1.3rem;
-						line-height: 1.3rem;
-						margin-top: 0.3rem;
+						height: 1.8rem;
+						margin-top: 0.4rem;
 						font-size: 0;
 						color: #B3681B;
 						padding-bottom: 0.2rem;
@@ -315,6 +315,13 @@
 							.suc {
 								color: #56b810;
 							}
+						}
+
+						.track {
+							margin-left: 1.8rem;
+							text-align: left;
+							color: #343131;
+							font-size: 0.5rem;
 						}
 					}
 				}

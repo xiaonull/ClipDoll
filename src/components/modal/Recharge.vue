@@ -11,7 +11,9 @@
 					<div class="item" v-for="item in rechargeData" :key="item.id">
 						<img :src="'http://' + item.pic" class="icon">
 						<span class="num">{{item.coin_num}}<span class="green" v-if="item.award_num !== 0">+{{item.award_num}}</span>金币</span>
-						<img src="~@/assets/modal/buy-ico.png" class="img_buy" @click="buyGold(item.id)">
+						<div class="img_buy" @click="buyGold(item.id)">
+							<span class="price">{{item.price + '元'}}</span>
+						</div>
 					</div>
 					<!-- <div class="item">
 						<img src="~@/assets/modal/gold-ico02.png" class="icon">
@@ -234,11 +236,20 @@
 
 						.img_buy {
 							display: inline-block;
-							width: 3.3rem;
+							width: 3.2rem;
 							height: 1.35rem;
+							line-height: 1.35rem;
+							text-align: center;
 							position: absolute;
 							right: 0.5rem;
 							top: 0.35rem;
+							background-image: url('~@/assets/modal/priceBg.png');
+							background-size: 100% 100%;
+
+							.price {
+								font-size: 0.6rem;
+								color: #fff;
+							}
 						}
 					}
 				}
