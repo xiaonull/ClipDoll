@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import rod from './rod.js';
 import modal from './modal.js';
 import info from './info.js';
+import extractWaWas from './extractWaWas.js';
 
 Vue.use(Vuex);
 
@@ -25,6 +26,12 @@ export default new Vuex.Store({
 			state: info.state,
 			mutations: info.mutations,
 			actions: info.actions
+		},
+		extractWaWas: {
+			namespaced: true,
+			state: extractWaWas.state,
+			mutations: extractWaWas.mutations,
+			actions: extractWaWas.actions
 		}
 	}
 })

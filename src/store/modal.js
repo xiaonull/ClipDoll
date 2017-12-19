@@ -11,10 +11,8 @@ export default {
 		showSelectWawaJi: false,
 		showBackpack: false,
 		showReceiptInfo: false,
-		receiptID: {
-			rucksack_id: 0,
-			goods_id: 0
-		},
+		showExtractWaWa: false,
+		receiptWaWas: [],
 		showRecharge: false,
 		showTask: false,
 		showPlayerShow: false,
@@ -59,12 +57,41 @@ export default {
 		setBackpack(state, data) {
 			state.showBackpack = data.showBackpack;
 		},
+		setExtractWaWa(state, val) {
+			state.showExtractWaWa = val;
+		},
 		setReceiptInfo(state, data) {
 			state.showReceiptInfo = data.showReceiptInfo;
 		},
-		setReceiptID(state, data) {
-			state.receiptID.rucksack_id = data.rucksack_id;
-			state.receiptID.goods_id = data.goods_id;
+		setReceiptWaWas(state, data) {
+			for(let i = 0, l = state.receiptWaWas.length; i < l; i++) {
+				if(data.rucksack === state.receiptWaWas[i].rucksack_id && data.goods_id === state.receiptWaWas[i].goods_id) {
+					if(data.type === 'add') {
+						if(state.receiptWaWas[i].num >= state.receiptWaWas[i].total) {
+							return;
+						}
+
+						state.receiptWaWas[i].num ++;
+					}else {
+						state.receiptWaWas[i].num --;
+						if(state.receiptWaWas[i].num === 0) {
+							state.receiptWaWas.splice(i, 1);
+						}
+					}
+					// console.log(state.receiptWaWas);
+					return;
+				}
+			}
+
+			state.receiptWaWas.push({
+				rucksack_id: data.rucksack,
+				goods_id: data.goods_id,
+				name: data.name,
+				num: 1,
+				total: data.total
+			});
+
+			// console.log(state.receiptWaWas);
 		},
 		setRecharge(state, data) {
 			state.showRecharge = data.showRecharge;

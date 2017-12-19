@@ -83,7 +83,7 @@
 				this.address = data.province.value + data.city.value + data.area.value;
 			},
 			commit() {
-				if(this.$store.state.modal.receiptID.rucksack_id === 0 && this.$store.state.modal.receiptID.goods_id === 0) {
+				if(this.$store.state.modal.receiptWaWas.length <= 0) {
 					this.$store.commit('modal/setMsg', {
 						msg: '请重新选择要提取的娃娃',
 						display: true
@@ -120,13 +120,12 @@
 					return;
 				}
 
-
+				console.log(this.$store.state.modal.receiptWaWas)
 				let option = {
 					url: '/api/withdrawdoll?token=' + sessionStorage.token,
 					type: 'POST',
 					data: {
-						rucksack_id: this.$store.state.modal.receiptID.rucksack_id,
-						goods_id: this.$store.state.modal.receiptID.goods_id,
+						data: this.$store.state.modal.receiptWaWas,
 						name: this.name,
 						phone: this.phone,
 						address: this.address + this.addressDetail
@@ -143,6 +142,7 @@
 							}, 2000);
 
 							htsBus.$emit('loadBackpackData');
+							this.refreshUserData();
 
 							this.$store.commit('modal/setReceiptInfo', {
 								showReceiptInfo: false
@@ -156,6 +156,26 @@
 								this.$store.commit('modal/resetMsg');
 								clearTimeout(t);
 							}, 2000);
+						}
+					}.bind(this)
+				};
+
+				myAjax(option);
+			},
+			refreshUserData() {
+				// 刷新用户数据
+				let data = JSON.parse(sessionStorage.loginUrlData);
+				let option = {
+					url: 'api/login',
+					type: 'POST',
+					data: data,
+					success: function(result, status, xhr) {
+						if(result.code === 1) {
+							sessionStorage.token = result.token;
+							sessionStorage.userData =  JSON.stringify(result.user);
+
+							let userData = JSON.parse(sessionStorage.userData);
+							this.$store.commit('info/setUserGold', userData.coin);
 						}
 					}.bind(this)
 				};
@@ -225,7 +245,7 @@
 				background-color: #fdffed;
 				border-radius: 0.5rem;
 				padding-top: 1.3rem;
-				overflow: hidden;
+				overflow: visible;
 
 				.formGroup {
 					font-size: 0;

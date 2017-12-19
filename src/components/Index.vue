@@ -17,6 +17,7 @@
 			<backpack></backpack>
 		</transition>
 		<receiptInfo></receiptInfo>
+		<extractWaWa></extractWaWa>
 		<transition name="bounce">
 			<playerShow></playerShow>
 		</transition>
@@ -66,6 +67,7 @@
 	import SelectWawaJi from './modal/SelectWawaJi.vue';
 	import Backpack from './modal/Backpack.vue';
 	import ReceiptInfo from './modal/ReceiptInfo.vue';
+	import ExtractWaWa from './modal/ExtractWaWa.vue';
 	import Recharge from './modal/Recharge.vue';
 	import Task from './modal/Task.vue';
 	import LoginReward from './modal/LoginReward.vue';
@@ -91,6 +93,7 @@
 			SelectWawaJi,
 			Backpack,
 			ReceiptInfo,
+			ExtractWaWa,
 			Recharge,
 			Task,
 			LoginReward,

@@ -265,9 +265,9 @@
 						// 移动到出口处
 
 						// 将娃娃的阴影去掉
-						if(option.$wawa_shadow) {
-							option.$wawa_shadow.css('display', 'none');
-						}
+						// if(option.$wawa_shadow) {
+						// 	option.$wawa_shadow.css('display', 'none');
+						// }
 
 						return new Promise((resolve, reject) => {
 							let moveLeft = 0;
@@ -451,7 +451,7 @@
 						let t2 = setTimeout(() => {
 							this.$store.commit('modal/setbubble_luckValue', {
 								showBubble: false,
-								bubble_luckValue: 0
+								// bubble_luckValue: 0
 							});
 							clearTimeout(t2);
 						}, 3000);

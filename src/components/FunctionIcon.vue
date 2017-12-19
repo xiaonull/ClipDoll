@@ -24,19 +24,29 @@
 <script type="text/javascript">
 	export default {
 		mounted() {
+			let mainBgMusic = document.getElementById('mainBgMusic');
 			if(this.$store.state.info.bgm === false) {
-				$(this.$refs.bgm)[0].pause();
+				// $(this.$refs.bgm)[0].pause();
+				// mainBgMusic.pause();
+				this.$refs.bgm.pause();
+				return;
 			}
+			
+			// mainBgMusic.play();
 
 			let that = this;
 			function audioAutoPlay() {
 				setTimeout(() => {
-					$(that.$refs.bgm)[0].play();
+					// $(that.$refs.bgm)[0].play();
+					// mainBgMusic.play();
+					that.$refs.bgm.play();
 					that.$store.commit('info/setBgm', true);
 				}, 1000);
+				
 				document.addEventListener("WeixinJSBridgeReady", function () {
 					setTimeout(() => {
-						$(that.$refs.bgm)[0].play();
+						// $(that.$refs.bgm)[0].play();
+						that.$refs.bgm.play();
 						that.$store.commit('info/setBgm', true);
 					}, 1000);
 				}, false);
@@ -55,6 +65,8 @@
                     }
                 });
             }else{
+                // $(that.$refs.bgm)[0].play();
+                // mainBgMusic.play();
                 this.$refs.bgm.play();
                 this.$store.commit('info/setBgm', true);
             }
@@ -67,10 +79,16 @@
 		watch: {
 			startMusic: {
 				handler: function(val, oldVal) {
+					let mainBgMusic = document.getElementById('mainBgMusic');
+
 					if(val.bgm === false) {
-						$(this.$refs.bgm)[0].pause();
+						// $(this.$refs.bgm)[0].pause();
+						// mainBgMusic.pause();
+						this.$refs.bgm.pause();
 					}else {
-						$(this.$refs.bgm)[0].play();
+						// $(this.$refs.bgm)[0].play();
+						// mainBgMusic.play();
+						this.$refs.bgm.play();
 					}
 				},
 				deep: true

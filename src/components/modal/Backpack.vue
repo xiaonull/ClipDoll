@@ -23,7 +23,7 @@
 						<div class="imgContainer">
 							<img :src="'http://' + item.pic" class="img">
 						</div>
-						<div class="extractWaWa" @click="extractWaWa(item.rucksack_id, item.goods_id)">
+						<div class="extractWaWa" @click="extractWaWa(item.rucksack_id, item.goods_id, item.name, item.num)">
 							<img src="~@/assets/modal/an-ico01.png" class="img">
 						</div>
 					</div>
@@ -112,14 +112,16 @@
 					this.active = 'extractRecords';
 				}
 			},
-			extractWaWa(rucksack_id, goods_id) {
-				this.$store.commit('modal/setReceiptID', {
-					rucksack_id: rucksack_id,
-					goods_id: goods_id
+			extractWaWa(rucksack_id, goods_id, name, total) {
+				this.$store.commit('modal/setReceiptWaWas', {
+					type: 'add',
+					rucksack: rucksack_id,
+					goods_id: goods_id,
+					name: name,
+					total: total
 				});
-				this.$store.commit('modal/setReceiptInfo', {
-					showReceiptInfo: true
-				});
+
+				this.$store.commit('modal/setExtractWaWa', true);
 			}
 		},
 		computed: {

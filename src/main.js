@@ -10,6 +10,10 @@ Vue.config.productionTip = false
 /* eslint-disable no-new */
 window.htsBus = new Vue();
 
+document.oncontextmenu = function(){
+	return false;
+};
+
 new Vue({
 	el: '#app',
 	store,

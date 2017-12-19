@@ -10,7 +10,7 @@ export default {
 			zIndex: 0
 		},
 		wawa_id: 0,
-		bgm: false
+		bgm: true
 	},
 
 	mutations: {

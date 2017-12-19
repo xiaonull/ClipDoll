@@ -51,11 +51,15 @@
 				<div class="shadow6 shadowImg" v-if="currentWaWaList[5]"></div> -->
 				<div class="wawa_wrapper" :class="'wawa_' + (index + 1) + '_wrapper'" v-for="(item, index) in currentWaWaList" :key="item.id" :grabHeight="item.xdheight" @click="setWaWaBubble(index + 1)">
 					<img :src="'http://' + item.sc_pic" :class="item.id" class="img wawa">
-					<div class="expression" v-if="showExpression === (index + 1)"><img :src="expressionImg" class="img"></div>
-					<div class="shadowImg" v-if="currentWaWaList[0]"></div>
-					<div class="bubble" v-if="showWaWaBubble === (index + 1)">
-						<p class="text">{{static_talk}}</p>
+					<div class="expression" v-if="!isTalk && showExpression === (index + 1) && expressionImg !== ''"><img :src="expressionImg" class="img"></div>
+					<div class="shadowImg"></div>
+					<div class="bubble" v-if="isTalk && showExpression === (index + 1) && talk !== ''">
+						<p class="text">{{talk}}</p>
+						<!-- <img :src="expressionImg" class="img"> -->
 					</div>
+					<!-- <div class="bubble" v-if="showWaWaBubble === (index + 1)">
+						<p class="text">{{static_talk}}</p>
+					</div> -->
 				</div>
 			</div>
 		</div>
@@ -103,10 +107,13 @@
 				showExpression: 1, // 随机一个娃娃
 				expression_state: 'static',
 				waWaXState: this.$store.state.rod.waWaXState,
-				expressionImg: 'static/expression/expression.png', // 静止时随机一个娃娃弹出表情
-				static_talk: '你好~', // 点击娃娃触发问候语
-				static_expressionImg: 'static/expression/expression.png', // 静止时随机一个娃娃弹出表情
-				grab_expressionImg: 'static/expression/expression.png', // 娃娃被抓时弹出的表情
+				expressionImg: '', // 静止时随机一个娃娃弹出表情
+				talk: '',
+				isTalk: false,
+				static_talk: '', // 点击娃娃触发问候语
+				static_expressionImg: '', // 静止时随机一个娃娃弹出表情
+				grab_expressionImg: '', // 娃娃被抓时弹出的表情
+				grab_msg: '', // 抓取娃娃时的语句
 				down_expressionImg: '', // 娃娃掉落时弹出的表情
 				down_msg: '', // 抓取娃娃失败时的语句
 				showWaWaBubble: 0
@@ -174,8 +181,9 @@
 				htsBus.$on('reset_expression', () => {
 					// 重置娃娃表情
 					this.expressionImg = this.static_expressionImg;
+					this.talk = this.static_talk;
 					this.expression_state = 'static';
-					this.showExpression = 1;
+					this.showExpression = 0;
 					this.$store.commit('rod/setGrabWaWaX', -1);
 					this.$store.commit('rod/setWaWaXState', 'static');
 				});
@@ -222,6 +230,10 @@
 				}, 1500);
 
 				setInterval(() => {
+					this.isTalk = !this.isTalk;
+				}, 2000);
+
+				setInterval(() => {
 					if(this.expression_state === 'static') {
 						let index = Math.floor(Math.random() * 6 + 1);
 						this.showExpression = index;
@@ -231,7 +243,7 @@
 							clearTimeout(t);
 						}, 1500);
 					}
-				}, 5000);
+				}, 8000);
 			},
 			setExpressionImg(type) {
 				let option = {
@@ -241,15 +253,17 @@
 						if(result.code === 1) {
 							if(type === 1) {
 								// 抓取时触发
-								this.grab_expressionImg = result.expression !== '' ? 'http://' + result.expression : 'static/expression/expression.png';
+								this.grab_msg = result.talk !== '' ? result.talk : '';
+								this.grab_expressionImg = result.expression !== '' ? 'http://' + result.expression : '';
 							}else if(type === 2) {
 								// 掉落触发 
-								this.down_expressionImg = result.expression !== '' ? 'http://' + result.expression : 'static/expression/expression.png';
-								this.down_msg = result.talk !== '' ? result.talk : '啊噢';
+								this.down_msg = result.talk !== '' ? result.talk : '';
+								this.down_expressionImg = result.expression !== '' ? 'http://' + result.expression : '';
 							}else if(type === 3) {
 								// 静止的时候随机触发
-								this.static_expressionImg = result.expression !== '' ? 'http://' + result.expression : 'static/expression/expression.png';
-								this.static_talk = result.talk !== '' ? result.talk : '抓我啊';
+								this.static_expressionImg = result.expression !== '' ? 'http://' + result.expression : '';
+								this.static_talk = result.talk !== '' ? result.talk : '';
+								this.talk = this.static_talk;
 								this.expressionImg = this.static_expressionImg;
 							}
 						}
@@ -569,7 +583,7 @@
 					}else {
 						let left;
 						if(i === 3) {
-							left = (Math.random() * 0.8 + 2.5).toFixed(2) + 'rem';
+							left = (Math.random() * 0.8 + 2.3).toFixed(2) + 'rem';
 						}
 						if(i === 4) {
 							left = (Math.random() * 0.3 + 5.5).toFixed(2) + 'rem';
@@ -603,6 +617,7 @@
 					if(val.state === 'down') {
 						// 娃娃掉落时弹出表情
 						this.expressionImg = this.down_expressionImg;
+						this.talk = this.down_msg;
 						this.expression_state = 'down';
 						this.showExpression = this.$store.state.rod.grabWaWaX;
 
@@ -642,6 +657,7 @@
 								// 抓取娃娃时弹出表情
 								let t1 = setTimeout(() => {
 									this.expressionImg = this.grab_expressionImg;
+									this.talk = this.grab_msg;
 									this.expression_state = 'grab';
 									this.showExpression = this.$store.state.rod.grabWaWaX;
 
@@ -681,6 +697,7 @@
 							if(distance <= 0) {
 								// 抓取娃娃时弹出表情
 								this.expressionImg = this.grab_expressionImg;
+								this.talk = this.grab_msg;
 								this.expression_state = 'grab';
 								this.showExpression = this.$store.state.rod.grabWaWaX;
 
@@ -1192,11 +1209,11 @@
 
 				.bubble {
 					position: absolute;
-					z-index: 8;
+					z-index: 55;
 					width: 4rem;
 					height: 2.5rem;
 					line-height: 2.5rem;
-					text-align: center;
+					text-align: left;
 					overflow: hidden;
 					top: -1rem;
 					left: -0.5rem;
@@ -1204,9 +1221,21 @@
 					background-size: 100% 100%;
 
 					.text {
+						float: left;
+						display: inline-block;
 						padding: 0 0.2rem;
+						margin-left: 1rem;
 						height: 2.5rem;
 						color: #DA840A;
+					}
+
+					.img {
+						display: inline-block;
+						width: 1.8rem;
+						height: 1.5rem;
+						float: left;
+						position: relative;
+						top: 0.2rem;
 					}
 				}
 			}
