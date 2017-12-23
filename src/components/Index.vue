@@ -52,59 +52,59 @@
 </template>
 
 <script>
-	import Help from './Help.vue';
-	import Share from './Share.vue';
-	import Notice from './Notice.vue';
-	import NoticeBoard from './modal/NoticeBoard.vue';
-	import FunctionIcon from './FunctionIcon.vue';
-	import CountDown from './modal/CountDown.vue';
-	import GameBox from './GameBox.vue';
-	import LuckValue from './LuckValue.vue';
-	import GameDesk from './GameDesk.vue';
-	import Msg from './modal/Msg.vue';
-	import ColorfulMsg from './modal/ColorfulMsg.vue';
-	import FavoriteTips from './modal/FavoriteTips.vue';
-	import SelectWawaJi from './modal/SelectWawaJi.vue';
-	import Backpack from './modal/Backpack.vue';
-	import ReceiptInfo from './modal/ReceiptInfo.vue';
-	import ExtractWaWa from './modal/ExtractWaWa.vue';
-	import Recharge from './modal/Recharge.vue';
-	import Task from './modal/Task.vue';
-	import LoginReward from './modal/LoginReward.vue';
-	import PlayerShow from './modal/PlayerShow.vue';
-	import PublishShow from './modal/PublishShow.vue';
-	import Catch from './modal/Catch.vue';
-	import Gift from './modal/Gift.vue';
-	import Setting from './modal/Setting.vue';
+import Help from './Help.vue';
+import Share from './Share.vue';
+import Notice from './Notice.vue';
+import NoticeBoard from './modal/NoticeBoard.vue';
+import FunctionIcon from './FunctionIcon.vue';
+import CountDown from './modal/CountDown.vue';
+import GameBox from './GameBox.vue';
+import LuckValue from './LuckValue.vue';
+import GameDesk from './GameDesk.vue';
+import Msg from './modal/Msg.vue';
+import ColorfulMsg from './modal/ColorfulMsg.vue';
+import FavoriteTips from './modal/FavoriteTips.vue';
+import SelectWawaJi from './modal/SelectWawaJi.vue';
+import Backpack from './modal/Backpack.vue';
+import ReceiptInfo from './modal/ReceiptInfo.vue';
+import ExtractWaWa from './modal/ExtractWaWa.vue';
+import Recharge from './modal/Recharge.vue';
+import Task from './modal/Task.vue';
+import LoginReward from './modal/LoginReward.vue';
+import PlayerShow from './modal/PlayerShow.vue';
+import PublishShow from './modal/PublishShow.vue';
+import Catch from './modal/Catch.vue';
+import Gift from './modal/Gift.vue';
+import Setting from './modal/Setting.vue';
 
-	export default {
-		components: {
-			Help,
-			Share,
-			FunctionIcon,
-			Notice,
-			CountDown,
-			GameBox,
-			LuckValue,
-			GameDesk,
-			Msg,
-			ColorfulMsg,
-			FavoriteTips,
-			SelectWawaJi,
-			Backpack,
-			ReceiptInfo,
-			ExtractWaWa,
-			Recharge,
-			Task,
-			LoginReward,
-			PlayerShow,
-			PublishShow,
-			Catch,
-			Gift,
-			Setting,
-			NoticeBoard
-		},
-		mounted() {
+export default {
+	components: {
+		Help,
+		Share,
+		FunctionIcon,
+		Notice,
+		CountDown,
+		GameBox,
+		LuckValue,
+		GameDesk,
+		Msg,
+		ColorfulMsg,
+		FavoriteTips,
+		SelectWawaJi,
+		Backpack,
+		ReceiptInfo,
+		ExtractWaWa,
+		Recharge,
+		Task,
+		LoginReward,
+		PlayerShow,
+		PublishShow,
+		Catch,
+		Gift,
+		Setting,
+		NoticeBoard
+	},
+	mounted() {
 			// 每20分钟刷新一下 token
 			let t = setTimeout(() => {
 				setInterval(() => {
@@ -230,6 +230,15 @@
 		    success: function () { 
 
 		        // 用户确认分享后执行的回调函数
+		        let option = {
+		        	url: 'api/sharewihtwx?token=' + sessionStorage.token,
+		        	type: 'GET',
+		        	success: function(result, status, xhr) {
+		        		
+		        	}.bind(this)
+		        };
+
+		        myAjax(option);
 
 		    },
 
@@ -259,6 +268,15 @@
 		    success: function () { 
 
 		        // 用户确认分享后执行的回调函数
+		        let option = {
+		        	url: 'api/sharewihtwx?token=' + sessionStorage.token,
+		        	type: 'GET',
+		        	success: function(result, status, xhr) {
+		        		
+		        	}.bind(this)
+		        };
+
+		        myAjax(option);
 
 		    },
 
@@ -271,9 +289,9 @@
 		});
 
 	}
-</script>
+	</script>
 
-<style scoped lang="less">
+	<style scoped lang="less">
 	.index {
 		position: absolute;
 		z-index: 0;
@@ -318,4 +336,4 @@
 			transform: scale(1);
 		}
 	}
-</style>
+	</style>
