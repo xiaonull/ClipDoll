@@ -63,6 +63,7 @@
 				</div>
 				<div class="icon icon4">
 					<span class="text" @click="openTask">任 务</span>
+					<img src="~@/assets/gameDesk/point.png" :class="{tips: tips === true}" class="img">
 				</div>
 			</div>
 		</div>
@@ -85,11 +86,15 @@
 			},
 			userGold() {
 				return this.$store.state.info.userGold;
+			},
+			tips() {
+				return this.$store.state.info.has_receiveTask;
 			}
 		},
 		mounted() {
 			this.bindEvevt();
 			this.init();
+			this.loadReceiveTask();
 		},
 		methods: {
 			bindEvevt() {
@@ -101,6 +106,33 @@
 				let userData = JSON.parse(sessionStorage.userData);
 				this.nickname = userData.username;
 				this.$store.commit('info/setUserGold', userData.coin);
+			},
+			loadReceiveTask() {
+				// 轮询是否有可领取的任务奖励
+				let option = {
+					url: 'api/mission?token=' + sessionStorage.token,
+					type: 'GET',
+					success: function(result, status, xhr) {
+						if(result.code === 1) {
+							let taskList = result.data;
+							for(let i = 0, j = taskList.length; i < j; i++) {
+								if(taskList[i].mission_status === '1') {
+									this.$store.commit('info/setHasReceiveTask', true);
+									return;
+								}
+							}
+
+							this.$store.commit('info/setHasReceiveTask', false);
+						}
+					}.bind(this)
+				};
+
+				setInterval(() => {
+					if(!this.$store.state.info.startGame) {
+						myAjax(option);
+					}
+				}, 1500);
+
 			},
 			start() {
 				// 判断金币够不够
@@ -811,10 +843,23 @@
 				}
 
 				.icon4 {
+					position: relative;
 					background-image: url('~@/assets/gameDesk/chip-ico04.png');
 					background-size: contain;
 					background-repeat: no-repeat;
 					background-position: center;
+
+					.img {
+						display: none;
+					}
+
+					.tips {
+						display: block;
+						position: absolute;
+						top: 0rem;
+						right: 0rem;
+						width: 0.8rem;
+					}
 				}
 			}
 		}

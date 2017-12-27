@@ -10,7 +10,8 @@ export default {
 			zIndex: 0
 		},
 		wawa_id: 0,
-		bgm: true
+		bgm: true,
+		has_receiveTask: false
 	},
 
 	mutations: {
@@ -37,6 +38,9 @@ export default {
 		},
 		setBgm(state, value) {
 			state.bgm = value;
+		},
+		setHasReceiveTask(state, value) {
+			state.has_receiveTask = value;
 		}
 	},
 

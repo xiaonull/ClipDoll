@@ -67,6 +67,7 @@ window.myAjax = function(option) {
 			success: function(result, status, xhr) {
 
 				option.success(result, status, xhr);  	
+				
 			},
 			beforeSend: function(xhr) {
 				if(option.beforeSend) {
