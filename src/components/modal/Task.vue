@@ -229,7 +229,7 @@
 				position: relative;
 				margin: 0 0.5rem -0.2rem 0.5rem;
 				height: 2.7rem;
-				background-image: url('~@/assets/modal/banner-tu.png');
+				background-image: url('~@/assets/modal/banner-tu2.png');
 				background-size: 100% 100%;
 
 				.main {
